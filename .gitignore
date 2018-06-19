@@ -16,3 +16,5 @@
 /.mc-lists.el
 /user.el
 /var/
+tramp
+abbrev_defs

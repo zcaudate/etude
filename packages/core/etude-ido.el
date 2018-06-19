@@ -9,7 +9,7 @@
       ido-use-virtual-buffers t)
 
 ;; Make sure ido is really everywhere.
-(use-package ido-ubiquitous
+(use-package ido-completing-read+
   :ensure t
   :init (ido-ubiquitous-mode))
 
