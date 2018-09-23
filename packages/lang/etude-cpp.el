@@ -1,6 +1,6 @@
 (use-package flycheck
   :ensure t)
-  
+
 (use-package rtags
   :ensure t
   :config

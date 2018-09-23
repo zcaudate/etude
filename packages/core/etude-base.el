@@ -1,9 +1,11 @@
 ;; Skip the default splash screen.
 (setq inhibit-startup-message t)
 
-;; Add /usr/local/bin to PATH variable
-(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-(setq exec-path (cons "/usr/local/bin" exec-path))
+;; Add shell defaults
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
 
 ;; Make sure we always use UTF-8.
 (set-terminal-coding-system 'utf-8)
@@ -15,10 +17,15 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Emacs writes backup files to `filename~` by default. This is messy,
-;; so let's tell it to write them to `~/.emacs.d/bak` instead.
+;; so let's tell it to write them to `~/.emacs.d/backup` instead.
 ;; If you have an accident, check this directory - you might get lucky.
-(setq backup-directory-alist
-      `(("." . ,(expand-file-name (concat emacs-d "bak")))))
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+      backup-by-copying t    ; Don't delink hardlinks
+      version-control t      ; Use version numbers on backups
+      delete-old-versions t  ; Automatically delete excess backups
+      kept-new-versions 20   ; how many of the newest versions to keep
+      kept-old-versions 5    ; and how many of the old
+      )
 
 ;; Automatically save buffers before launching M-x compile and friends,
 ;; instead of asking you if you want to save.

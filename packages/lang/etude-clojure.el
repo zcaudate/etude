@@ -1,8 +1,3 @@
-(use-package etude-programming)
-
-(use-package midje-mode
-  :ensure t)
-
 (use-package clojure-mode
   :ensure t
   :config
@@ -10,6 +5,9 @@
     (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
     (add-hook 'clojure-mode-hook 'paredit-mode)
     (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)))
+
+(use-package midje-mode
+  :ensure t)
 
 (use-package cider
   :ensure t
@@ -26,7 +24,9 @@
     (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
     (add-hook 'cider-repl-mode-hook 'subword-mode)))
 
-
-
+(setq cider-cljs-lein-repl
+      "(do (require 'figwheel-sidecar.repl-api)
+           (figwheel-sidecar.repl-api/start-figwheel!)
+           (figwheel-sidecar.repl-api/cljs-repl))")
 
 (provide 'etude-clojure)

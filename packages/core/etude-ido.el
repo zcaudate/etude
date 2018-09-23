@@ -17,6 +17,7 @@
 (use-package flx-ido
   :ensure t)
 
+
 ;; Use smex to provide ido-like interface for M-x
 (use-package smex
   :ensure t
@@ -31,7 +32,6 @@
   :ensure t
   :init (ido-vertical-mode))
   
-
 ;; Bind `~` to go to homedir when in ido-find-file.
 ;; From http://whattheemacsd.com/setup-ido.el-02.html
 (add-hook 'ido-setup-hook

@@ -1,7 +1,7 @@
 (use-package paredit
   :ensure t
   :diminish paredit-mode)
-    
+
 (use-package rainbow-delimiters
   :ensure t)
 

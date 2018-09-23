@@ -18,3 +18,7 @@
 /var/
 tramp
 abbrev_defs
+/dev
+.cask
+*#
+.#*
