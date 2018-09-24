@@ -45,7 +45,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (wgrep diminish ace-window ag ivy-rich counsel-projectile use-package-chords ivy-hydra counsel ivy exec-path-from-shell auto-highlight-symbol git-timemachine undo-tree dashboard lsp-flycheck lsp-rust cargo rust-mode lsp-ui magit etude-company etude-lang company-lsp lsp-mode neotree direx cider markdown-mode elisp-lint lispy hy-mode ess wakatime-mode midje-mode rainbow-delimiters paredit smartparens projectile diff-hl company ido-vertical-mode smex flx-ido ido-ubiquitous smart-mode-line solarized-theme use-package))))
+    (multiple-cursors breadcrumbs breadcrumb wgrep diminish ace-window ag ivy-rich counsel-projectile use-package-chords ivy-hydra counsel ivy exec-path-from-shell auto-highlight-symbol git-timemachine undo-tree dashboard lsp-flycheck lsp-rust cargo rust-mode lsp-ui magit etude-company etude-lang company-lsp lsp-mode neotree direx cider markdown-mode elisp-lint lispy hy-mode ess wakatime-mode midje-mode rainbow-delimiters paredit smartparens projectile diff-hl company ido-vertical-mode smex flx-ido ido-ubiquitous smart-mode-line solarized-theme use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

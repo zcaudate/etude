@@ -22,6 +22,9 @@
   			  (seq-partition bindings 2))))
     (cons 'progn body)))
 
+(defun etude/do-nothing ()
+  (interactive))
+
 ;; Keybinding Principles
 ;; - keys stay as close to the window mapping keys as possible
 ;; - `M-*` will be used instead of `s-*` for common purposes
@@ -29,22 +32,29 @@
 
 ;; Menu rewrite
 ;; Instead of `M-x`, using alternate binding keys'
-	      
-(setq etude/menu  'counsel-M-x)
-(setq etude/git   'magit)
-(setq etude/quit  'save-buffers-kill-terminal)
+(progn
+  (setq etude/menu         'counsel-M-x)
+  (setq etude/git          'magit)
+  (setq etude/describe-key 'describe-key)
+  (setq etude/quit         'save-buffers-kill-terminal))
 
 (etude/bind-keys
- etude/menu          ("M-'" "<C-1>" "C-p")
+ etude/menu          ("C-p")
  etude/git           ("M-g" "C-x C-g")
+ etude/describe-key  ("M-h")
  etude/quit          ("M-q" "C-x C-q"))
+
+(defun etude/switch (name &optional command)
+    (if (not (equal (buffer-name (current-buffer))
+		    name))
+	(if command
+	    (eval command)
+	  (switch-to-buffer name))
+    (previous-buffer)))
 
 (defun eshell-switch ()
   (interactive)
-  (if (not (equal (buffer-name (current-buffer))
-		  "*eshell*"))
-      (eshell)
-    (previous-buffer)))
+  (etude/switch "*eshell*" '(eshell)))
 
 (defun file-tree-switch ()
   (interactive)
@@ -54,17 +64,11 @@
 
 (defun dashboard-switch ()
   (interactive)
-  (if (not (equal (buffer-name (current-buffer))
-	       "*dashboard*"))
-      (dashboard-blank)
-    (previous-buffer)))
+  (etude/switch "*dashboard*"))
 
 (defun scratch-switch ()
   (interactive)
-  (if (not (equal (buffer-name (current-buffer))
-	       "*scratch*"))
-      (switch-to-buffer "*scratch*")
-    (previous-buffer)))
+  (etude/switch "*scratch*"))
 
 (defun dashboard-close-all ()
   (interactive)
@@ -79,11 +83,10 @@
   (setq etude/dashboard-close-all  'dashboard-close-all))
 
 (etude/bind-keys
- etude/shell-switch           ("M-1")
- etude/file-tree-switch       ("M-2")
- etude/dashboard-switch       ("M-3")
- etude/scratch-switch         ("M-4")
- etude/dashboard-close-all    ("M-0"))
+ etude/shell-switch           ("<f1>")
+ etude/file-tree-switch       ("<f2>")
+ etude/dashboard-switch       ("<f3>")
+ etude/scratch-switch         ("<f4>"))
 
 ;; Text Editing
 ;; - Copy, Kill, Cut,
@@ -105,20 +108,18 @@
   (setq etude/paste-list    'counsel-yank-pop)
   (setq etude/undo          'undo)
   (setq etude/undo-list     'undo-tree-visualize)
-  (setq etude/redo          'undo-tree-redo)
-  (setq etude/eval          'eval-last-sexp))
+  (setq etude/redo          'undo-tree-redo))
 
 (etude/bind-keys
- etude/cut            ("C-x C-x")
- etude/copy           ("C-x C-c")
+ etude/cut            ("C-a")
+ etude/copy           ("C-i")
  etude/cut-context    ("C-k")
  etude/copy-context   ("C-j")
- etude/paste          ("C-v")
+ etude/paste          ("C-y" "C-v")
  etude/paste-list     ("M-v" "C-x C-v")
  etude/undo           ("C--")
  etude/undo-list      ("M-_" "C-x C--")
- etude/redo           ("M--")
- etude/eval           ("C-e"))
+ etude/redo           ("M--"))
 
 ;; List Editing
 ;; - Slurp and Burf using C-arrow
@@ -132,8 +133,23 @@
 ;; - Open File
 ;; - Goto Directory
 ;; - Move File/Directory
-	      
+
+(defhydra file-hydra (:color red :hint nil)
+"
+^File^                     ^Manage^
+_1_: open file  
+_2_: save file
+_3_: save-all files 
+_4_: close file           _q_: quit
+"
+  ("1" find-file)
+  ("2" save-buffer)
+  ("3" save-some-buffers)
+  ("4" etude/do-nothing)
+  ("q" etude/do-nothing :exit t))
+
 (progn
+  (setq etude/file-menu                  'file-hydra/body)
   (setq etude/file-open                  'find-file)
   (setq etude/file-open-recent           'etude/recentf-ivy-find-file)
   (setq etude/file-open-in-project       'projectile-find-file)
@@ -146,6 +162,7 @@
   (setq etude/file-tree-locate-current   'neotree-locate-file))
 
 (etude/bind-keys
+ etude/file-menu                 ("M-1")
  etude/file-open                 ("C-o")
  etude/file-open-recent          ("C-r")
  etude/file-open-in-project      ("C-t")
@@ -176,19 +193,34 @@
 	(split-window-below)
       (delete-other-windows))))
 
+(defhydra window-hydra (:color red :hint nil)
+"
+^Position^                  ^Manage^                     Resize      
+_1_: focus window           _o_: swap                      u 
+_2_: window below           _t_: toggle                  l + r
+_3_: window right           _d_: delete                    d
+_4_: balance windows        _q_: quit     
+"
+  ("d" ace-delete-window)
+  ("1" delete-other-windows)
+  ("2" split-window-below)
+  ("3" split-window-right)
+  ("4" balance-windows)
+  ("o" ace-swap-window)
+  ("t" window-split-toggle)
+  ("q" etude/do-nothing :exit t)
+  ("<left>" shrink-window-horizontally)
+  ("<up>" shrink-window)
+  ("<down>" enlarge-window)
+  ("<right>" enlarge-window-horizontally))
+
 (progn
-  (setq etude/window-next        'other-window)
-  (setq etude/window-previous    'previous-window-current)
-  (setq etude/window-grow        'enlarge-window)
-  (setq etude/window-shrink      'shrink-window)
-  (setq etude/window-split       'window-split-toggle))
+  (setq etude/window-focus    'delete-other-windows)
+  (setq etude/window-menu     'window-hydra/body))
 
 (etude/bind-keys
- etude/window-next       ("ESC <right>" "<M-right>")
- etude/window-previous   ("ESC <left>"  "<M-left>")
- etude/window-grow       ("ESC <up>"    "<M-up>")
- etude/window-shrink     ("ESC <down>"  "<M-down>")
- etude/window-split      ("ESC RET"     "M-RET"))
+ etude/window-focus   ("M-RET")
+ etude/window-menu    ("M-`"))
 
 ;; Search
 ;; - Search within buffer
