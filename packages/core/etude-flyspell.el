@@ -1,3 +1,0 @@
-
-
-(provide 'etude-flyspell)
