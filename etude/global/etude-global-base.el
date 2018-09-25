@@ -102,6 +102,66 @@
 (defmacro menu: (name &rest specs)
   (apply 'menu:fn name specs))
 
+(setq etude/*mode-bindings*  (ht-create))
+(setq etude/*mode-functions* (ht-create))
+(setq etude/*mode-lookup*    (ht-create))
+
+(defun etude/mode-key ()
+  (ht-get etude/*mode-lookup* major-mode))
+
+(defun etude/mode-dispatch (fn-key &rest args)
+  (let: [mode-key (ht-get etude/*mode-lookup* major-mode)
+	 fn-table (if mode-key
+		      (ht-get etude/*mode-functions* mode-key))
+	 fn       (if fn-table
+		      (ht-get fn-table fn-key))]
+	(if fn
+	    (apply 'funcall fn args)
+	  (error (s-concat "Function unavailable ("
+			   (symbol-name mode-key)
+			   " "
+			   (symbol-name fn-key) ")")))))
+
+(defun init-mode:create-mode-fn (fn-key bindings params)
+  (let: [fn-name (intern (s-concat "etude/mode-fn"
+				   (symbol-name fn-key)))
+	 args    (seq-map 'intern params)]
+	(ht-set etude/*mode-bindings* fn-key bindings)
+	`(progn (defun ,fn-name (,@args)
+		  (interactive ,@params)
+		  (etude/mode-dispatch ,fn-key ,@args))
+		(bind: nil ,fn-key ,bindings (quote ,fn-name)))))
+
+(defmacro init-mode: (&rest specs)
+  (let: [body (seq-map (lambda (args)
+			 (apply 'init-mode:create-mode-fn args))
+		       (seq-partition specs 3))]
+	(cons 'progn body)))
+
+(defun mode:create-config-fn (mode-key mode-name mode-config)
+  (let: [fn-name   (intern (s-concat "etude/mode-config" (symbol-name mode-key)))
+	 mode-map  (intern (s-concat (symbol-name mode-name) "-map"))]
+	`(progn
+	   (defun ,fn-name ()
+	     (interactive)
+	     (etude/jump-to-config ,mode-config))
+	   (bind-key "M-0" (quote ,fn-name) ,mode-map))))
+
+(defun mode:fn (mode &rest specs)
+  (let: [(mode-key mode-name mode-config) mode
+	 mode-table (ht-create)
+	 _    (ht-set etude/*mode-functions* mode-key mode-table)
+	 _    (ht-set etude/*mode-lookup* mode-name mode-key)
+	 conf-body (apply 'mode:create-config-fn mode)
+	 body      (seq-map (lambda (spec)
+			    (let: [(fn-key fn) spec
+				   mode-fn-key (intern (s-concat (symbol-name fn-key) (symbol-name mode-key)))]
+				  (ht-set mode-table fn-key (cadr fn))))
+			  (seq-partition specs 2))]
+	conf-body))
+
+(defmacro mode: (mode &rest specs)
+  (apply 'mode:fn mode specs))
 
 ;; Lisp Modes
 (use-package smartparens

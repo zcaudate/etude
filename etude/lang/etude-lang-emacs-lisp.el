@@ -27,16 +27,15 @@
       	   ("M-)" . etude/jump-to-elisp-config)
       	   ("M-0" . etude/jump-back)))
 
-(comment:
- 
- (bind:
-  (::emacs-lisp :config "etude-lang-emacs-lisp"
-		:hook emacs-lisp-mode-hook
-		:keys emacs-lisp-mode-map)
-  
-  :eval          ()        'eval-last-sexp
-  :eval-buffer   ()        'eval-buffer
-  :jump-config   ("M-)")   'etude/jump-to-elisp-config))
 
+(mode:
+ (::emacs-lisp    emacs-lisp-mode
+		  "etude-lang-emacs-lisp") 
+ ::eval-cursor    'eval-last-sexp
+ ::eval-buffer    'eval-buffer)
+
+(bind: emacs-lisp-mode-map
+ ::jump-config  ("M-)")   'etude/jump-to-elisp-config
+ ::jump-back    ("M-0")   'etude/jump-back)
 
 (provide 'etude-lang-emacs-lisp)

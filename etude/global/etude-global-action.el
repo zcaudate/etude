@@ -76,14 +76,14 @@
 
 (defun etude/split-window-toggle ()
   (interactive)
-  (let ((cnt (seq-count
-	      (lambda (w)
-		(not (equal (buffer-name (window-buffer w))
-			    " *NeoTree*")))
-	      (window-list))))
-    (if (equal cnt 1)
-	(split-window-below)
-      (delete-other-windows))))
+  (let: [cnt  (seq-count
+	       (lambda (w)
+		 (not (equal (buffer-name (window-buffer w))
+			     " *NeoTree*")))
+	       (window-list))]
+	(if (equal cnt 1)
+	    (split-window-below)
+	  (delete-other-windows))))
 
 (bind:
  ::window-close         ("M-DEL")              'delete-window      
@@ -194,12 +194,12 @@
  ::goto-end        ()             nil)
 
 ;;
-;; (M-3) Mode Specific
+;; (M-3) Language Specific
 ;; 
-;; This is reserved for the given minor mode to provide functionality
-;; that is specific working within the language. Usually done for
-;; tutorial/walk-through/late-night-brain-dead programming to show
-;; common options that a user might be able to use.
+;; This is reserved for the given language minor mode to provide
+;; functionality that is specific working within the language.
+;; Usually done for tutorial/walk-through/late-night-brain-dead
+;; programming to show common options that a user might be able to use.
 ;;
 ;;   - emacs lisp
 ;;   - java
@@ -210,6 +210,27 @@
 ;;   - html/css
 ;;   - javascript
 
+(init-mode:
+ ::eval-cursor        ("C-e")   ("P")
+ ::eval-file          ("M-e")   ()
+ ::init               ("M-c")   ()
+ ::test               ("M-t")   ()
+ ::run                ("M-r")   ())
+
+(menu:
+ ["Language" etude/lang-menu
+  "
+  ^Code^            
+  _1_: run          
+  _2_: test      
+  _3_: connect/compile
+  "]
+ ("1" ::run          "run")
+ ("2" ::test         "test")
+ ("3" ::init         "connect/compile")
+ ("x" ::do-nothing   "exit" :exit t))
+
+(bind: ::lang-menu       ("M-3")             'etude/lang-menu/body)
 
 ;;
 ;; (M-4) Project Management
@@ -248,8 +269,6 @@
  ("x" ::do-nothing   "exit" :exit t))
 
 (bind: ::git-menu       ("M-5")             'etude/git-menu/body)
-
-
 
 ;;
 ;; (M-9) OS Management 
