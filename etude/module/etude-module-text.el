@@ -1,4 +1,6 @@
-(ns: etude-module-text)
+(ns: etude-module-text
+  (:require
+   etude-core))
 
 (use-package markdown-mode
   :defer t
@@ -7,3 +9,7 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+(use-package yaml-mode
+  :defer t
+  :mode "\\.yml\\")

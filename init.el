@@ -14,7 +14,7 @@
 (require 'etude-lang)
 (require 'etude-core)
 (require 'etude-module-emacs-lisp)
-(require 'etude-module-clojure)
+(require 'etude-module-jvm)
 (require 'etude-module-native)
 (require 'etude-module-text)
 
@@ -28,7 +28,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window))))
+    (jdee javap-mode yaml-mode opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
