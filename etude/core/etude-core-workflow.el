@@ -1,6 +1,5 @@
-(ns: etude-core-workflow)
-
-;;; ETUDE CORE WORKFLOW
+;;
+;;  ETUDE CORE WORKFLOW
 ;;
 ;;  This package standardizes actions and the etude menu system. All global
 ;;  keybindings as well as menus are defined. `:keyword`s are used to specify
@@ -25,9 +24,11 @@
 ;;  - App Management       (M-9)       [eshell]
 ;;  - Config Management    (M-0)       [jump to config]
 
-(require 'etude-core-base)
-(require 'etude-core-management)
-(require 'etude-core-code)
+(ns: etude-core-workflow
+  (:require
+   etude-core-base
+   etude-core-code
+   etude-core-management))
 
 ;;
 ;; (GLOBAL)
@@ -61,7 +62,6 @@
   ;; (F1 - F12) Function Keys
   ;;
 
-
 (on/bind: []
   ::f1              ("<f1>")            'on/jump-to-eshell
   ::f2              ("<f2>")            'on/neotree-toggle
@@ -87,9 +87,9 @@
 		 (not (equal (buffer-name (window-buffer w))
 			     " *NeoTree*")))
 	       (window-list))]
-	(if (equal cnt 1)
-	    (split-window-below)
-	  (delete-other-windows))))
+    (if (equal cnt 1)
+	(split-window-below)
+      (delete-other-windows))))
 
 (on/bind: []
   ::window-close         ("M-DEL")              'delete-window      
@@ -214,12 +214,12 @@
 ;;   - html/css
 ;;   - javascript
 
-(on/mode-init:
- ::eval-cursor        ("C-e")   ("P")
- ::eval-file          ("M-e")   ()
- ::init               ("M-c")   ()
- ::test               ("M-t")   ()
- ::run                ("M-r")   ())
+(on/mode-init: []
+  ::eval-cursor        ("C-e")   ("P")
+  ::eval-file          ("M-e")   ()
+  ::init               ("M-c")   ()
+  ::test               ("M-t")   ()
+  ::run                ("M-r")   ())
 
 (on/menu: [::lang-menu  ("M-3")]
   "
@@ -299,5 +299,3 @@
   (interactive)
   (if on/*back-buffer*
       (switch-to-buffer on/*back-buffer*)))
-
-(provide 'etude-core-workflow)

@@ -25,5 +25,3 @@
 (on/bind: [emacs-lisp-mode-map]
   ::jump-config  ("M-)")   'on/jump-to-elisp-config
   ::jump-back    ("M-0")   'on/jump-back)
-
-(provide 'etude-lang-emacs-lisp)

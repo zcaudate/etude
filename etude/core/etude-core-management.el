@@ -1,4 +1,5 @@
-(ns: etude-core-management)
+(ns: etude-core-management
+  (:require etude-core-base))
 
 (use-package recentf
   :defer true
@@ -23,9 +24,8 @@
 
 (defun on/ivy-recentf-file ()
   (interactive)
-  (let ((file (ivy-completing-read "Recent: " recentf-list nil t)))
-    (when file
-      (find-file file))))
+  (let: [file (ivy-completing-read "Recent: " recentf-list nil t)]
+    (if file (find-file file))))
 
 (use-package projectile
   :diminish 'projectile-mode
@@ -64,34 +64,32 @@
 
 (defun on/neotree-toggle ()
   (interactive)
-  (let ((cw (selected-window)))
+  (let: [cw (selected-window)]
     (neotree-toggle)
     (select-window cw)))
 
 (defun on/neotree-projectile-root ()
   (interactive)
-  (let ((project-dir (condition-case nil
+  (let: [project-dir (condition-case nil
                          (projectile-project-root)
-                       (error "~")))
-        (file-name   (condition-case nil
+                       (error "~"))
+         file-name   (condition-case nil
                          (buffer-file-name)
-                       (error nil))))
-    (let ((cw (selected-window)))
-      (if project-dir
-          (neo-global--open-dir project-dir))
-      (select-window cw))))
+                       (error nil))
+         cw  (selected-window)]
+    (if project-dir
+        (neo-global--open-dir project-dir))
+    (select-window cw)))
 
 (defun on/neotree-projectile-locate ()
   (interactive)
-  (save-excursion
-    (let ((cw (selected-window)))
-      (let ((origin-buffer-file-name (buffer-file-name)))
-        (when (and (fboundp 'projectile-project-p)
-                   (projectile-project-p)
-                   (fboundp 'projectile-project-root))
-          (neo-global--open-dir (projectile-project-root))
-          (neotree-find origin-buffer-file-name)
-          (neotree-find (projectile-project-root))
-          (recenter))))))
-
-(provide 'etude-core-management)
+  (let: [cw (selected-window)
+         bname (buffer-file-name)]
+    (save-excursion
+      (when (and (fboundp 'projectile-project-p)
+                 (projectile-project-p)
+                 (fboundp 'projectile-project-root))
+        (neo-global--open-dir (projectile-project-root))
+        (neotree-find bname)
+        (neotree-find (projectile-project-root))
+        (recenter)))))

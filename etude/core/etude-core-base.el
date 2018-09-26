@@ -61,5 +61,3 @@
   :defer true
   :diminish 'undo-tree-mode
   :config (global-undo-tree-mode true))
-
-(provide 'etude-core-base)

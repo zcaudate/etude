@@ -1,4 +1,5 @@
-(ns: etude-core-code)
+(ns: etude-core-code
+  (:require etude-core-base))
 
 ;; Automatic completion
 (define-key read-expression-map (kbd "TAB") 'completion-at-point)
@@ -23,16 +24,16 @@
                  (setq company-tooltip-flip-when-above true)
                  (setq company-show-numbers true))
   :config (progn (add-hook 'after-init-hook 'global-company-mode)
-                 (let: [map company-active-map]
-                   (mapc
-                    (lambda (x)
-                      (define-key map (format "%d" x) 'on/complete-number))
-                    (number-sequence 0 9))
-                   (define-key map " " (lambda ()
-                                         (interactive)
-                                         (company-abort)
-                                         (self-insert-command 1)))
-                   (define-key map (kbd "<return>") nil))))
+                 (mapc  (lambda (x)
+                          (define-key company-active-map (format "%d" x) 'on/complete-number))
+                        (number-sequence 0 9))
+                 (define-key company-active-map
+                   " "
+                   (lambda ()
+                     (interactive)
+                     (company-abort)
+                     (self-insert-command 1)))
+                 (define-key company-active-map (kbd "<return>") nil)))
 
 (use-package flycheck
   :defer true)
@@ -49,7 +50,7 @@
   :defer true
   :init (progn (require 'company-lsp)
                (push 'company-lsp company-backends)))
- 
+
 (use-package magit
   :defer true)
 
@@ -70,5 +71,3 @@
   :config   (progn (setq wakatime-cli-path "/usr/local/bin/wakatime")
 	           (setq wakatime-python-bin nil)
 	           (global-wakatime-mode true)))
-
-(provide 'etude-core-code)
