@@ -2,8 +2,7 @@
 (setq false -1)
 
 (add-to-list 'load-path (concat emacs-d "etude/core"))
-(add-to-list 'load-path (concat emacs-d "etude/global"))
-(add-to-list 'load-path (concat emacs-d "etude/lang"))
+(add-to-list 'load-path (concat emacs-d "etude/module"))
 
 (require 'package)
 (progn (add-to-list 'package-archives

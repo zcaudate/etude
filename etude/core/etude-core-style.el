@@ -1,3 +1,5 @@
+(ns: etude-core-style)
+
 ;; Remove menu, tool, and scrolls
 (set-cursor-color "light green")
 (show-paren-mode true)
@@ -37,4 +39,4 @@
   :config   (progn (setq ahs-idle-interval 0.0)
 	                 (global-auto-highlight-symbol-mode true)))
  
-(provide 'etude-global-style)
+(provide 'etude-core-style)

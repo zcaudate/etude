@@ -1,2 +1,0 @@
-
-(provide 'etude-core-buffer)
