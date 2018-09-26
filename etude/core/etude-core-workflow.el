@@ -58,24 +58,6 @@
   ::undo-menu       ("M-_" "C-x C--")   'undo-tree-visualize
   ::redo            ("M--")             'undo-tree-redo)
 
-  ;;
-  ;; (F1 - F12) Function Keys
-  ;;
-
-(on/bind: []
-  ::f1              ("<f1>")            'on/jump-to-eshell
-  ::f2              ("<f2>")            'on/neotree-toggle
-  ::f3              ("<f3>")            'on/jump-to-start-screen
-  ::f4              ("<f4>")            'on/jump-to-scratch
-  ::f5              ("<f5>")            nil
-  ::f6              ("<f6>")            nil
-  ::f7              ("<f7>")            nil
-  ::f8              ("<f8>")            nil
-  ::f9              ("<f9>")            nil
-  ::f10             ("<f10>")           nil
-  ::f11             ("<f11>")           nil
-  ::f12             ("<f12>")           nil)
-
 ;;
 ;; (M-`) Window Management
 ;;
@@ -146,17 +128,21 @@
   (save-some-buffers)
   (mapc 'kill-buffer (buffer-list)))
 
+(defun on/last-used-buffer ()
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
 (on/bind: []
   ::open              ("C-o")             'find-file
   ::open-recent       ("C-r")             'on/ivy-recentf-file
   ::open-project      ("C-t")             'projectile-find-file
   ::save              ("M-s" "C-s")       'save-buffer
   ::save-as           ("C-x C-s")         'write-file
-  ::save-all          ("M-S" "C-x s" )          'save-some-buffers
+  ::save-all          ("M-S" "C-x s" )    'save-some-buffers
   ::close             ("M-k")             'on/close-buffer
   ::close-select      ("C-x k")           'kill-buffer  
   ::close-all         ("M-K")             'on/close-all-buffers
-  ::last-used-buffer  ("M-\\")            nil
+  ::last-used-buffer  ("M-\\")            'on/last-used-buffer
   ::prev-buffer       ("M-/")             'previous-buffer
   ::next-buffer       ("M-=")             'next-buffer
   ::jump-buffer       ("C-b")             'switch-to-buffer
@@ -279,8 +265,36 @@
 ;;
 ;; (M-9) OS Management 
 ;;
+
+(defun on/jump-to-buffer (bname command &rest args)
+  (if (not (equal (buffer-name (current-buffer))
+                  bname))
+      (funcall 'apply command args)
+    (previous-buffer)))
+
+(defun on/jump-to-eshell ()
+  (interactive)
+  (on/jump-to-buffer "*eshell*" 'eshell))
+
+(defun on/jump-to-start-screen ()
+  (interactive)
+  (on/jump-to-buffer "*dashboard*" 'on/start-screen))
+
+(defun on/jump-to-scratch ()
+  (interactive)
+  (on/jump-to-buffer "*scratch*" (lambda () (switch-to-buffer "*scratch*"))))
+
 (on/bind: []
   ::toggle-eshell      ()            'on/jump-to-eshell)
+
+(on/menu: [::os-menu ("M-9")]
+  "
+  ^OS^                      
+  _1_: eshell
+  "
+  ("1" ::toggle-eshell  "eshell")
+  ("x" ::do-nothing   "exit" :exit t))
+
 ;;
 ;; (M-0) Config Managment
 ;;
@@ -299,3 +313,22 @@
   (interactive)
   (if on/*back-buffer*
       (switch-to-buffer on/*back-buffer*)))
+
+
+  ;;
+  ;; (F1 - F12) Function Keys
+  ;;
+
+(on/bind: []
+  ::f1              ("<f1>")            'on/jump-to-eshell
+  ::f2              ("<f2>")            'on/neotree-toggle
+  ::f3              ("<f3>")            'on/jump-to-start-screen
+  ::f4              ("<f4>")            'on/jump-to-scratch
+  ::f5              ("<f5>")            nil
+  ::f6              ("<f6>")            nil
+  ::f7              ("<f7>")            nil
+  ::f8              ("<f8>")            nil
+  ::f9              ("<f9>")            nil
+  ::f10             ("<f10>")           nil
+  ::f11             ("<f11>")           nil
+  ::f12             ("<f12>")           nil)

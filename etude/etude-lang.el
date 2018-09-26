@@ -195,7 +195,7 @@
 
 (defmacro on/mode-init: (declaration &rest specs)
   (declare (indent 1))
-  (apply 'on-mode-init::form declaration specs))
+  (apply 'on/mode-init::form declaration specs))
 
 ;;
 ;; on/mode:

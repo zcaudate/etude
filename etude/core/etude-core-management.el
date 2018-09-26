@@ -85,11 +85,13 @@
   (interactive)
   (let: [cw (selected-window)
          bname (buffer-file-name)]
-    (save-excursion
-      (when (and (fboundp 'projectile-project-p)
-                 (projectile-project-p)
-                 (fboundp 'projectile-project-root))
-        (neo-global--open-dir (projectile-project-root))
-        (neotree-find bname)
-        (neotree-find (projectile-project-root))
-        (recenter)))))
+    (if (equal " *NeoTree*" (buffer-name (window-buffer cw)))
+        (select-window (previous-window))
+      (save-excursion
+        (when (and (fboundp 'projectile-project-p)
+                   (projectile-project-p)
+                   (fboundp 'projectile-project-root))
+          (neo-global--open-dir (projectile-project-root))
+          (neotree-find bname)
+          (neotree-find (projectile-project-root))
+          (recenter))))))

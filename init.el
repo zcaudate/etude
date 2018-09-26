@@ -15,6 +15,8 @@
 (require 'etude-core)
 (require 'etude-module-emacs-lisp)
 (require 'etude-module-clojure)
+(require 'etude-module-native)
+(require 'etude-module-text)
 
 (server-force-delete)
 (server-start)

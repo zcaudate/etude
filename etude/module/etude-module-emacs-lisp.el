@@ -13,12 +13,12 @@
        (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
 (on/mode: [::lisp   lisp-interaction-mode]
-  "etude-lang-emacs-lisp" 
+  "etude-module-emacs-lisp" 
   ::eval-cursor    'eval-last-sexp
   ::eval-buffer    'eval-buffer)
 
 (on/mode: [::emacs-lisp    emacs-lisp-mode]
-  "etude-lang-emacs-lisp" 
+  "etude-module-emacs-lisp" 
   ::eval-cursor    'eval-last-sexp
   ::eval-buffer    'eval-buffer)
 

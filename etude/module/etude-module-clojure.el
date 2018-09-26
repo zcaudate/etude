@@ -1,3 +1,6 @@
+(ns: etude-module-clojure
+  (:require etude-core))
+
 (use-package clojure-mode
   :init (progn (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
                (add-hook 'clojure-mode-hook 'paredit-mode)
@@ -17,7 +20,7 @@
                (add-hook 'cider-repl-mode-hook 'subword-mode)))
 
 (on/mode: [::clojure clojure-mode]
-  "etude-lang-clojure"
+  "etude-module-clojure"
   ::eval-cursor   'cider-eval-last-sexp
   ::eval-file     'cider-eval-buffer
   ::init          'cider-connect)
@@ -26,5 +29,3 @@
       "(do (require 'figwheel-sidecar.repl-api)
            (figwheel-sidecar.repl-api/start-figwheel!)
            (figwheel-sidecar.repl-api/cljs-repl))")
-
-(provide 'etude-lang-clojure)
