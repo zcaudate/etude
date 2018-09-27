@@ -12,15 +12,17 @@
        (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
+(defun on/eval-buffer ()
+  (interactive)
+  (eval-buffer (current-buffer) true))
+
 (on/mode: [::lisp   lisp-interaction-mode]
-  "etude-module-lisp"
-  ::eval-cursor    'eval-last-sexp
-  ::eval-buffer    'eval-buffer)
+  ::eval-cursor   'eval-last-sexp
+  ::eval-file     'on/eval-buffer)
 
 (on/mode: [::emacs-lisp    emacs-lisp-mode]
-  "etude-module-lisp" 
-  ::eval-cursor    'eval-last-sexp
-  ::eval-buffer    'eval-buffer)
+  ::eval-cursor  'eval-last-sexp
+  ::eval-file    'on/eval-buffer)
 
 (on/bind: [emacs-lisp-mode-map]
   ::jump-config  ("M-)")   'on/jump-to-elisp-config
@@ -30,7 +32,6 @@
   :defer true
   :config (progn (setq geiser-active-implementations '(racket))
                  (setq geiser-mode-autodoc-p nil)
-                 (on/mode: [::scheme    geiser-mode]
-                   "etude-module-lisp" 
+                 (on/mode: [::scheme geiser-mode]
                    ::eval-cursor    'geiser-eval-last-sexp
-                   ::eval-buffer    'geiser-eval-buffer)))
+                   ::eval-file      'geiser-eval-buffer)))

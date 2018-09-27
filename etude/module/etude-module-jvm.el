@@ -4,16 +4,13 @@
 ;;
 ;; Java
 ;;
-
 (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk")
+
+(require 'cedet)
 
 (use-package jdee
   :defer true
   :config (setq jdee-server-dir (s-concat emacs-d "dev")))
-
-(require 'cedet)
-
-
 
 ;;
 ;; Clojure
@@ -27,7 +24,6 @@
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
                  (on/mode: [::clojure clojure-mode]
-                   "etude-module-jvm"
                    ::eval-cursor   'cider-eval-last-sexp
                    ::eval-file     'cider-eval-buffer
                    ::init          'cider-connect)))

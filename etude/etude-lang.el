@@ -80,9 +80,12 @@
                `(require (quote ,p)))
              packages)))
 
+(setq on/*ns* nil)
+
 (defmacro ns: (name &rest body)
   (declare (indent 1))
-  (let: [head `(provide (quote ,name))]
+  (let: [_     (setq on/*ns* name)
+         head `(provide (quote ,name))]
     `(progn ,head
             ,@(seq-mapcat 'ns::require body))))
 
@@ -210,12 +213,12 @@
          (on/jump-to-config ,mode-config))
        (bind-key on/*meta-config* (quote ,fn-name) ,mode-map))))
 
-(defun on/mode::form (declaration mode-config &rest specs)
+(defun on/mode::form (declaration &rest specs)
   (let: [[mode-key mode-name] declaration
          mode-table (ht-create)
          _    (ht-set on/*mode-functions* mode-key mode-table)
          _    (ht-set on/*mode-lookup* mode-name mode-key)
-         conf-body (on/mode::create-config-fn mode-key mode-name mode-config)
+         conf-body (on/mode::create-config-fn mode-key mode-name load-file-name)
          body      (seq-map (lambda (spec)
                               (let: [(fn-key fn) spec
                                      mode-fn-key (intern (s-concat (symbol-name fn-key) (symbol-name mode-key)))]
@@ -226,5 +229,12 @@
 (defmacro on/mode: (declaration config &rest specs)
   (declare (indent 1))
   (apply 'on/mode::form declaration config specs))
+
+(comment:
+    mode-config mode-config  (or (if (not (seq-empty-p more))
+                                     (seq-elt more))
+                                 (if on/*ns*
+                                     (symbol-name on/*ns*)
+                                   (error "No namespace available."))))
 
 (ns: etude-lang)

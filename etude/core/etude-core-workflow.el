@@ -49,7 +49,7 @@
 
 (on/bind: []
   ::cut             ("C-a")             'kill-region    
-  ::copy            ("C-o" "C-j")       'copy-region-as-kill
+  ::copy            ("C-j")       'copy-region-as-kill
   ::cut-context     ("C-k")             'paredit-kill
   ::copy-context    ("C-x C-k")         'on/paredit-copy-as-kill
   ::paste           ("C-v")             'yank
@@ -134,8 +134,8 @@
 
 (on/bind: []
   ::open              ("C-o")             'find-file
-  ::open-recent       ("C-r")             'on/ivy-recentf-file
-  ::open-project      ("C-t")             'projectile-find-file
+  ::open-recent       ("M-r" "C-r")       'on/ivy-recentf-file
+  ::open-project      ("M-t" "C-t")       'projectile-find-file
   ::save              ("M-s" "C-s")       'save-buffer
   ::save-as           ("C-x C-s")         'write-file
   ::save-all          ("M-S" "C-x s" )    'save-some-buffers
@@ -204,8 +204,9 @@
   ::eval-cursor        ("C-e")   ("P")
   ::eval-file          ("M-e")   ()
   ::init               ("M-c")   ()
-  ::test               ("M-t")   ()
-  ::run                ("M-r")   ())
+  ;::test               ("M-t")   ()
+  ;::run                ("M-r")   ()
+  )
 
 (on/menu: [::lang-menu  ("M-3")]
   "

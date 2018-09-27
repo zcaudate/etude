@@ -7,24 +7,25 @@
 ;;
 
 (use-package opencl-mode
-  :mode "\\.cl\\'")
+  :defer true
+  :mode   "\\.cl\\'")
 
 ;;
 ;; RUST
 ;;
 
-(use-package cargo)
+(use-package cargo
+  :defer true)
 
 (use-package rust-mode
-  :mode "\\.rs\\'"
+  :defer true
+  :mode   "\\.rs\\'"
+  :init   (require 'cargo)
+  :hook   cargo-minor-mode
   :config (progn (setq rust-format-on-save true)
-                 (cargo-minor-mode true)
                  (on/mode: [:rust rust-mode]
-                   "etude-module-native" 
                    ::init       'cargo-process-init
-                   ::eval-file  'cargo-process-build
-                   ::test       'cargo-process-test
-                   ::run        'cargo-process-run)))
+                   ::eval-file  'cargo-process-run)))
 
 ;;
 ;; MAKE
@@ -53,10 +54,8 @@
 
 (use-package lsp-clangd
   :defer true
-  :init
-  (when (equal system-type 'darwin)
-    (setq lsp-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
-  :hook
-  ((c-mode . lsp-clangd-c-enable)
-   (c++-mode . lsp-clangd-c++-enable)
-   (objc-mode . lsp-clangd-objc-enable)))
+  :init  (when (equal system-type 'darwin)
+           (setq lsp-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
+  :hook  ((c-mode . lsp-clangd-c-enable)
+          (c++-mode . lsp-clangd-c++-enable)
+          (objc-mode . lsp-clangd-objc-enable)))
