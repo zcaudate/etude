@@ -49,14 +49,14 @@
 
 (on/bind: []
   ::cut             ("C-a")             'kill-region    
-  ::copy            ("C-j")       'copy-region-as-kill
+  ::copy            ("C-j")             'copy-region-as-kill
   ::cut-context     ("C-k")             'paredit-kill
   ::copy-context    ("C-x C-k")         'on/paredit-copy-as-kill
   ::paste           ("C-v")             'yank
   ::paste-menu      ("M-v" "C-x C-v")   'counsel-yank-pop
-  ::undo            ("C--")             'undo
-  ::undo-menu       ("M-_" "C-x C--")   'undo-tree-visualize
-  ::redo            ("M--")             'undo-tree-redo)
+  ::undo            ("C--" "M--")       'undo
+  ::undo-menu       ("C-x -")           'undo-tree-visualize
+  ::redo            ("C-x C-")          'undo-tree-redo)
 
 ;;
 ;; (M-`) Window Management
@@ -133,7 +133,7 @@
   (switch-to-buffer (other-buffer)))
 
 (on/bind: []
-  ::open              ("C-o")             'find-file
+  ::open              ("M-o" "C-o")             'find-file
   ::open-recent       ("M-r" "C-r")       'on/ivy-recentf-file
   ::open-project      ("M-t" "C-t")       'projectile-find-file
   ::save              ("M-s" "C-s")       'save-buffer
@@ -147,8 +147,7 @@
   ::next-buffer       ("M-=")             'next-buffer
   ::jump-buffer       ("C-b")             'switch-to-buffer
   ::toggle-project    ("C-x C-l")         'on/neotree-toggle
-  ::locate-project    ("C-l")             'on/neotree-projectile-root
-  ::locate-file       ("M-l")             'on/neotree-projectile-locate)
+  ::locate-file       ("C-l" "M-l")       'on/neotree-projectile-locate)
 
 (on/menu: [::file-menu ("M-1")]
   "
@@ -167,8 +166,6 @@
   ("8" ::close)
   ("q" ::quit         "quit emacs")
   ("x" ::do-nothing   "exit" :exit t))
-
-;;(on/bind: ::file-menu       ("M-1")             'on/file-menu/body)
 
 ;;
 ;; (M-2) Navigation and Movement 
@@ -203,10 +200,7 @@
 (on/mode-init: []
   ::eval-cursor        ("C-e")   ("P")
   ::eval-file          ("M-e")   ()
-  ::init               ("M-c")   ()
-  ;::test               ("M-t")   ()
-  ;::run                ("M-r")   ()
-  )
+  ::init               ("M-c")   ())
 
 (on/menu: [::lang-menu  ("M-3")]
   "
@@ -227,9 +221,9 @@
 ;;
 
 (on/bind: []
-  ::find                ()             nil
+  ::find                ("C-f")        'swiper
   ::replace             ()             nil
-  ::find-in-project     ()             nil
+  ::find-in-project     ("M-f")        'counsel-ag
   ::replace-in-project  ()             nil
   ::find-in-os          ()             nil
   ::line-count          ()             'count-lines-page) 
@@ -316,9 +310,9 @@
       (switch-to-buffer on/*back-buffer*)))
 
 
-  ;;
-  ;; (F1 - F12) Function Keys
-  ;;
+;;
+;; (F1 - F12) Function Keys
+;;
 
 (on/bind: []
   ::f1              ("<f1>")            'on/jump-to-eshell
