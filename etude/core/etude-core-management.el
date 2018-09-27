@@ -7,7 +7,7 @@
                        recentf-max-menu-items 15)
                  (recentf-mode true)))
 
-(use-package smex 
+(use-package smex
   :config (progn (smex-initialize)))
 
 (use-package ivy
@@ -24,7 +24,7 @@
 
 (defun on/ivy-recentf-file ()
   (interactive)
-  (let: [file (ivy-completing-read "Recent: " recentf-list nil t)]
+  (let: [file (ivy-completing-read "Recent: " recentf-list nil true)]
     (if file (find-file file))))
 
 (use-package projectile
@@ -43,7 +43,7 @@
 (use-package ace-window)
 
 (use-package neotree
-  :init   (add-hook 'neo-after-create-hook (lambda (_) (display-line-numbers-mode -1)))
+  :init   (add-hook 'neo-after-create-hook (lambda (_) (display-line-numbers-mode false)))
   :config (progn (setq neo-theme 'nerd)
                  (setq neo-smart-open true)
                  (setq projectile-switch-project-action 'neotree-projectile-action)))

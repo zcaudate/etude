@@ -23,3 +23,6 @@ abbrev_defs
 *#
 .#*
 bookmarks
+semanticdb
+ede-projects.el
+srecode-map.el

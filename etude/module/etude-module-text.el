@@ -12,4 +12,4 @@
 
 (use-package yaml-mode
   :defer t
-  :mode "\\.yml\\")
+  :mode "\\.yml\\'")

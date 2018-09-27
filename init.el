@@ -13,7 +13,7 @@
 ;; Core
 (require 'etude-lang)
 (require 'etude-core)
-(require 'etude-module-emacs-lisp)
+(require 'etude-module-lisp)
 (require 'etude-module-jvm)
 (require 'etude-module-native)
 (require 'etude-module-text)
@@ -26,9 +26,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ede-project-directories
+   (quote
+    ("/Users/chris/Development/caudata/base/src/hara/lang/c")))
  '(package-selected-packages
    (quote
-    (jdee javap-mode yaml-mode opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window))))
+    (paradox aggressive-indent slime-company slime geiser geiser-mode jdee javap-mode yaml-mode opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

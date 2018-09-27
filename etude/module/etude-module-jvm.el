@@ -5,32 +5,46 @@
 ;; Java
 ;;
 
+(setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk")
+
 (use-package jdee
-  :defer t)
+  :defer true
+  :config (setq jdee-server-dir (s-concat emacs-d "dev")))
+
+(require 'cedet)
+
+
 
 ;;
 ;; Clojure
 ;;
 
 (use-package clojure-mode
-  :defer t
-  :init (progn (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
-               (add-hook 'clojure-mode-hook 'paredit-mode)
-               (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)))
+  :defer true
+  :init   (progn (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
+                 (add-hook 'clojure-mode-hook 'paredit-mode)
+                 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+  :config (progn (require 'cider-mode)
+                 (require 'midje-mode)
+                 (on/mode: [::clojure clojure-mode]
+                   "etude-module-jvm"
+                   ::eval-cursor   'cider-eval-last-sexp
+                   ::eval-file     'cider-eval-buffer
+                   ::init          'cider-connect)))
 
 (use-package midje-mode
-  :defer t
+  :defer true
   :config (define-clojure-indent
-             (comment 'defun)))
+            (comment 'defun)))
 
 (use-package cider
-  :defer t
+  :defer true
   :init (progn (add-hook 'cider-mode-hook 'eldoc-mode)
-               (setq nrepl-log-messages t)
-               (setq cider-prefer-local-resources t)
+               (setq nrepl-log-messages true)
+               (setq cider-prefer-local-resources true)
                (setq nrepl-buffer-name-separator "/")
-               (setq nrepl-buffer-name-show-port t)
-               (setq cider-repl-use-clojure-font-lock t)
+               (setq nrepl-buffer-name-show-port true)
+               (setq cider-repl-use-clojure-font-lock true)
                (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
                (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
                (add-hook 'cider-repl-mode-hook 'subword-mode)
@@ -38,12 +52,3 @@
                      "(do (require 'figwheel-sidecar.repl-api)
                           (figwheel-sidecar.repl-api/start-figwheel!)
                           (figwheel-sidecar.repl-api/cljs-repl))")))
-
-(on/mode: [::clojure clojure-mode]
-  "etude-module-clojure"
-  ::eval-cursor   'cider-eval-last-sexp
-  ::eval-file     'cider-eval-buffer
-  ::init          'cider-connect)
-
-           
-
