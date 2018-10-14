@@ -40,20 +40,29 @@
 (on/bind: []
   ::no-action       ()                  'on/no-action
   ::main-menu       ("C-p" "M-x")       'counsel-M-x
-  ::help-bind-key   ("M-h")             'describe-key
+  ::help-bind-key   ("M-h" "C-c C-h")   'describe-key
   ::quit            ("M-q")             'save-buffers-kill-terminal)
 
 ;;
 ;; (EDITING)
 ;;
 
+
+(defun on/just-one-space ()
+  "Delete all spaces and tabs around point, leaving one space (or N spaces).
+If N is negative, delete newlines as well, leaving -N spaces.
+See also `cycle-spacing'."
+  (interactive)
+  (cycle-spacing -1 nil 'single-shot))
+
 (on/bind: []
-  ::cut             ("C-a")             'kill-region    
-  ::copy            ("C-j")             'copy-region-as-kill
+  ::cut             ("C-a" "M-a")       'kill-region
+  ::trim            ("C-x C-k")         'on/just-one-space
+  ::copy            ("C-o" "M-o")       'copy-region-as-kill
   ::cut-context     ("C-k")             'paredit-kill
-  ::copy-context    ("C-x C-k")         'on/paredit-copy-as-kill
-  ::paste           ("C-v")             'yank
-  ::paste-menu      ("M-v" "C-x C-v")   'counsel-yank-pop
+  ::copy-context    ("C-j")             'on/paredit-copy-as-kill
+  ::paste           ("C-v" "M-v")       'yank
+  ::paste-menu      ("C-x v")           'counsel-yank-pop
   ::undo            ("C--" "M--")       'undo
   ::undo-menu       ("C-x -")           'undo-tree-visualize
   ::redo            ("C-x C-")          'undo-tree-redo)
@@ -62,29 +71,50 @@
 ;; (M-`) Window Management
 ;;
 
+(defun on/window-list ()
+  (seq-filter (lambda (w) 
+                (not (equal (buffer-name (window-buffer w))
+		            " *NeoTree*")))
+              (window-list)))
+
+(defun on/window-alternate ()
+  (seq-find (lambda (w)
+              (not (equal w (selected-window))))
+            (on/window-list)))
+
+(defun on/window-set-buffer (w buff)
+  (save-selected-window
+    (select-window w)
+    (switch-to-buffer buff)))
+
 (defun on/split-window-toggle ()
   (interactive)
-  (let: [cnt  (seq-count
-	       (lambda (w)
-		 (not (equal (buffer-name (window-buffer w))
-			     " *NeoTree*")))
-	       (window-list))]
-    (if (equal cnt 1)
-	(split-window-below)
-      (delete-other-windows))))
+  (let: [cnt  (seq-length (on/window-list))]
+    (cond ((equal cnt 1)
+	   (progn (split-window-below)
+                  (on/window-set-buffer (on/window-alternate)
+                                        (other-buffer 1))))
+          
+          ((not (window-full-height-p))
+           (progn (delete-other-windows)
+                  (split-window-right)
+                  (on/window-set-buffer (on/window-alternate)
+                                        (other-buffer 1))))
+          (:else
+           (delete-other-windows)))))
 
 (on/bind: []
-  ::window-close         ("M-DEL")              'delete-window      
-  ::window-focus         ("M-RET")              'delete-other-windows
+  ::window-close         ("<C-backspace>" "M-DEL")   'delete-window      
+  ::window-focus         ("<C-return>" "M-RET")      'delete-other-windows
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
   ::window-split-bottom  ()                     'split-window-below
-  ::window-split-toggle  ()                     'on/split-window-toggle
-  ::window-move-left     ("ESC <left>")         'windmove-left
-  ::window-move-right    ("ESC <right>")        'windmove-right
-  ::window-move-up       ("ESC <up>")           'windmove-up
-  ::window-move-down     ("ESC <down>")         'windmove-down
+  ::window-split-toggle  ("M-w")                'on/split-window-toggle
+  ::window-move-left     ("<C-S-left>" "<M-left>"  "ESC <left>")     'windmove-left
+  ::window-move-right    ("<C-S-right>" "<M-right>" "ESC <right>")    'windmove-right
+  ::window-move-up       ("<C-S-up>" "<M-up>" "ESC <up>")          'windmove-up
+  ::window-move-down     ("<C-S-down>" "<M-down>" "ESC <down>")     'windmove-down
   ::window-balance       ()                     'balance-windows
   ::window-swap          ()                     'ace-swap-window
   ::window-h-plus        ()                     'enlarge-window-horizontally
@@ -96,7 +126,7 @@
   "
   ^Position^                  ^Manage^                    Resize      
   _1_: window focus           _o_: swap                      u 
-  _2_: window split h         _t_: toggle                  l + r
+  _2_: window split h         _w_: toggle                  l + r
   _3_: window split v         _d_: window close              d
   _4_: balance windows
   "
@@ -105,7 +135,7 @@
   ("3" ::window-split-right)
   ("4" ::window-balance)
   ("o" ::window-swap "window swap")
-  ("t" ::window-split-toggle)
+  ("w" ::window-split-toggle)
   ("d" ::window-close  "window close")
   ("<left>"  ::window-h-minus)
   ("<up>"    ::window-v-minus)
@@ -132,22 +162,36 @@
   (interactive)
   (switch-to-buffer (other-buffer)))
 
+(defun on/revert-buffer ()
+  (interactive)
+  (revert-buffer :ignore-auto :noconfirm)
+  (message "Buffer reverted"))
+
+(defun on/jump-workflow ()
+  (interactive)
+  (find-library "etude-core-workflow"))
+
 (on/bind: []
-  ::open              ("M-o" "C-o")             'find-file
-  ::open-recent       ("M-r" "C-r")       'on/ivy-recentf-file
-  ::open-project      ("M-t" "C-t")       'projectile-find-file
+  ::open              ("C-c C-o")         'find-file
+  ::open-recent       ("M-r" "C-r" "s-r") 'on/ivy-recentf-file
+  ::open-project      ("M-t" "C-t" "s-t") 'projectile-find-file
+  ::revert            ("C-x C-r")         'on/revert-buffer
   ::save              ("M-s" "C-s")       'save-buffer
   ::save-as           ("C-x C-s")         'write-file
-  ::save-all          ("M-S" "C-x s" )    'save-some-buffers
+  ::save-all          ("C-x s")           'save-some-buffers
   ::close             ("M-k")             'on/close-buffer
-  ::close-select      ("C-x k")           'kill-buffer  
-  ::close-all         ("M-K")             'on/close-all-buffers
-  ::last-used-buffer  ("M-\\")            'on/last-used-buffer
-  ::prev-buffer       ("M-/")             'previous-buffer
-  ::next-buffer       ("M-=")             'next-buffer
-  ::jump-buffer       ("C-b")             'switch-to-buffer
-  ::toggle-project    ("C-x C-l")         'on/neotree-toggle
-  ::locate-file       ("C-l" "M-l")       'on/neotree-projectile-locate)
+  ::close-select      ("C-c C-k")         'kill-buffer  
+  ::close-all         ("C-c C-x C-k")     'on/close-all-buffers
+  ::last-used-buffer  ("C-\\" "M-\\")     'on/last-used-buffer
+  ::prev-buffer       ("C-/" "M-/")       'previous-buffer
+  ::next-buffer       ("C-=" "M-=")       'next-buffer
+  ::jump-buffer       ("M-b" "C-b")       'switch-to-buffer
+  ::jump-workflow     ("C-x C-0")         'on/jump-workflow
+  ::jump-test         ("C-x C-t")         'projectile-find-test-file
+  ::locate-project    ("C-c l")           'on/neotree-projectile-root
+  ::toggle-project    ("C-c C-l")         'on/neotree-toggle
+  ::locate-file       ("C-l" "M-l")       'on/neotree-projectile-locate
+  ::stats             ("M-'")             'count-lines-page)
 
 (on/menu: [::file-menu ("M-1")]
   "
@@ -199,7 +243,7 @@
 
 (on/mode-init: []
   ::eval-cursor        ("C-e")   ("P")
-  ::eval-file          ("M-e")   ()
+  ::eval-file          ("M-e" "C-x e")   ()
   ::init               ("M-c")   ())
 
 (on/menu: [::lang-menu  ("M-3")]
@@ -221,7 +265,9 @@
 ;;
 
 (on/bind: []
-  ::find                ("C-f")        'swiper
+  ::find                ("C-c s" "C-f")        'swiper
+  ::search-backward     ("C-c s")     'isearch-backward
+  ::search-forward      ("C-c C-s")   'isearch-forward
   ::replace             ()             nil
   ::find-in-project     ("M-f")        'counsel-ag
   ::replace-in-project  ()             nil

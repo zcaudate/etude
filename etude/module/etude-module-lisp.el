@@ -8,19 +8,21 @@
 (progn (add-hook 'lisp-interaction-mode-hook 'smartparens-strict-mode)
        (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
+       (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
        (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
        (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-       (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+       (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+       (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
 (defun on/eval-buffer ()
   (interactive)
   (eval-buffer (current-buffer) true))
 
-(on/mode: [::lisp   lisp-interaction-mode]
+(on/mode: [::lisp   lisp-interaction-mode "etude-module-lisp"]
   ::eval-cursor   'eval-last-sexp
   ::eval-file     'on/eval-buffer)
 
-(on/mode: [::emacs-lisp    emacs-lisp-mode]
+(on/mode: [::emacs-lisp    emacs-lisp-mode "etude-module-lisp"]
   ::eval-cursor  'eval-last-sexp
   ::eval-file    'on/eval-buffer)
 
@@ -32,6 +34,6 @@
   :defer true
   :config (progn (setq geiser-active-implementations '(racket))
                  (setq geiser-mode-autodoc-p nil)
-                 (on/mode: [::scheme geiser-mode]
+                 (on/mode: [::scheme geiser-mode  "etude-module-lisp"]
                    ::eval-cursor    'geiser-eval-last-sexp
                    ::eval-file      'geiser-eval-buffer)))

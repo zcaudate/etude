@@ -16,17 +16,26 @@
 ;; Clojure
 ;;
 
+(use-package flycheck-clojure
+  :defer true)
+
+(defun on/cider-eval-buffer ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer))
+
 (use-package clojure-mode
   :defer true
-  :init   (progn (add-hook 'clojure-mode-hook 'smartparens-strict-mode)
-                 (add-hook 'clojure-mode-hook 'paredit-mode)
-                 (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
-                 (on/mode: [::clojure clojure-mode]
+                 (on/mode: [::clojure clojure-mode "etude-module-jvm"]
                    ::eval-cursor   'cider-eval-last-sexp
-                   ::eval-file     'cider-eval-buffer
-                   ::init          'cider-connect)))
+                   ::eval-file     'on/cider-eval-buffer
+                   ::init          'cider-connect))
+  :hook ((clojure-mode . smartparens-strict-mode)
+         (clojure-mode . rainbow-delimiters-mode)
+         (clojure-mode . paredit-mode)
+         (clojure-mode . eldoc-mode)))
 
 (use-package midje-mode
   :defer true
@@ -35,16 +44,15 @@
 
 (use-package cider
   :defer true
-  :init (progn (add-hook 'cider-mode-hook 'eldoc-mode)
-               (setq nrepl-log-messages true)
-               (setq cider-prefer-local-resources true)
+  :init (progn (setq nrepl-log-messages true)
                (setq nrepl-buffer-name-separator "/")
                (setq nrepl-buffer-name-show-port true)
+               (setq cider-prefer-local-resources true)
                (setq cider-repl-use-clojure-font-lock true)
-               (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
-               (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-               (add-hook 'cider-repl-mode-hook 'subword-mode)
                (setq cider-cljs-lein-repl
                      "(do (require 'figwheel-sidecar.repl-api)
                           (figwheel-sidecar.repl-api/start-figwheel!)
-                          (figwheel-sidecar.repl-api/cljs-repl))")))
+                          (figwheel-sidecar.repl-api/cljs-repl))"))
+  :hook ((cider-repl-mode . smartparens-strict-mode)
+         (cider-repl-mode . rainbow-delimiters-mode)
+         (cider-repl-mode . eldoc-mode)))

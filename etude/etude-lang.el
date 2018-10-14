@@ -214,11 +214,12 @@
        (bind-key on/*meta-config* (quote ,fn-name) ,mode-map))))
 
 (defun on/mode::form (declaration &rest specs)
-  (let: [[mode-key mode-name] declaration
+  (let: [[mode-key mode-name &rest more] declaration
+         mode-file-name (if (not (seq-empty-p more)) (seq-elt more 0))
          mode-table (ht-create)
          _    (ht-set on/*mode-functions* mode-key mode-table)
          _    (ht-set on/*mode-lookup* mode-name mode-key)
-         conf-body (on/mode::create-config-fn mode-key mode-name load-file-name)
+         conf-body (on/mode::create-config-fn mode-key mode-name (or mode-file-name load-file-name))
          body      (seq-map (lambda (spec)
                               (let: [(fn-key fn) spec
                                      mode-fn-key (intern (s-concat (symbol-name fn-key) (symbol-name mode-key)))]

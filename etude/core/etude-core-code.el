@@ -16,6 +16,11 @@
         (self-insert-command true)
       (company-complete-number (string-to-number k)))))
 
+(comment: "For number completion"
+    (mapc  (lambda (x)
+             (define-key company-active-map (format "%d" x) 'on/complete-number))
+           (number-sequence 0 9)))
+
 (use-package company
   :diminish 'company-mode
   :init   (progn (setq company-idle-delay 0.05)
@@ -24,9 +29,6 @@
                  (setq company-tooltip-flip-when-above true)
                  (setq company-show-numbers true))
   :config (progn (add-hook 'after-init-hook 'global-company-mode)
-                 (mapc  (lambda (x)
-                          (define-key company-active-map (format "%d" x) 'on/complete-number))
-                        (number-sequence 0 9))
                  (define-key company-active-map
                    " "
                    (lambda ()
@@ -37,6 +39,8 @@
 
 (use-package flycheck
   :defer true)
+
+(use-package flycheck-pos-tip)
 
 (use-package lsp-mode
   :defer true
