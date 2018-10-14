@@ -39,7 +39,7 @@
 
 (on/bind: []
   ::no-action       ()                  'on/no-action
-  ::main-menu       ("C-p" "M-x")       'counsel-M-x
+  ::main-menu       ("C-p")             'counsel-M-x
   ::help-bind-key   ("M-h" "C-c C-h")   'describe-key
   ::quit            ("M-q")             'save-buffers-kill-terminal)
 
