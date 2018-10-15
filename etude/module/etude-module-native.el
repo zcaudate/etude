@@ -49,9 +49,6 @@
 ;; CLANG
 ;;
 
-(use-package c-mode
-  :defer true)
-
 (use-package lsp-clangd
   :defer true
   :init  (when (equal system-type 'darwin)
