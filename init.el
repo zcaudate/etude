@@ -1,4 +1,11 @@
 ;; Boot
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (setq gc-cons-threshold (* 50 1000 1000))
 
 (progn (setq emacs-d
@@ -31,7 +38,8 @@
     ("/Users/chris/Development/caudata/base/src/hara/lang/c")))
  '(package-selected-packages
    (quote
-    (flycheck-pos-tip flycheck-clojure flycheck-joker paradox aggressive-indent slime-company slime geiser geiser-mode jdee javap-mode yaml-mode opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window))))
+    (flycheck-pos-tip flycheck-clojure flycheck-joker paradox aggressive-indent slime-company slime geiser geiser-mode jdee javap-mode yaml-mode opencl-mode f ht esup counsel-dash wgrep wakatime-mode use-package-chords undo-tree solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit neotree multiple-cursors midje-mode magit lsp-ui lsp-rust lsp-clangd ivy-rich ivy-hydra git-timemachine git-gutter exec-path-from-shell diminish diff-hl dashboard counsel-projectile company-lsp cargo auto-highlight-symbol ace-window)))
+ '(wakatime-python-bin nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -17,10 +17,12 @@
   (when (fboundp mode) (funcall mode false)))
 
 (use-package solarized-theme
+  :ensure t
   :init (load-theme 'solarized-dark true))
 
 ;; Use smart mode line
 (use-package smart-mode-line
+  :ensure t
   :init   (setq sml/no-confirm-load-theme true)
   :config (progn (sml/setup)
                  (sml/apply-theme 'smart-mode-line-dark)))
@@ -35,6 +37,7 @@
        (which-function-mode true))
 
 (use-package auto-highlight-symbol
+  :ensure t
   :diminish 'auto-highlight-symbol-mode
   :config   (progn (setq ahs-idle-interval 0.0)
 	                 (global-auto-highlight-symbol-mode true)))

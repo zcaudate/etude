@@ -40,12 +40,14 @@
 
 ;; Lisp Modes
 (use-package smartparens
+  :ensure t
   :diminish 'smartparens-mode
   :config (progn (require 'smartparens-config)
                  (smartparens-global-mode true)
                  (show-paren-mode true)))
 
 (use-package paredit
+  :ensure t
   :diminish 'paredit-mode
   :init  (define-key read-expression-map (kbd "TAB") 'completion-at-point))
 
@@ -54,7 +56,8 @@
   (paredit-kill)
   (save-excursion (yank)))
 
-(use-package rainbow-delimiters)
+(use-package rainbow-delimiters
+  :ensure t)
 
 ;; Undo tree
 (use-package undo-tree

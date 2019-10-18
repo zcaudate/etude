@@ -22,6 +22,7 @@
            (number-sequence 0 9)))
 
 (use-package company
+  :ensure t
   :diminish 'company-mode
   :init   (progn (setq company-idle-delay 0.05)
                  (setq company-tooltip-limit 20)
@@ -40,7 +41,8 @@
 (use-package flycheck
   :defer true)
 
-(use-package flycheck-pos-tip)
+(use-package flycheck-pos-tip
+  :defer true)
 
 (use-package lsp-mode
   :defer true
@@ -71,7 +73,13 @@
   :config   (global-git-gutter-mode true))
 
 (use-package wakatime-mode
+  :ensure t
   :diminish 'wakatime-mode
   :config   (progn (setq wakatime-cli-path "/usr/local/bin/wakatime")
 	           (setq wakatime-python-bin nil)
 	           (global-wakatime-mode true)))
+
+
+
+ 
+

@@ -8,9 +8,11 @@
                  (recentf-mode true)))
 
 (use-package smex
+  :ensure t
   :config (progn (smex-initialize)))
 
 (use-package ivy
+  :ensure t
   :diminish 'ivy-mode
   :config (progn (ivy-mode true)
                  (setq ivy-initial-inputs-alist nil)
@@ -20,6 +22,7 @@
                  (setq ivy-count-format "(%d/%d)")))
 
 (use-package ivy-rich
+  :ensure t
   :config (ivy-rich-mode true))
 
 (defun on/ivy-recentf-file ()
@@ -28,19 +31,21 @@
     (if file (find-file file))))
 
 (use-package projectile
+  :ensure t
   :diminish 'projectile-mode
   :config (setq projectile-completion-system 'ivy))
 
-(use-package ag)
+(use-package ag :ensure t)
 
-(use-package counsel)
+(use-package counsel :ensure t)
 
 (use-package counsel-projectile
+  :ensure t
   :init (add-hook 'after-init-hook 'counsel-projectile-mode))
 
-(use-package swiper)
+(use-package swiper :ensure t)
 
-(use-package ace-window)
+(use-package ace-window :ensure t)
 
 (defun on/neotree-toggle ()
   (interactive)
@@ -80,6 +85,7 @@
           (recenter))))))
 
 (use-package neotree
+  :ensure t
   :commands neotree-mode
   :init   (add-hook 'neo-after-create-hook
                     (lambda (_)
@@ -102,6 +108,7 @@
   (switch-to-buffer "*dashboard*"))
 
 (use-package dashboard
+  :ensure t
   :init (progn (setq dashboard-startup-banner nil)
                (setq dashboard-items '((recents  . 15)
                                        (projects . 5)))
