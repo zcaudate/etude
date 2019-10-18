@@ -6,11 +6,11 @@
 ;;
 
 ;; Modern libraries
-(use-package s)     ;; string
-(use-package dash)  ;; list
-(use-package ht)    ;; maps
-(use-package f)     ;; file
-(use-package hydra) ;; menus
+(use-package s :ensure t)     ;; string
+(use-package dash :ensure t)  ;; list
+(use-package ht :ensure t)    ;; maps
+(use-package f :ensure t)     ;; file
+(use-package hydra :ensure t) ;; menus
 
 ;; Fix vector intentation
 
