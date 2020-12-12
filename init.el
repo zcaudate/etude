@@ -4,7 +4,7 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
+;;(package-initialize)
 
 (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -22,12 +22,12 @@
 (require 'etude-core)
 (require 'etude-module-lisp)
 (require 'etude-module-jvm)
+(require 'etude-module-docker)
 (require 'etude-module-text)
 ;; (require 'etude-module-native)
 
 (server-force-delete)
 (server-start)
-
 
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-faces
@@ -42,9 +42,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(nord-comment-brightness 20)
+ '(nord-comment-brightness 40)
  '(nord-region-highlight "\"frost\"")
  '(nord-uniform-mode-lines t)
  '(package-selected-packages
-   (quote
-    (counsel-tramp auto-highlight-symbol cider clojure-mode company counsel-codesearch counsel-etags counsel-projectile dashboard magit midje-mode neotree nord-theme paredit rainbow-delimiters smart-mode-line smartparens smex use-package))))
+   '(magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

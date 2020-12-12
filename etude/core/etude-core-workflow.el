@@ -121,20 +121,24 @@ See also `cycle-spacing'."
   ::window-h-plus        ()                     'enlarge-window-horizontally
   ::window-h-minus       ()                     'shrink-window-horizontally
   ::window-v-plus        ()                     'enlarge-window
-  ::window-v-minus       ()                     'shrink-window)
+  ::window-v-minus       ()                     'shrink-window
+  ::window-grow-font     ()                     nil
+  ::window-shrink-font   ()                     nil)
 
 (on/menu: [::window-menu  ("M-`")]
   "
   ^Position^                  ^Manage^                    Resize      
-  _1_: window focus           _o_: swap                      u 
-  _2_: window split h         _w_: toggle                  l + r
-  _3_: window split v         _d_: window close              d
-  _4_: balance windows
+  _1_: window focus           _o_: swap                   _<up>_
+  _2_: window split h         _w_: toggle           _<left>_    _<right>_    
+  _3_: window split v         _d_: window close          _<down>_
+  _4_: balance windows        _9_: shrink font         _0_: grow font
   "
   ("1" ::window-focus "window focus")
   ("2" ::window-split-bottom)
   ("3" ::window-split-right)
   ("4" ::window-balance)
+  ("9" ::window-shrink-font)
+  ("0" ::window-grow-font)
   ("o" ::window-swap "window swap")
   ("w" ::window-split-toggle)
   ("d" ::window-close  "window close")
@@ -281,7 +285,7 @@ See also `cycle-spacing'."
 ;;
 
 (on/bind: []
-  ::find                ("C-c s" "C-f")        'swiper
+  ::find                ("C-f")       'swiper
   ::search-backward     ("C-c s")     'isearch-backward
   ::search-forward      ("C-c C-s")   'isearch-forward
   ::replace             ()             nil
@@ -292,13 +296,14 @@ See also `cycle-spacing'."
 (on/menu: [::search-menu  ("M-4")]
   "
   ^Code^            
-  _1_: find          
+  _1_: find             _4_: find in project
   _2_: find backward      
   _3_: find forward
   "
-  ("1" ::find               "find")
+  ("1" ::find               )
   ("2" ::search-backward    "find previous")
   ("3" ::search-forward     "find next")
+  ("4" ::find-in-project    )
   ("x" ::do-nothing   "exit" :exit t))
 
 
@@ -329,6 +334,23 @@ See also `cycle-spacing'."
   ("3" ::git-log      "git log")
   ("x" ::do-nothing   "exit" :exit t))
 
+
+;;
+;; (M-6) Container Management
+;;
+
+(on/bind: []
+  ::docker-ps          ()             'docker)
+
+(on/menu: [::docker-menu ("M-6")]
+  "
+  ^Basic^                           ^Advanced^
+  _1_: docker-ps
+  "
+  ("1" ::docker-ps)
+  ("x" ::do-nothing   "exit" :exit t))
+
+
 ;;(on/bind: ::git-menu       ("M-5")             'on/git-menu/body)
 
 ;;
@@ -354,14 +376,23 @@ See also `cycle-spacing'."
   (on/jump-to-buffer "*scratch*" (lambda () (switch-to-buffer "*scratch*"))))
 
 (on/bind: []
-  ::toggle-eshell      ()            'on/jump-to-eshell)
+  ::toggle-eshell          ()            'on/jump-to-eshell
+  ::toggle-neotree         ()            'on/neotree-toggle
+  ::toggle-dashboard       ()            'on/jump-to-start-screen
+  ::toggle-scratch         ()            'on/jump-to-scratch)
 
 (on/menu: [::os-menu ("M-9")]
   "
   ^OS^                      
-  _1_: eshell
+  _1_: toggle eshell
+  _2_: toggle tree
+  _3_: toggle dashboard
+  _4_: toggle scratch
   "
-  ("1" ::toggle-eshell  "eshell")
+  ("1" ::toggle-eshell)
+  ("2" ::toggle-tree)
+  ("3" ::toggle-dashboard)
+  ("4" ::toggle-scratch)
   ("x" ::do-nothing   "exit" :exit t))
 
 ;;

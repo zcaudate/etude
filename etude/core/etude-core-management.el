@@ -35,6 +35,8 @@
   :diminish 'projectile-mode
   :config (setq projectile-completion-system 'ivy))
 
+(use-package ag :ensure t)
+
 (use-package counsel :ensure t)
 
 (use-package counsel-etags :ensure t)

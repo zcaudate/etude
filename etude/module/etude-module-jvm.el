@@ -5,19 +5,6 @@
 ;; Clojure
 ;;
 
-(use-package clojure-mode
-  :defer true
-  :config (progn (require 'cider-mode)
-                 (require 'midje-mode)
-                 (on/mode: [::clojure clojure-mode "etude-module-jvm"]
-                   ::eval-cursor   'cider-eval-last-sexp
-                   ::eval-file     'on/cider-eval-buffer
-                   ::init          'cider-connect))
-  :hook ((clojure-mode . smartparens-strict-mode)
-         (clojure-mode . rainbow-delimiters-mode)
-         (clojure-mode . paredit-mode)
-         (clojure-mode . eldoc-mode)))
-
 (use-package midje-mode
   :defer true
   :config (define-clojure-indent
@@ -42,3 +29,16 @@
   (interactive)
   (save-buffer)
   (cider-eval-buffer))
+
+(use-package clojure-mode
+  :defer true
+  :config (progn (require 'cider-mode)
+                 (require 'midje-mode)
+                 (on/mode: [::clojure clojure-mode "etude-module-jvm"]
+                   ::eval-cursor   'cider-eval-last-sexp
+                   ::eval-file     'on/cider-eval-buffer
+                   ::init          'cider-connect))
+  :hook ((clojure-mode . smartparens-strict-mode)
+         (clojure-mode . rainbow-delimiters-mode)
+         (clojure-mode . paredit-mode)
+         (clojure-mode . eldoc-mode)))

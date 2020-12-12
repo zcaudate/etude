@@ -16,11 +16,6 @@
         (self-insert-command true)
       (company-complete-number (string-to-number k)))))
 
-(comment: "For number completion"
-    (mapc  (lambda (x)
-             (define-key company-active-map (format "%d" x) 'on/complete-number))
-           (number-sequence 0 9)))
-
 (use-package company
   :ensure t
   :diminish 'company-mode
