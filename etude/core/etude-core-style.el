@@ -16,9 +16,9 @@
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
   (when (fboundp mode) (funcall mode false)))
 
-(use-package solarized-theme
+(use-package nord-theme
   :ensure t
-  :init (load-theme 'solarized-dark true))
+  :init (load-theme 'nord true))
 
 ;; Use smart mode line
 (use-package smart-mode-line

@@ -3,6 +3,7 @@
 /auto-save-list/
 .mc-lists.el
 *~
+.cache
 /auto-save-list/
 /bak/
 /elpa/

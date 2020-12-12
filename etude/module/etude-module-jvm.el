@@ -4,25 +4,16 @@
 ;;
 ;; Java
 ;;
-(setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk")
+;; (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk")
+;; (require 'cedet)
 
-(require 'cedet)
-
-(use-package jdee
-  :defer true
-  :config (setq jdee-server-dir (s-concat emacs-d "dev")))
+;; (use-package jdee
+;;   :defer true
+;;   :config (setq jdee-server-dir (s-concat emacs-d "dev")))
 
 ;;
 ;; Clojure
 ;;
-
-(use-package flycheck-clojure
-  :defer true)
-
-(defun on/cider-eval-buffer ()
-  (interactive)
-  (save-buffer)
-  (cider-eval-buffer))
 
 (use-package clojure-mode
   :defer true
@@ -56,3 +47,8 @@
   :hook ((cider-repl-mode . smartparens-strict-mode)
          (cider-repl-mode . rainbow-delimiters-mode)
          (cider-repl-mode . eldoc-mode)))
+
+(defun on/cider-eval-buffer ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer))

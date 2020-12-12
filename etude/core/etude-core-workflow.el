@@ -65,7 +65,8 @@ See also `cycle-spacing'."
   ::paste-menu      ("C-x v")           'counsel-yank-pop
   ::undo            ("C--" "M--")       'undo
   ::undo-menu       ("C-x -")           'undo-tree-visualize
-  ::redo            ("C-x C-")          'undo-tree-redo)
+  ::redo            ("C-x C-")          'undo-tree-redo
+  ::comment         ("C-;")             'comment-dwim)
 
 ;;
 ;; (M-`) Window Management
@@ -216,13 +217,28 @@ See also `cycle-spacing'."
 ;;
 
 (on/bind: []
-  ::goto-line       ()             nil
+  ::goto-line       ()             'goto-line
   ::goto-label      ()             nil
   ::mark-label      ()             nil
   ::page-up         ()             nil
   ::page-down       ()             nil
-  ::goto-start      ()             nil
-  ::goto-end        ()             nil)
+  ::goto-start      ()             'beginning-of-buffer
+  ::goto-end        ()             'end-of-buffer
+  ::line-count          ()             'count-lines-page)
+
+(on/menu: [::jump-menu ("M-2")]
+  "
+  ^Goto^           ^Stats^
+  _1_: top         _6_: line count
+  _2_: line
+  _3_: bottom
+  "
+  ("1" ::goto-start  "goto start")
+  ("2" ::goto-line   "goto line")
+  ("3" ::goto-end    "goto bottom")
+
+  ("6" ::line-count  "line count")
+  ("x" ::do-nothing   "exit" :exit t))
 
 ;;
 ;; (M-3) Language Specific
@@ -271,8 +287,20 @@ See also `cycle-spacing'."
   ::replace             ()             nil
   ::find-in-project     ("M-f")        'counsel-ag
   ::replace-in-project  ()             nil
-  ::find-in-os          ()             nil
-  ::line-count          ()             'count-lines-page) 
+  ::find-in-os          ()             nil) 
+
+(on/menu: [::search-menu  ("M-4")]
+  "
+  ^Code^            
+  _1_: find          
+  _2_: find backward      
+  _3_: find forward
+  "
+  ("1" ::find               "find")
+  ("2" ::search-backward    "find previous")
+  ("3" ::search-forward     "find next")
+  ("x" ::do-nothing   "exit" :exit t))
+
 
 (comment: e
   'what-cursor-position)
