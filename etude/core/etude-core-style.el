@@ -1,7 +1,7 @@
 (ns: etude-core-style)
 
 ;; Remove menu, tool, and scrolls
-(set-cursor-color "light green")
+;;(set-cursor-color "light green")
 (show-paren-mode true)
 (global-hl-line-mode true)
 (setq redisplay-dont-pause true)
@@ -21,11 +21,7 @@
   :init (load-theme 'nord true))
 
 ;; Use smart mode line
-(use-package smart-mode-line
-  :ensure t
-  :init   (setq sml/no-confirm-load-theme true)
-  :config (progn (sml/setup)
-                 (sml/apply-theme 'smart-mode-line-dark)))
+
 
 (progn (global-display-line-numbers-mode true)
        (setq display-line-numbers "%4d \u2502 ")
@@ -40,6 +36,6 @@
   :ensure t
   :diminish 'auto-highlight-symbol-mode
   :config   (progn (setq ahs-idle-interval 0.0)
-	                 (global-auto-highlight-symbol-mode true)))
+                   (global-auto-highlight-symbol-mode true)))
  
 (provide 'etude-core-style)

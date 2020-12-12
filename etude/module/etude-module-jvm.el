@@ -2,16 +2,6 @@
   (:require etude-core))
 
 ;;
-;; Java
-;;
-;; (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk")
-;; (require 'cedet)
-
-;; (use-package jdee
-;;   :defer true
-;;   :config (setq jdee-server-dir (s-concat emacs-d "dev")))
-
-;;
 ;; Clojure
 ;;
 

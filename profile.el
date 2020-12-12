@@ -85,6 +85,8 @@
 All sexp's with a running time below this percentage will be
 grayed out.")
 
+;; Main function
+
 (defface profile-dotemacs-time-face
   '((((background dark)) (:background "OrangeRed1"))
     (t (:background "red3")))
@@ -99,8 +101,6 @@ grayed out.")
   '((((background dark)) (:background "blue"))
     (t (:background "yellow")))
   "Highlight face for benchmark results.")
-
-;; Main function
 
 (defun profile-dotemacs ()
   "Load `profile-dotemacs-file' and benchmark its sexps."

@@ -38,25 +38,6 @@
                      (self-insert-command 1)))
                  (define-key company-active-map (kbd "<return>") nil)))
 
-;; (use-package flycheck
-;;   :defer true)
-
-;; (use-package flycheck-pos-tip
-;;   :defer true)
-
-;; (use-package lsp-mode
-;;   :defer true
-;;   :config (progn (require 'lsp-mode)))
-
-;; (use-package lsp-ui
-;;   :defer true
-;;   :config (progn (require 'lsp-ui)))
-
-;; (use-package company-lsp
-;;   :defer true
-;;   :init (progn (require 'company-lsp)
-;;                (push 'company-lsp company-backends)))
-
 (use-package magit
   :defer true)
 
@@ -71,15 +52,6 @@
   :defer true
   :diminish 'git-gutter-mode
   :config   (global-git-gutter-mode true))
-
-;; (use-package wakatime-mode
-;;   :ensure t
-;;   :diminish 'wakatime-mode
-;;   :config   (progn (setq wakatime-cli-path "/usr/local/bin/wakatime")
-;; 	           (setq wakatime-python-bin nil)
-;; 	           (global-wakatime-mode true)))
-
-
 
  
 

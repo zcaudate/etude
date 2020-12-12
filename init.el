@@ -22,8 +22,8 @@
 (require 'etude-core)
 (require 'etude-module-lisp)
 (require 'etude-module-jvm)
-;;(require 'etude-module-native)
 (require 'etude-module-text)
+;; (require 'etude-module-native)
 
 (server-force-delete)
 (server-start)
@@ -36,11 +36,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(nord-comment-brightness 20)
+ '(nord-region-highlight "\"frost\"")
+ '(nord-uniform-mode-lines t)
  '(package-selected-packages
    (quote
-    (midje-mode cider clojure-mode counsel-etags magit wakatime-mode use-package treemacs solarized-theme smex smartparens smart-mode-line rainbow-delimiters paredit nord-theme neotree ivy-rich dashboard counsel-projectile counsel-codesearch company auto-highlight-symbol ag))))
+    (counsel-tramp auto-highlight-symbol cider clojure-mode company counsel-codesearch counsel-etags counsel-projectile dashboard magit midje-mode neotree nord-theme paredit rainbow-delimiters smart-mode-line smartparens smex use-package))))

@@ -21,9 +21,9 @@
                  (setq enable-recursive-minibuffers true)
                  (setq ivy-count-format "(%d/%d)")))
 
-(use-package ivy-rich
-  :ensure t
-  :config (ivy-rich-mode true))
+;; (use-package ivy-rich
+;;   :ensure t
+;;   :config (ivy-rich-mode true))
 
 (defun on/ivy-recentf-file ()
   (interactive)
@@ -35,13 +35,15 @@
   :diminish 'projectile-mode
   :config (setq projectile-completion-system 'ivy))
 
-(use-package ag :ensure t)
-
 (use-package counsel :ensure t)
+
+(use-package counsel-etags :ensure t)
 
 (use-package counsel-projectile
   :ensure t
   :init (add-hook 'after-init-hook 'counsel-projectile-mode))
+
+(use-package counsel-tramp :ensure t)
 
 (use-package swiper :ensure t)
 
