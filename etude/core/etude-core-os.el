@@ -6,6 +6,11 @@
   :ensure t
   :config (progn (exec-path-from-shell-initialize)))
 
+(use-package pcomplete-extensions :ensure t)
+(use-package fish-mode :ensure t)
+(use-package fish-completion :ensure t)
+
+
 (defun on/copy-from-osx ()
     (shell-command-to-string "pbpaste"))
 
@@ -18,6 +23,7 @@
 (setq interprogram-cut-function 'on/paste-to-osx)
 (setq interprogram-paste-function 'on/copy-from-osx)
 
-(use-package fish-mode :ensure t)
+
+
 
 (provide 'etude-core-shell)

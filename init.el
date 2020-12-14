@@ -20,9 +20,11 @@
 (require 'etude-lang)
 (require 'etude-core)
 (require 'etude-module-lisp)
-(require 'etude-module-jvm)
 (require 'etude-module-docker)
 (require 'etude-module-text)
+
+
+;;(require 'etude-module-jvm)
 ;; (require 'etude-module-native)
 
 ;;(server-force-delete)
@@ -45,4 +47,4 @@
  '(nord-region-highlight "\"forst\"")
  '(nord-uniform-mode-lines t)
  '(package-selected-packages
-   '(fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(true git-gutter treemacs-icons-dired treemacs-projectile treemacs-magit treemacs-all-the-icons markdown-mode treemacs all-the-icons fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

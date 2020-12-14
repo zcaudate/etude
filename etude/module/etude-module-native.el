@@ -11,7 +11,7 @@
 (require 'cedet)
 
 (use-package jdee
-  :defer true
+  :defer t
   :config (setq jdee-server-dir (s-concat emacs-d "dev")))
 
 ;;
@@ -19,7 +19,7 @@
 ;;
 
 (use-package opencl-mode
-  :defer true
+  :defer t
   :mode   "\\.cl\\'")
 
 ;;
@@ -27,14 +27,14 @@
 ;;
 
 (use-package cargo
-  :defer true)
+  :defer t)
 
 (use-package rust-mode
-  :defer true
+  :defer t
   :mode   "\\.rs\\'"
   :init   (require 'cargo)
   :hook   cargo-minor-mode
-  :config (progn (setq rust-format-on-save true)
+  :config (progn (setq rust-format-on-save t)
                  (on/mode: [:rust rust-mode  "etude-module-native"]
                    ::init       'cargo-process-init
                    ::eval-file  'cargo-process-run)))
@@ -54,7 +54,7 @@
 ;;
 
 (use-package cmake-mode
-  :defer true
+  :defer t
   :mode "\\CMakeLists.txt\\'" )
 
 ;;
@@ -62,7 +62,7 @@
 ;;
 
 (use-package lsp-clangd
-  :defer true
+  :defer t
   :init  (when (equal system-type 'darwin)
            (setq lsp-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
   :hook  ((c-mode . lsp-clangd-c-enable)

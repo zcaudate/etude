@@ -37,3 +37,80 @@
                  (on/mode: [::scheme geiser-mode  "etude-module-lisp"]
                    ::eval-cursor    'geiser-eval-last-sexp
                    ::eval-file      'geiser-eval-buffer)))
+
+(on/mode: [::eshell-mode eshell-mode    "etude-module-lisp"]
+  ::eval-cursor 'eval-last-sexp)
+
+;;
+;; Clojure
+;;
+
+
+(use-package cider
+  :defer true
+  :init (progn (setq nrepl-log-messages true)
+               (setq nrepl-buffer-name-separator "/")
+               (setq nrepl-buffer-name-show-port true)
+               (setq cider-prefer-local-resources true)
+               (setq cider-repl-use-clojure-font-lock true)
+               (setq cider-cljs-lein-repl
+                     "(do (require 'figwheel-sidecar.repl-api)
+                          (figwheel-sidecar.repl-api/start-figwheel!)
+                          (figwheel-sidecar.repl-api/cljs-repl))"))
+  :hook ((cider-repl-mode . smartparens-strict-mode)
+         (cider-repl-mode . rainbow-delimiters-mode)
+         (cider-repl-mode . eldoc-mode)))
+
+(defun on/cider-eval-buffer ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer))
+
+(use-package clojure-mode
+  :defer true
+  :config (progn (require 'cider-mode)
+                 (require 'midje-mode)
+                 (on/mode: [::clojure clojure-mode "etude-module-jvm"]
+                   ::eval-cursor   'cider-eval-last-sexp
+                   ::eval-file     'on/cider-eval-buffer
+                   ::init          'cider-connect))
+  :hook ((clojure-mode . smartparens-strict-mode)
+         (clojure-mode . rainbow-delimiters-mode)
+         (clojure-mode . paredit-mode)
+         (clojure-mode . eldoc-mode)))
+
+(use-package midje-mode
+  :defer true
+  :config (define-clojure-indent
+            (comment 'defun)))
+
+;;
+;; Overlays from cider
+;;
+
+(autoload 'cider--make-result-overlay "cider-overlays")
+
+(defun endless/eval-overlay (value point)
+  (cider--make-result-overlay (format "%S" value)
+    :where point
+    :duration 'command)
+  ;; Preserve the return value.
+  value)
+
+(advice-add 'eval-region :around
+            (lambda (f beg end &rest r)
+              (endless/eval-overlay
+               (apply f beg end r)
+               end)))
+
+(advice-add 'eval-last-sexp :filter-return
+            (lambda (r)
+              (endless/eval-overlay r (point))))
+
+(advice-add 'eval-defun :filter-return
+            (lambda (r)
+              (endless/eval-overlay
+               r
+               (save-excursion
+                 (end-of-defun)
+                 (point)))))

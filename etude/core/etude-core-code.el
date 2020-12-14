@@ -13,7 +13,7 @@
          re (concat "^" company-prefix k)]
     (if (cl-find-if (lambda (s) (string-match re s))
                     company-candidates)
-        (self-insert-command true)
+        (self-insert-command t)
       (company-complete-number (string-to-number k)))))
 
 (use-package company
@@ -22,8 +22,8 @@
   :init   (progn (setq company-idle-delay 0.05)
                  (setq company-tooltip-limit 20)
                  (setq company-minimum-prefix-length 1)
-                 (setq company-tooltip-flip-when-above true)
-                 (setq company-show-numbers true))
+                 (setq company-tooltip-flip-when-above t)
+                 (setq company-show-numbers t))
   :config (progn (add-hook 'after-init-hook 'global-company-mode)
                  (define-key company-active-map
                    " "
@@ -40,10 +40,7 @@
   (interactive)
   (save-some-buffers))
 
-(use-package git-timemachine
-  :ensure t)
-
 (use-package git-gutter
-  :defer t
+  :ensure t
   :diminish 'git-gutter-mode
-  :config   (global-git-gutter-mode true))
+  :config   (global-git-gutter-mode t))
