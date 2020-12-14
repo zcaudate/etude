@@ -34,19 +34,16 @@
                  (define-key company-active-map (kbd "<return>") nil)))
 
 (use-package magit
-  :defer true)
+  :ensure t)
 
 (defun on/magit-add-commit-push ()
   (interactive)
   (save-some-buffers))
 
 (use-package git-timemachine
-  :defer true)
+  :ensure t)
 
 (use-package git-gutter
-  :defer true
+  :defer t
   :diminish 'git-gutter-mode
   :config   (global-git-gutter-mode true))
-
- 
-

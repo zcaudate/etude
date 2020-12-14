@@ -34,9 +34,19 @@
 ;; Automatically update unmodified buffers whose files have changed.
 (global-auto-revert-mode true)
 
+;; XTERM Mouse support
+(xterm-mouse-mode true)
+
+(global-set-key [mouse-4] '(lambda ()
+                             (interactive)
+                             (scroll-down 1)))
+(global-set-key [mouse-5] '(lambda ()
+                             (interactive)
+                             (scroll-up 1)))
+
+
 ;; Indentation
 (setq-default indent-tabs-mode nil)
-;(setq lisp-indent-function 'common-lisp-indent-function-1)
 
 ;; Lisp Modes
 (use-package smartparens
@@ -59,8 +69,7 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-;; Undo tree
 (use-package undo-tree
-  :defer true
+  :ensure t
   :diminish 'undo-tree-mode
   :config (global-undo-tree-mode true))

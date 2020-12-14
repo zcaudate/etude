@@ -4,7 +4,6 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-;;(package-initialize)
 
 (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -43,7 +42,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(nord-comment-brightness 40)
- '(nord-region-highlight "\"frost\"")
+ '(nord-region-highlight "\"snowstorm\"")
  '(nord-uniform-mode-lines t)
  '(package-selected-packages
-   '(magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(true undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
