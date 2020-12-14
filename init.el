@@ -25,8 +25,8 @@
 (require 'etude-module-text)
 ;; (require 'etude-module-native)
 
-(server-force-delete)
-(server-start)
+;;(server-force-delete)
+;;(server-start)
 
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-faces
@@ -42,7 +42,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(nord-comment-brightness 40)
- '(nord-region-highlight "\"snowstorm\"")
+ '(nord-region-highlight "\"forst\"")
  '(nord-uniform-mode-lines t)
  '(package-selected-packages
-   '(true undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

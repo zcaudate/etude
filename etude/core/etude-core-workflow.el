@@ -55,17 +55,17 @@ See also `cycle-spacing'."
   (cycle-spacing -1 nil 'single-shot))
 
 (on/bind: []
-  ::cut             ("C-o")             'kill-region
-  ::trim            ()                  'on/just-one-space
-  ::copy            ("C-x C-o")         'copy-region-as-kill
-  ::cut-context     ("C-k")             'paredit-kill
-  ::copy-context    ("C-x C-k")         'on/paredit-copy-as-kill
-  ::paste           ("C-v" "M-v")       'yank
-  ::paste-menu      ("C-x v")           'counsel-yank-pop
-  ::undo            ("C--" "M--")       'undo
-  ::undo-menu       ("C-x -")           'undo-tree-visualize
-  ::redo            ("C-x C-")          'undo-tree-redo
-  ::comment         ("C-;")             'comment-dwim)
+  ::cut             ("C-o")               'kill-region
+  ::trim            ()                    'on/just-one-space
+  ::copy            ("C-x C-o")           'copy-region-as-kill
+  ::cut-context     ("C-k")               'paredit-kill
+  ::copy-context    ("C-x C-k")           'on/paredit-copy-as-kill
+  ::paste           ("C-v" "M-v" "C-j")   'yank
+  ::paste-menu      ("C-x C-v" "C-x v" "C-x C-j" "C-x j")  'counsel-yank-pop
+  ::undo            ("C--" "M--")         'undo
+  ::undo-menu       ("C-x -")             'undo-tree-visualize
+  ::redo            ("C-x C-")            'undo-tree-redo
+  ::comment         ("C-;")               'comment-dwim)
 
 ;;
 ;; (F1) File and Buffer Management
@@ -91,14 +91,10 @@ See also `cycle-spacing'."
   (revert-buffer :ignore-auto :noconfirm)
   (message "Buffer reverted"))
 
-(defun on/jump-workflow ()
-  (interactive)
-  (find-library "etude-core-workflow"))
-
 (on/bind: []
   ::open              ()                    'find-file
   ::open-recent       ()                    'on/ivy-recentf-file
-  ::open-project      ("M-t" "C-t" "s-t")   'projectile-find-file
+  ::open-project      ("M-t" "C-t" "s-t")   'projectile-find-file-dwim
   ::revert            ("C-x r" "C-x C-r")   'on/revert-buffer
   ::save              ("C-s" "M-s")         'save-buffer
   ::save-as           ()                    'write-file
@@ -175,9 +171,9 @@ See also `cycle-spacing'."
   (on/close-buffer))
 
 (on/bind: []
-  ::window-delete        ("M-`")                         'on/window-delete
-  ::window-close         ("C-x C-<down>" "C-x <down>")   'delete-window      
-  ::window-focus         ("C-x C-<up>" "C-x <up>")       'delete-other-windows
+  ;; ::window-delete        ("M-`")                         'on/window-delete
+  ::window-close         ("M-DEL" "C-x C-<down>" "C-x <down>")   'delete-window      
+  ::window-focus         ("M-RET" "C-x C-<up>" "C-x <up>")       'delete-other-windows
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
@@ -233,16 +229,18 @@ See also `cycle-spacing'."
   (setq on/*back-buffer* (current-buffer))
   (find-library library))
 
-(defun on/jump-to-workflow ()
-  (interactive)
-  (setq on/*back-buffer* (current-buffer))
-  (find-library "etude-core-workflow"))
-
 (defun on/jump-back ()
   (interactive)
   (when on/*back-buffer*
     (switch-to-buffer on/*back-buffer*)
     (setq on/*back-buffer* nil)))
+
+(defun on/jump-to-workflow ()
+  (interactive)
+  (if on/*back-buffer*
+      (on/jump-back)
+    (progn (setq on/*back-buffer* (current-buffer))
+           (find-library "etude-core-workflow"))))
 
 (on/bind: []
   ::describe-key       ("<f5>") 'describe-key
