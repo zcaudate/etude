@@ -105,7 +105,8 @@ See also `cycle-spacing'."
   ::last-used-buffer  ("C-\\" "M-\\")       'on/last-used-buffer
   ::prev-buffer       ("C-x C-<left>" "C-x <left>")         'previous-buffer
   ::next-buffer       ("C-x C-<right>" "C-x <right>")         'next-buffer
-  ::jump-buffer       ("C-r")               'counsel-buffer-or-recentf
+  ::jump-buffer       ("M-r" "C-r")               'counsel-buffer-or-recentf
+  ::jump-buffer       ("M-b" "C-x C-b" "C-x b" )   'counsel-ibuffer
   ::jump-test         ()                    'projectile-find-test-file
   ::locate-project    ("C-c C-r" "C-c r")   'on/neotree-projectile-root
   ::toggle-project    ("C-c C-0" "C-c 0")   'on/neotree-toggle
