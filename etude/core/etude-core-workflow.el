@@ -57,17 +57,17 @@ See also `cycle-spacing'."
 (on/bind: []
   ::cut             ("C-o")               'kill-region
   ::trim            ()                    'on/just-one-space
-  ::copy            ("C-x C-o")           'copy-region-as-kill
+  ::copy            ("C-x C-o" "C-x o")   'copy-region-as-kill
   ::cut-context     ("C-k")               'paredit-kill
-  ::copy-context    ("C-x C-k")           'on/paredit-copy-as-kill
+  ::copy-context    ("C-x C-k" "C-x k")   'on/paredit-copy-as-kill
   ::paste           ("C-v" "M-v" "C-j")   'yank
   ::paste-menu      ("C-x C-v" "C-x v" "C-x C-j" "C-x j")  'counsel-yank-pop
   ::undo            ("C--" "M--")         'undo
-  ::undo-menu       ("C-x -")             'undo-tree-visualize
-  ::redo            ("C-x C-")            'undo-tree-redo
-  ::comment         ("C-;")               'comment-dwim)
+  ::redo            ("C-_" "M-_")            'undo-tree-redo
+  ::undo-menu       ("C-x C--" "C-x -")             'undo-tree-visualize
+  ::comment         ("C-x ;" "C-x C-;")   'comment-or-uncomment-region)
 
-;;
+;;;
 ;; (F1) File and Buffer Management
 ;;
 
@@ -93,7 +93,7 @@ See also `cycle-spacing'."
 
 (on/bind: []
   ::open              ()                    'find-file
-  ::open-recent       ()                    'on/ivy-recentf-file
+  ::open-recent       ()                    'counsel-recentf
   ::open-project      ("M-t" "C-t" "s-t")   'projectile-find-file-dwim
   ::revert            ("C-x r" "C-x C-r")   'on/revert-buffer
   ::save              ("C-s" "M-s")         'save-buffer
@@ -171,7 +171,7 @@ See also `cycle-spacing'."
   (on/close-buffer))
 
 (on/bind: []
-  ;; ::window-delete        ("M-`")                         'on/window-delete
+  ::window-delete        ("M-`")                         'on/window-delete
   ::window-close         ("M-DEL" "C-x C-<down>" "C-x <down>")   'delete-window      
   ::window-focus         ("M-RET" "C-x C-<up>" "C-x <up>")       'delete-other-windows
   ::window-split-left    ()                     nil
