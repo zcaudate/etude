@@ -44,7 +44,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(nord-comment-brightness 40)
- '(nord-region-highlight "\"forst\"")
  '(nord-uniform-mode-lines t)
  '(package-selected-packages
-   '(true git-gutter treemacs-icons-dired treemacs-projectile treemacs-magit treemacs-all-the-icons markdown-mode treemacs all-the-icons fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(dired-rsync graphviz-dot-mode prism git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

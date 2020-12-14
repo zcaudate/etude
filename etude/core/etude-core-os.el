@@ -6,13 +6,17 @@
   :ensure t
   :config (progn (exec-path-from-shell-initialize)))
 
-(use-package pcomplete-extensions :ensure t)
+(use-package pcomplete-extension :ensure t)
 (use-package fish-mode :ensure t)
 (use-package fish-completion :ensure t)
+(use-package shx :ensure t)
 
 
+;;
+;; OSX
+;;
 (defun on/copy-from-osx ()
-    (shell-command-to-string "pbpaste"))
+  (shell-command-to-string "pbpaste"))
 
 (defun on/paste-to-osx (text &optional push)
     (let ((process-connection-type nil))
@@ -20,10 +24,13 @@
         (process-send-string proc text)
         (process-send-eof proc))))
 
-(setq interprogram-cut-function 'on/paste-to-osx)
-(setq interprogram-paste-function 'on/copy-from-osx)
+(if (eq system-type 'darwin)
+    (progn
+      (setq interprogram-cut-function 'on/paste-to-osx)
+      (setq interprogram-paste-function 'on/copy-from-osx)))
 
-
-
+;;
+;;
+;;
 
 (provide 'etude-core-shell)

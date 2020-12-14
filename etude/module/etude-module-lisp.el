@@ -16,7 +16,7 @@
 
 (defun on/eval-buffer ()
   (interactive)
-  (eval-buffer (current-buffer) true))
+  (eval-buffer (current-buffer) t))
 
 (on/mode: [::lisp   lisp-interaction-mode "etude-module-lisp"]
   ::eval-cursor   'eval-last-sexp
@@ -30,14 +30,6 @@
   ::jump-config  ("M-)")   'on/jump-to-elisp-config
   ::jump-back    ("M-0")   'on/jump-back)
 
-(use-package geiser
-  :defer true
-  :config (progn (setq geiser-active-implementations '(racket))
-                 (setq geiser-mode-autodoc-p nil)
-                 (on/mode: [::scheme geiser-mode  "etude-module-lisp"]
-                   ::eval-cursor    'geiser-eval-last-sexp
-                   ::eval-file      'geiser-eval-buffer)))
-
 (on/mode: [::eshell-mode eshell-mode    "etude-module-lisp"]
   ::eval-cursor 'eval-last-sexp)
 
@@ -47,12 +39,12 @@
 
 
 (use-package cider
-  :defer true
-  :init (progn (setq nrepl-log-messages true)
+  :ensure t
+  :init (progn (setq nrepl-log-messages t)
                (setq nrepl-buffer-name-separator "/")
-               (setq nrepl-buffer-name-show-port true)
-               (setq cider-prefer-local-resources true)
-               (setq cider-repl-use-clojure-font-lock true)
+               (setq nrepl-buffer-name-show-port t)
+               (setq cider-prefer-local-resources t)
+               (setq cider-repl-use-clojure-font-lock t)
                (setq cider-cljs-lein-repl
                      "(do (require 'figwheel-sidecar.repl-api)
                           (figwheel-sidecar.repl-api/start-figwheel!)
@@ -67,7 +59,7 @@
   (cider-eval-buffer))
 
 (use-package clojure-mode
-  :defer true
+  :ensure t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
                  (on/mode: [::clojure clojure-mode "etude-module-jvm"]
@@ -80,7 +72,7 @@
          (clojure-mode . eldoc-mode)))
 
 (use-package midje-mode
-  :defer true
+  :ensure t
   :config (define-clojure-indent
             (comment 'defun)))
 
