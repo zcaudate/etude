@@ -77,7 +77,8 @@
          bname (buffer-file-name)]
     (if (equal " *NeoTree*" (buffer-name (window-buffer cw)))
         (progn (select-window (previous-window))
-               (neotree-toggle))
+               ;;(neotree-toggle)
+               )
       (save-excursion
         (when (and (fboundp 'projectile-project-p)
                    (projectile-project-p)
@@ -108,7 +109,7 @@
   (dashboard-insert-startupify-lists)
   (redisplay)
   (switch-to-buffer "*dashboard*")
-  (neotree-dir "~")
+  ;;(neotree-dir "~")
   (switch-to-buffer "*dashboard*"))
 
 (use-package dashboard

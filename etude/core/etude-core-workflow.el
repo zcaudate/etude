@@ -103,18 +103,17 @@ See also `cycle-spacing'."
   ::save              ("C-s" "M-s")         'save-buffer
   ::save-as           ()                    'write-file
   ::save-all          ()                    'save-some-buffers
-  ::close             ("M-k")               'on/close-buffer
+  ::close             ("C-c 9" "C-c C-9")   'on/close-buffer
   ::close-select      ("C-c k" "C-c C-k")   'kill-buffer  
   ::close-all         ()                    'on/close-all-buffers
   ::last-used-buffer  ("C-\\" "M-\\")       'on/last-used-buffer
-  ::prev-buffer       ("C-r" "M-r")         'previous-buffer
-  ::next-buffer       ("C-l" "M-l")         'next-buffer
-  ::jump-buffer       ("M-b" "C-b")         'switch-to-buffer
-  ::jump-workflow     ()                    'on/jump-workflow
+  ::prev-buffer       ("C-x C-<left>" "C-x <left>")         'previous-buffer
+  ::next-buffer       ("C-x C-<right>" "C-x <right>")         'next-buffer
+  ::jump-buffer       ("C-r")               'counsel-buffer-or-recentf
   ::jump-test         ()                    'projectile-find-test-file
-  ::locate-project    ()                    'on/neotree-projectile-root
-  ::toggle-project    ()                    'on/neotree-toggle
-  ::locate-file       ()                    'on/neotree-projectile-locate)
+  ::locate-project    ("C-c C-r" "C-c r")   'on/neotree-projectile-root
+  ::toggle-project    ("C-c C-0" "C-c 0")   'on/neotree-toggle
+  ::locate-file       ("C-c C-l" "C-c l")   'on/neotree-projectile-locate)
 
 (on/menu: [::file-menu ("<f1>")]
   "
@@ -170,9 +169,15 @@ See also `cycle-spacing'."
           (:else
            (delete-other-windows)))))
 
+(defun on/window-delete ()
+  (interactive)
+  (delete-other-windows)
+  (on/close-buffer))
+
 (on/bind: []
-  ::window-close         ("<C-backspace>" "M-DEL" "C-c C-l" "C-c l")   'delete-window      
-  ::window-focus         ("<C-return>" "M-RET" "C-c C-r" "C-c r")      'delete-other-windows
+  ::window-delete        ("M-`")                         'on/window-delete
+  ::window-close         ("C-x C-<down>" "C-x <down>")   'delete-window      
+  ::window-focus         ("C-x C-<up>" "C-x <up>")       'delete-other-windows
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
@@ -264,14 +269,14 @@ See also `cycle-spacing'."
 ;;
 
 (on/bind: []
-  ::goto-line           ()             'goto-line
-  ::goto-start          ()             'beginning-of-buffer
-  ::goto-end            ()             'end-of-buffer
-  ::find                ("C-c C-s")    'swiper
+  ::goto-line           ("C-c C-g" "C-c g")    'goto-line
+  ::goto-start          ("C-c C-<up>" "C-c <up>")       'beginning-of-buffer
+  ::goto-end            ("C-c C-<down>" "C-c <down>")   'end-of-buffer
+  ::find                ("C-c C-s" "C-c s")  'swiper
   ::search-backward     ()             'isearch-backward
   ::search-forward      ()             'isearch-forward
   ::replace             ()             nil
-  ::find-in-project     ("C-x C-s")    'counsel-ag
+  ::find-in-project     ("C-x C-s" "C-x s")    'counsel-ag
   ::replace-in-project  ()             nil
   ::find-in-os          ()             nil) 
 
@@ -390,21 +395,22 @@ See also `cycle-spacing'."
 
 (on/bind: []
   ::toggle-eshell          ("M-1")                      'on/jump-to-eshell
-  ::toggle-neotree         ("M-2" "C-c C-0" "C-c 0")    'on/neotree-toggle
-  ::toggle-dashboard       ("M-3")                      'on/jump-to-start-screen
-  ::toggle-scratch         ("M-4")                      'on/jump-to-scratch)
+  ::toggle-dashboard       ("M-2")                      'on/jump-to-start-screen
+  ::toggle-scratch         ("M-3")                      'on/jump-to-scratch
+  ::toggle-workflow        ("M-4")                      'on/jump-to-workflow
+  ::toggle-magit           ("M-5")                      'magit)
 
 (on/menu: [::os-menu ("<f9>")]
   "
   ^OS^                      
-  _1_: toggle eshell
-  _2_: toggle tree
-  _3_: toggle dashboard
-  _4_: toggle scratch
+  _1_: toggle eshell         _4_: toggle workflow
+  _2_: toggle dashboard      _5_: toggle git
+  _3_: toggle scratch
   "
   ("1" ::toggle-eshell)
-  ("2" ::toggle-tree)
-  ("3" ::toggle-dashboard)
-  ("4" ::toggle-scratch)
+  ("2" ::toggle-dashboard)
+  ("3" ::toggle-scratch)
+  ("4" ::toggle-workflow)
+  ("5" ::toggle-magit)
   ("x" ::do-nothing   "exit" :exit t))
 
