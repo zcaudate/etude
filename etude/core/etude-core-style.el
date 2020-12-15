@@ -22,7 +22,6 @@
 
 ;; Use smart mode line
 
-
 (progn (global-display-line-numbers-mode t)
        (setq display-line-numbers "%4d \u2502 ")
        
@@ -32,10 +31,11 @@
        ;; Show current function in modeline.
        (which-function-mode t))
 
-(use-package auto-highlight-symbol
-  :ensure t
-  :diminish 'auto-highlight-symbol-mode
-  :config   (progn (setq ahs-idle-interval 0.0)
-                   (global-auto-highlight-symbol-mode t)))
+(comment:
+    (use-package auto-highlight-symbol
+      :ensure t
+      :diminish 'auto-highlight-symbol-mode
+      :config   (progn (setq ahs-idle-interval 0.0)
+                       (global-auto-highlight-symbol-mode t))))
  
 (provide 'etude-core-style)

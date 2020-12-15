@@ -46,3 +46,7 @@
   :ensure t
   :diminish 'git-gutter-mode
   :config   (global-git-gutter-mode t))
+
+(use-package git-timemachine :ensure t)
+
+(use-package eglot :ensure t)

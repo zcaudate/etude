@@ -111,12 +111,13 @@ See also `cycle-spacing'."
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\")       'on/last-used-buffer
   ::prev-buffer       ("C-S-<left>" "C-x C-<left>" "C-x <left>")      'previous-buffer
   ::next-buffer       ("C-S-<right>" "C-x C-<right>" "C-x <right>")    'next-buffer
-  ::jump-buffer       ("ESC r" "M-r" "C-r")         'counsel-buffer-or-recentf
-  ::jump-buffer       ("ESC b" "M-b" "C-b")         'counsel-ibuffer
-  ::jump-test         ()                    'projectile-find-test-file
-  ::locate-project    ()                    nil
-  ::toggle-project    ("ESC 0" "M-0")               'treemacs
-  ::locate-file       ()                    nil)
+  ::jump-recent       ("ESC r" "M-r" "C-r")   'counsel-recentf
+  ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-ibuffer
+  ::list-buffers      ("C-x b" "C-x C-b")     'bufler
+  ::jump-test         ()                      'projectile-find-test-file
+  ::locate-project    ()                      nil
+  ::toggle-project    ("ESC 0" "M-0")         'treemacs
+  ::locate-file       ()                      nil)
 
 (on/menu: [::file-menu ("<f1>")]
   "

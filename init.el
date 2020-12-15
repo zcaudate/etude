@@ -44,6 +44,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(doom-modeline-icon nil)
+ '(global-linum-mode nil)
  '(nord-comment-brightness 40)
  '(nord-uniform-mode-lines t)
  '(org-babel-load-languages
@@ -54,4 +55,4 @@
      (gnuplot . t)
      (java . t)))
  '(package-selected-packages
-   '(multi-vterm w3m writeroom-mode visual-fill company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode prism git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(gdscript-mode eglot git-timemachine multiple-cursors bufler multi-vterm w3m writeroom-mode visual-fill company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode prism git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
