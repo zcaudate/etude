@@ -128,8 +128,8 @@ See also `cycle-spacing'."
   ("1" ::save-all     "save all")
   ("2" ::close-all    "close all")
   ("3" ::open-project "open file in project")
-  ("4" ::open         nil :exit true)
-  ("5" ::open-recent  nil :exit true)
+  ("4" ::open         nil :exit t)
+  ("5" ::open-recent  nil :exit t)
   ("6" ::save)
   ("7" ::save-as)
   ("8" ::close)
@@ -179,8 +179,8 @@ See also `cycle-spacing'."
 
 (on/bind: []
   ::window-delete        ("ESC <deletechar>")           'on/window-delete
-  ::window-close         ("ESC DEL" "M-DEL" "C-<delete>" "C-x DEL" "C-x <down>")   'delete-window      
-  ::window-focus         ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x <up>")     'delete-other-windows
+  ::window-close         ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x <down>" "C-x C-<down>")   'delete-window      
+  ::window-focus         ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x <up>" "C-x C-<up>")    'delete-other-windows
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
@@ -250,11 +250,11 @@ See also `cycle-spacing'."
            (find-library "etude-core-workflow"))))
 
 (on/bind: []
-  ::describe-key       ()       'describe-key
-  ::describe-bindings  ()       'describe-bindings
-  ::line-count         ()       'count-lines-page
-  ::settings-workflow  ()       'on/jump-to-workflow
-  ::settings-back      ()       'on/jump-back)
+  ::describe-key       ("<f4>")   'describe-key
+  ::describe-bindings  ()         'describe-bindings
+  ::line-count         ()         'count-lines-page
+  ::settings-workflow  ()         'on/jump-to-workflow
+  ::settings-back      ()         'on/jump-back)
 
 (on/menu: [::jump-menu ("<f3>")]
   "
@@ -283,9 +283,10 @@ See also `cycle-spacing'."
   ::replace             ()             nil
   ::find-in-project     ("C-x C-s" "C-x s")    'counsel-ag
   ::replace-in-project  ()             nil
-  ::find-in-os          ()             nil) 
+  ::find-in-os          ()             nil
+  ::goto-definition     ()) 
 
-(on/menu: [::search-menu  ("<f4>")]
+(on/menu: [::search-menu  ()]
   "
   ^Goto^            
   _1_: find             _4_: find in project
@@ -323,7 +324,6 @@ See also `cycle-spacing'."
   ("3" ::git-log      "git log")
   ("x" ::do-nothing   "exit" :exit t))
 
-
 ;;
 ;; (M-6) Container Management
 ;;
@@ -338,7 +338,6 @@ See also `cycle-spacing'."
   "
   ("1" ::docker-ps)
   ("x" ::do-nothing   "exit" :exit t))
-
 
 ;;
 ;; (M-8) Language Specific
@@ -359,8 +358,8 @@ See also `cycle-spacing'."
 
 (on/mode-init: []
   ::eval-cursor        ("C-e")   ("P")
-  ::eval-file          ("M-e" "C-x e" "C-x C-e")   ()
-  ::init               ("M-c")   ())
+  ::eval-file          ("M-e" "ESC e" "C-x e" "C-x C-e")   ()
+  ::init               ("M-c" "ESC c")   ())
 
 (on/menu: [::lang-menu  ("<f8>")]
   "
@@ -399,11 +398,12 @@ See also `cycle-spacing'."
   (on/jump-to-buffer "*scratch*" (lambda () (switch-to-buffer "*scratch*"))))
 
 (on/bind: []
-  ::toggle-eshell          ("M-1")                      'on/jump-to-eshell
-  ::toggle-dashboard       ("M-2")                      'on/jump-to-start-screen
-  ::toggle-scratch         ("M-3")                      'on/jump-to-scratch
-  ::toggle-magit           ("M-4")                      'magit
-  ::toggle-workflow        ("M-5")                      'on/jump-to-workflow)
+  ::toggle-eshell          ("ESC 1" "M-1")                      'on/jump-to-eshell
+  ::toggle-dashboard       ("ESC 2" "M-2")                      'on/jump-to-start-screen
+  ::toggle-scratch         ("ESC 3" "M-3")                      'on/jump-to-scratch
+  ::toggle-magit           ("ESC 4" "M-4")                      'magit
+  ::toggle-workflow        ("ESC 5" "M-5")                      'on/jump-to-workflow
+  ::toggle-treemacs        ("ESC 0" "M-0")                      'treemacs-find-file)
 
 (on/menu: [::os-menu ("<f9>")]
   "

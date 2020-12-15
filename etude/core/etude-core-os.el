@@ -6,11 +6,16 @@
   :ensure t
   :config (progn (exec-path-from-shell-initialize)))
 
+
+;; EShell Support
 (use-package pcomplete-extension :ensure t)
 (use-package fish-mode :ensure t)
 (use-package fish-completion :ensure t)
-(use-package shx :ensure t)
 
+
+;; VTerm support
+(use-package vterm :ensure t)
+(use-package multi-vterm :ensure t)
 
 ;;
 ;; OSX

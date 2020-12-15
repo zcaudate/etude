@@ -1,7 +1,0 @@
-#+title:  Etude Emacs
-#+author: Chris Zheng
-#+date:   2020-10-27
-
-
-This is a minimal emacs installation designed to be very straightforward to customise
-

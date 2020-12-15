@@ -43,7 +43,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(doom-modeline-icon nil)
  '(nord-comment-brightness 40)
  '(nord-uniform-mode-lines t)
+ '(org-babel-load-languages
+   '((emacs-lisp . t)
+     (js . t)
+     (shell . t)
+     (dot . t)
+     (gnuplot . t)
+     (java . t)))
  '(package-selected-packages
-   '(dired-rsync graphviz-dot-mode prism git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(multi-vterm w3m writeroom-mode visual-fill company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode prism git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit ag docker-compose-mode docker-tramp docker dockerfile-mode midje-mode cider auto-highlight-symbol nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy smex company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

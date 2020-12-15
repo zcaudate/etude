@@ -2,10 +2,10 @@
   (:require etude-core-base))
 
 (use-package recentf
-  :defer true
+  :defer t
   :config (progn (setq recentf-max-saved-items 200
                        recentf-max-menu-items 15)
-                 (recentf-mode true)))
+                 (recentf-mode t)))
 
 (use-package smex
   :ensure t
@@ -14,21 +14,12 @@
 (use-package ivy
   :ensure t
   :diminish 'ivy-mode
-  :config (progn (ivy-mode true)
+  :config (progn (ivy-mode t)
                  (setq ivy-initial-inputs-alist nil)
-                 (setq ivy-use-virtual-buffers true)
+                 (setq ivy-use-virtual-buffers t)
                  (setq ivy-virtual-abbreviate 'abbreviate)     
-                 (setq enable-recursive-minibuffers true)
+                 (setq enable-recursive-minibuffers t)
                  (setq ivy-count-format "(%d/%d)")))
-
-;; (use-package ivy-rich
-;;   :ensure t
-;;   :config (ivy-rich-mode true))
-
-(defun on/ivy-recentf-file ()
-  (interactive)
-  (let: [file (ivy-completing-read "Recent: " recentf-list nil true)]
-    (if file (find-file file))))
 
 (use-package projectile
   :ensure t
@@ -49,14 +40,16 @@
 
 (use-package counsel-tramp :ensure t)
 
+(use-package ivy-rich
+  :ensure t
+  :config (ivy-rich-mode t))
+
 (use-package ace-window :ensure t)
 
 (defun on/start-screen ()
   (interactive)
   (dashboard-insert-startupify-lists)
   (redisplay)
-  (switch-to-buffer "*dashboard*")
-  ;;(neotree-dir "~")
   (switch-to-buffer "*dashboard*"))
 
 (use-package dashboard
@@ -66,7 +59,11 @@
                                        (projects . 5)))
                (add-hook 'emacs-startup-hook 'on/start-screen)))
 
-(use-package treemacs :ensure t)
-(setq treemacs-no-png-images t)
+(use-package treemacs :ensure t
+  :init (setq treemacs-no-png-images t))
+
 (use-package treemacs-projectile :ensure t)
 (use-package treemacs-magit :ensure t)
+
+(use-package doom-modeline :ensure t
+  :init (doom-modeline-mode))
