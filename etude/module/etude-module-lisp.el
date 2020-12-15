@@ -26,10 +26,6 @@
   ::eval-cursor  'eval-last-sexp
   ::eval-file    'on/eval-buffer)
 
-(on/bind: [emacs-lisp-mode-map]
-  ::jump-config  ("M-)")   'on/jump-to-elisp-config
-  ::jump-back    ("M-0")   'on/jump-back)
-
 (on/mode: [::eshell-mode eshell-mode    "etude-module-lisp"]
   ::eval-cursor 'eval-last-sexp)
 

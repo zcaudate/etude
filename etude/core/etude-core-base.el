@@ -69,7 +69,7 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(use-package undo-tree
-  :ensure t
-  :diminish 'undo-tree-mode
-  :config (global-undo-tree-mode t))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :diminish 'undo-tree-mode
+;;   :config (global-undo-tree-mode t))

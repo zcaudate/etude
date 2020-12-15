@@ -38,10 +38,10 @@
   (interactive))
 
 (on/bind: []
-  ::no-action       ()               'on/no-action
-  ::main-menu       ("C-p")          'counsel-M-x
-  ::help-bind-key   ("C-c C-h")      'describe-key
-  ::quit            ("M-q")          'save-buffers-kill-terminal)
+  ::no-action       ()                   'on/no-action
+  ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
+  ::help-bind-key   ("ESC h" "M-h")      'describe-key
+  ::quit            ("ESC q" "M-q")      'save-buffers-kill-terminal)
 
 ;;
 ;; (EDITING)
@@ -54,18 +54,24 @@ See also `cycle-spacing'."
   (interactive)
   (cycle-spacing -1 nil 'single-shot))
 
+(defun on/undo-tree-redo ()
+  (interactive)
+  (undo-tree-mode t)
+  (undo-tree-redo))
+
 (on/bind: []
-  ::cut             ("C-o")               'kill-region
+  ::cut             ("C-a")               'kill-region
   ::trim            ()                    'on/just-one-space
-  ::copy            ("C-x C-o" "C-x o")   'copy-region-as-kill
+  ::copy            ("C-o")   'copy-region-as-kill
   ::cut-context     ("C-k")               'paredit-kill
-  ::copy-context    ("C-x C-k" "C-x k")   'on/paredit-copy-as-kill
+  ::copy-context    ("ESC k")   'on/paredit-copy-as-kill
   ::paste           ("C-v" "M-v" "C-j")   'yank
   ::paste-menu      ("C-x C-v" "C-x v" "C-x C-j" "C-x j")  'counsel-yank-pop
-  ::undo            ("C--" "M--")         'undo
-  ::redo            ("C-_" "M-_")            'undo-tree-redo
-  ::undo-menu       ("C-x C--" "C-x -")             'undo-tree-visualize
+  ::undo            ("C--")               'undo
+  ::redo            ("ESC -")       'on/undo-tree-redo
+  ::undo-menu       ("C-x -")             'undo-tree-visualize
   ::comment         ("C-x ;" "C-x C-;")   'comment-or-uncomment-region)
+
 
 ;;;
 ;; (F1) File and Buffer Management
@@ -94,23 +100,23 @@ See also `cycle-spacing'."
 (on/bind: []
   ::open              ()                    'find-file
   ::open-recent       ()                    'counsel-recentf
-  ::open-project      ("M-t" "C-t" "s-t")   'projectile-find-file-dwim
+  ::open-project      ("ESC t" "M-t" "C-t" "s-t")   'projectile-find-file-dwim
   ::revert            ("C-x r" "C-x C-r")   'on/revert-buffer
-  ::save              ("C-s" "M-s")         'save-buffer
+  ::save              ("ESC s" "C-s" "M-s") 'save-buffer
   ::save-as           ()                    'write-file
   ::save-all          ()                    'save-some-buffers
-  ::close             ("C-c 9" "C-c C-9")   'on/close-buffer
-  ::close-select      ("C-c k" "C-c C-k")   'kill-buffer  
+  ::close             ()                    'on/close-buffer
+  ::close-select      ()                    'kill-buffer  
   ::close-all         ()                    'on/close-all-buffers
-  ::last-used-buffer  ("C-\\" "M-\\")       'on/last-used-buffer
-  ::prev-buffer       ("C-x C-<left>" "C-x <left>")         'previous-buffer
-  ::next-buffer       ("C-x C-<right>" "C-x <right>")         'next-buffer
-  ::jump-buffer       ("M-r" "C-r")               'counsel-buffer-or-recentf
-  ::jump-buffer       ("M-b" "C-x C-b" "C-x b" )   'counsel-ibuffer
+  ::last-used-buffer  ("ESC \\" "M-\\" "C-\\")       'on/last-used-buffer
+  ::prev-buffer       ("C-S-<left>" "C-x C-<left>" "C-x <left>")      'previous-buffer
+  ::next-buffer       ("C-S-<right>" "C-x C-<right>" "C-x <right>")    'next-buffer
+  ::jump-buffer       ("ESC r" "M-r" "C-r")         'counsel-buffer-or-recentf
+  ::jump-buffer       ("ESC b" "M-b" "C-b")         'counsel-ibuffer
   ::jump-test         ()                    'projectile-find-test-file
-  ::locate-project    ("C-c C-r" "C-c r")   'on/neotree-projectile-root
-  ::toggle-project    ("C-c C-0" "C-c 0")   'on/neotree-toggle
-  ::locate-file       ("C-c C-l" "C-c l")   'on/neotree-projectile-locate)
+  ::locate-project    ()                    nil
+  ::toggle-project    ("ESC 0" "M-0")               'treemacs
+  ::locate-file       ()                    nil)
 
 (on/menu: [::file-menu ("<f1>")]
   "
@@ -172,18 +178,18 @@ See also `cycle-spacing'."
   (on/close-buffer))
 
 (on/bind: []
-  ::window-delete        ("M-`")                         'on/window-delete
-  ::window-close         ("M-DEL" "C-x C-<down>" "C-x <down>")   'delete-window      
-  ::window-focus         ("M-RET" "C-x C-<up>" "C-x <up>")       'delete-other-windows
+  ::window-delete        ("ESC <deletechar>")           'on/window-delete
+  ::window-close         ("ESC DEL" "M-DEL" "C-<delete>" "C-x DEL" "C-x <down>")   'delete-window      
+  ::window-focus         ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x <up>")     'delete-other-windows
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
   ::window-split-bottom  ()                     'split-window-below
-  ::window-split-toggle  ("M-w")                'on/split-window-toggle
-  ::window-move-left     ("<C-S-left>" "<M-left>"  "ESC <left>")     'windmove-left
-  ::window-move-right    ("<C-S-right>" "<M-right>" "ESC <right>")    'windmove-right
-  ::window-move-up       ("<C-S-up>" "<M-up>" "ESC <up>")          'windmove-up
-  ::window-move-down     ("<C-S-down>" "<M-down>" "ESC <down>")     'windmove-down
+  ::window-split-toggle  ()                     'on/split-window-toggle
+  ::window-move-left     ("<M-left>"  "ESC <left>")     'windmove-left
+  ::window-move-right    ("<M-right>" "ESC <right>")    'windmove-right
+  ::window-move-up       ("<M-up>"    "ESC <up>")          'windmove-up
+  ::window-move-down     ("<M-down>"  "ESC <down>")     'windmove-down
   ::window-balance       ()                     'balance-windows
   ::window-swap          ()                     'ace-swap-window
   ::window-h-plus        ()                     'enlarge-window-horizontally
@@ -244,7 +250,7 @@ See also `cycle-spacing'."
            (find-library "etude-core-workflow"))))
 
 (on/bind: []
-  ::describe-key       ("<f5>") 'describe-key
+  ::describe-key       ()       'describe-key
   ::describe-bindings  ()       'describe-bindings
   ::line-count         ()       'count-lines-page
   ::settings-workflow  ()       'on/jump-to-workflow
@@ -268,9 +274,9 @@ See also `cycle-spacing'."
 ;;
 
 (on/bind: []
-  ::goto-line           ("C-c C-g" "C-c g")    'goto-line
-  ::goto-start          ("C-c C-<up>" "C-c <up>")       'beginning-of-buffer
-  ::goto-end            ("C-c C-<down>" "C-c <down>")   'end-of-buffer
+  ::goto-line           ("C-c C-l" "C-c l")    'goto-line
+  ::goto-start          ("C-c C-9" "C-c 9")       'beginning-of-buffer
+  ::goto-end            ("C-c C-0" "C-c 0")   'end-of-buffer
   ::find                ("C-c C-s" "C-c s")  'swiper
   ::search-backward     ()             'isearch-backward
   ::search-forward      ()             'isearch-forward
@@ -305,7 +311,7 @@ See also `cycle-spacing'."
   ::git-push           ()             'magit-push
   ::git-log            ()             'magit-log)
 
-(on/menu: [::git-menu ("M-5")]
+(on/menu: [::git-menu ()]
   "
   ^Basic^                           ^Advanced^
   _1_: git status
@@ -325,7 +331,7 @@ See also `cycle-spacing'."
 (on/bind: []
   ::docker-ps          ()             'docker)
 
-(on/menu: [::docker-menu ("M-6")]
+(on/menu: [::docker-menu ("<f6>")]
   "
   ^Basic^                           ^Advanced^
   _1_: docker-ps
@@ -396,20 +402,20 @@ See also `cycle-spacing'."
   ::toggle-eshell          ("M-1")                      'on/jump-to-eshell
   ::toggle-dashboard       ("M-2")                      'on/jump-to-start-screen
   ::toggle-scratch         ("M-3")                      'on/jump-to-scratch
-  ::toggle-workflow        ("M-4")                      'on/jump-to-workflow
-  ::toggle-magit           ("M-5")                      'magit)
+  ::toggle-magit           ("M-4")                      'magit
+  ::toggle-workflow        ("M-5")                      'on/jump-to-workflow)
 
 (on/menu: [::os-menu ("<f9>")]
   "
   ^OS^                      
-  _1_: toggle eshell         _4_: toggle workflow
-  _2_: toggle dashboard      _5_: toggle git
-  _3_: toggle scratch
+  _1_: toggle eshell         _4_: toggle git
+  _2_: toggle dashboard      _5_: toggle workflow
+  _3_: toggle scratch        
   "
   ("1" ::toggle-eshell)
   ("2" ::toggle-dashboard)
   ("3" ::toggle-scratch)
-  ("4" ::toggle-workflow)
-  ("5" ::toggle-magit)
+  ("4" ::toggle-magit)
+  ("5" ::toggle-workflow)
   ("x" ::do-nothing   "exit" :exit t))
 
