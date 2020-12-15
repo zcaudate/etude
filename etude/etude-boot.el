@@ -3,6 +3,7 @@
 
 (add-to-list 'load-path (concat emacs-d "etude/core"))
 (add-to-list 'load-path (concat emacs-d "etude/module"))
+(add-to-list 'load-path (concat emacs-d "etude/lib"))
 
 (require 'package)
 (progn (add-to-list 'package-archives

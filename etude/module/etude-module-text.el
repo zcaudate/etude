@@ -21,4 +21,4 @@
   :mode "\\.yml\\'")
 
 (use-package impatient-mode :ensure t)
-(use-package )
+
