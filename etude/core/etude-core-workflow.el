@@ -105,12 +105,12 @@ See also `cycle-spacing'."
   ::save              ("ESC s" "C-s" "M-s") 'save-buffer
   ::save-as           ()                    'write-file
   ::save-all          ()                    'save-some-buffers
-  ::close             ()                    'on/close-buffer
+  ::close             ("ESC `" "M-`")       'on/close-buffer
   ::close-select      ()                    'kill-buffer  
   ::close-all         ()                    'on/close-all-buffers
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\")       'on/last-used-buffer
-  ::prev-buffer       ("C-S-<left>" "C-x C-<left>" "C-x <left>")      'previous-buffer
-  ::next-buffer       ("C-S-<right>" "C-x C-<right>" "C-x <right>")    'next-buffer
+  ::prev-buffer       ("M-/" "ESC /" "C-S-<left>" "C-x C-<left>" "C-x <left>")      'previous-buffer
+  ::next-buffer       ("M-=" "ESC =" "C-S-<right>" "C-x C-<right>" "C-x <right>")    'next-buffer
   ::jump-recent       ("ESC r" "M-r" "C-r")   'counsel-recentf
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-ibuffer
   ::list-buffers      ("C-x b" "C-x C-b")     'bufler

@@ -50,11 +50,15 @@
   (interactive)
   (dashboard-insert-startupify-lists)
   (redisplay)
-  (switch-to-buffer "*dashboard*"))
+  (switch-to-buffer "*dashboard*")
+  (dashboard-setup-startup-hook [mouse-4] '(lambda ()
+                                             (interactive)
+                                             (scroll-down 1))))
 
 (use-package dashboard
   :ensure t
   :init (progn (setq dashboard-startup-banner nil)
+               (define-key dashboard-mode-map [down-mouse-1] nil)
                (setq dashboard-items '((recents  . 15)
                                        (projects . 5)))
                (add-hook 'emacs-startup-hook 'on/start-screen)))
