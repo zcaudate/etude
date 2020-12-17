@@ -45,7 +45,7 @@ creates a mental model that can be a guide for design of better
 ergonamics in both Emacs and other tools to come.
 
 
-** Dependencies
+* Dependencies
 
 The framework is built around a very small core set of libraries:
 
@@ -54,28 +54,31 @@ The framework is built around a very small core set of libraries:
 - [[https://github.com/abo-abo/hydra][hydra]] (gui)
 - [[https://github.com/magnars/dash.el][dash]], [[https://github.com/Wilfred/ht.el][ht]], [[https://github.com/magnars/s.el][s]] and [[https://github.com/rejeep/f.el][f]] (utils)
 
-** Methodology
+* Methodology
 
-*Question:*
+/*Question:*/
 
 /How would we remap the keys if we have to start from scratch?/
 
-*Answer*
+/*Answer:*/
 
 /Map the most widely used functions back to the most accessible
 keys. Duh./
 
-*Note to Reader*
+/*Note to Reader*/
 
-Feel free to skip this section, as it doesn't have anything to do with
-the code. This section is here mainly to explain how the keybindings
-within ~Etude~ came about.
+Feel free to skip this section and go to the code itself, as the
+methods outlined here doesn't have anything to do with the code. This
+section is here mainly to explain how the keybindings within ~Etude~
+came about.
 
-*** Overview
+** Overview
 
-We're essentially dealing with an optimisation problem. We rely on a
-set of assumed characteristics of the Dvorak keyboard as well as usage
-patterns by the user to do this.
+We're essentially dealing with an optimisation problem. We rely on two
+major assumptions:
+
+- a set of characteristics for use the Dvorak keyboard
+- a set of patterns by the user.
 
 In addition, there keys that cannot be remapped - ~C-i~, ~C-x~, ~C-g~,
 ~C-c~, ~C-u~ and ~C-z~. As this setup combined with ~tmux~, the ~tmux~
@@ -85,7 +88,7 @@ preferred over nesting ~tmux~ instances, ~C-b~ (the default prefix for
 nested ~tmux~'s) can also be used.
 
 
-*** Keyboard
+** Keyboard
 
 The keys on the keyboard is divided up into central (~C~) or
 peripheral (~P~) as well as a left (~L~) or right (~R~) marker. A key
@@ -208,8 +211,7 @@ some weights:
 
 TBD
 
-
-*** Inputs 
+** Inputs 
 
 User inputs are classified based on usage frequency Futhermore, inputs
 can be broken down into categories defining frequency of use:
@@ -251,15 +253,20 @@ Jump movement
 
 
 
-
-
-
-
-*** /shell/ and /tmux/
-
-
+** Additional Considerations
 
 *** Simplicity
+
+- *Modern*: Repurpose unused Emacs global keys for the modern
+  keyboard. For example, ~C-f~ and ~C-b~ are keys for forward and back
+  and using a combination of modifier keys, allow for for incremental
+  movements as well as movement and selection. Generally using arrow
+  keys and the mouse /(shock horror)/ suffice and so keys bound to
+  ~<C>~ that govern movement/selection can be repurposed for something
+  else. For marking and rectangles, it's just much faster in general
+  to select with the mouse.
+
+- *Visual* Have a overaching way to customise mod
 
 Emacs has become known for its infinite customisability. This causes
 problems because there are too many options and too many different
@@ -295,23 +302,15 @@ action with minimal readjustment of muscle memory when a modifier key
 become unusable).
 
 
-- *Modern*: Repurpose unused Emacs global keys for the modern
-  keyboard. For example, ~C-f~ and ~C-b~ are keys for forward and back
-  and using a combination of modifier keys, allow for for incremental
-  movements as well as movement and selection. Generally using arrow
-  keys and the mouse /(shock horror)/ suffice and so keys bound to
-  ~<C>~ that govern movement/selection can be repurposed for something
-  else. For marking and rectangles, it's just much faster in general
-  to select with the mouse.
-- *Visual* Have a overaching way to customise mod
 
 *** Flexibility
 
 A looser coupling between function implementation so that bindings and
 modes can be swapped out
 
+* Library
 
-** Library Core
+** Core
 
 There are 2 file associated purely with the framework:
 
@@ -327,7 +326,7 @@ couple of categories:
 - [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-os.el][os]] (vterm, eshell, cut/paste)
 - [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-style.el][style]] (nord)
 
-** Library Modules
+** Modules
 
 Etude also provides a very basic module system. The module libraries
 are simply loaded via init.el and provide supplemental customisations
@@ -347,62 +346,11 @@ all comes together.
 
 The workflow file define bindings as well as menu layouts. These work
 on a number of principles. Programmer Intent in emacs can be thought
-of being Movements, Actions and Tasks. In this context both are fundamentally the
-same except differ in the regularity that the are performed (Tasks are
-actions that are performed less than onc). So To be So
-an action like Move Forward might be used 50 times a minute, an action
-like Check Git Repository might be used
-
-
-
-
-
-
-** Background
-
-Previous to customising this package, I had mainly been switching
-between [[https://www.spacemacs.org/][Spacemacs]] and [[https://github.com/overtone/emacs-live][Emacs Live]]. I had been using emacs primarily for
-coding in clojure and for a while it was fine until for reasons
-unknown to me, the installation started getting slower and
-slower. There were issues with upgrades to [[https://github.com/clojure-emacs/cider/][CIDER]] not being promptly
-fixed in these installations and as beautiful and fully featured as
-they were, all I really needed was something to connect to a clojure
-repl.
-
-It was around the time that I became aware of [[https://github.com/jwiegley/use-package][use-package]] that I
-decided to hack together my own emacs customisation. It was
-suprisingly easy to download libraries but I found it extremely
-difficult to customise as it seemed like there was always about 20
-different ways of doing the same thing and the eco-system looked quite
-different to when I first started with Emacs Live in terms of the
-libraries. When I started, search and narrowing was through [[https://github.com/emacs-jp/anything][anything]],
-then using Spacemacs, it was [[https://github.com/emacs-helm/helm][Helm]].
-
-I had heard of [[https://github.com/abo-abo/swiper][Ivy]] before but it seemed like just another Ido-like
-library. I didn't really understand why there were so many libraries
-that kind of performed the same tasks until I read the article - [[https://sam217pa.github.io/2016/09/13/from-helm-to-ivy/][From
-helm, to ivy]]. And then I decided to go with the more minimalistic
-approach.
-
-As I had the extremely basic requirement of
-
-- Start Clojure repl
-- Connect to repl
-- Project and buffer navigation
-- Nice theme
-    
-I decided that those tools, along with CIDER were way more than enough
-for what I was after.
-
-Those libraries combined gave me what I thought were enough functions
-to build out a menu system
-
-with most of the bindings changed to what the author has deemed 'sane'
-defaults. In doing so, there is a microframework used for defining
-bindings and menus that is used to setup the workflow.
-
-The main setup is
-
+of being Movements, Actions and Tasks. In this context both are
+fundamentally the same except differ in the regularity that the are
+performed (Tasks are actions that are performed less than onc). So To
+be So an action like Move Forward might be used 50 times a minute, an
+action like Check Git Repository might be used
 
 
 * Installation 
@@ -431,47 +379,3 @@ For installation
 #+BEGIN_SRC shell :os ubuntu
 apt install bat fd tree fzf ripgrep ispell
 #+END_SRC
-
-It's now possible to
-
-#+BEGIN_SRC js
-var a = 4
-var b = 3
-
-return a + b
-#+END_SRC
-
-#+RESULTS:
-: 7
-
-
--------------
-| B | A | C |
-|---|---|---|
-| 2 | 1 | 3 |
-| b | a | c |
-
-#+BEGIN_SRC md.graph
-
-                 _______            
-  .-------.     /      /   .-----.  
-  | Write +-+->/ Edit ++->| Share |   
-  '-------' ^ /______/ |   '-----'  
-            |          |            
-             '--------'             
-
-#+END_SRC
-
-
-
-#+BEGIN_SRC md.graph
-  A         B         C   
-  *-------->o<------->o   
-  ^        / ^        |   
-  |       v   \       v   
-  o----->o---->o<---->*   
-  D      E     F      G   
-#+END_SRC
-
-
-this is something pretty crazy
