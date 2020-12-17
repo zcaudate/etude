@@ -6,7 +6,7 @@
 * Introduction
 
 This is [[http://github.com/zcaudate/etude][Etude]] - an /*emacs micro-framework*/ (aka /use-package + two
-files/) with the emphasis of being highly customisable and beginner
+additional files/) with the emphasis of being highly customisable and beginner
 friendly. It configures an extremely usable editor (subjectively
 speaking) with the minimal amount of addons (also subjectively
 speaking), creating a version ~emacs~ that is:
@@ -30,17 +30,17 @@ parts to it:
 
 The methodology used for determining keybindings is by no means
 authoritative or complete. It's definitely much better described with
-pictures - somthing that still needs to be done. However, given the
-minimal amount of code, one might point out that it's rehashing the
-completely obvious. The cynical might even say that it's a long winded
-attempt to justify the mutilation of a perfectly great set of
-defaults.
+pictures - something that still needs to be done. One who has read
+through it might point out that it's rehashing the completely
+obvious. The cynical might even say that it's a long winded attempt to
+justify the mutilation of a perfectly great set of defaults.
 
-What it does do however, is to provide a list of ~what is essential~ vs
-~what is not~. Doing so creates a mental model that can be used for
-design of ergonomic systems within other tools. In general, keeping
-things lean means that the core is simpler more understandable and
-more composible.
+/Well... Yes./
+
+However, doing this exercise (/etude... get it?/) provides a list of
+~what is essential~ vs ~what is not~. By writing all this down, it
+creates a mental model that can be a guide for design of better
+ergonamics in both Emacs and other tools to come.
 
 
 ** Dependencies
@@ -63,7 +63,13 @@ The framework is built around a very small core set of libraries:
 /Map the most widely used functions back to the most accessible
 keys. Duh./
 
-*** Summary
+*Note to Reader*
+
+Feel free to skip this section, as it doesn't have anything to do with
+the code. This section is here mainly to explain how the keybindings
+within ~Etude~ came about.
+
+*** Overview
 
 We're essentially dealing with an optimisation problem. We rely on a
 set of assumed characteristics of the Dvorak keyboard as well as usage
