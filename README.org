@@ -24,6 +24,8 @@ parts to it:
 - a /*micro framework*/ used for binding the keys to the actual
   functionality /(keyboard agnostic)/
  
+[[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
+
 *Note*
 
 /What is all this fuss around keybindings?/
