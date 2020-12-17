@@ -6,10 +6,10 @@
 * Introduction
 
 This is [[http://github.com/zcaudate/etude][Etude]] - an /*emacs micro-framework*/ (aka /use-package + two
-additional files/) with the emphasis of being highly customisable and beginner
-friendly. It configures an extremely usable editor (subjectively
-speaking) with the minimal amount of addons (also subjectively
-speaking), creating a version ~emacs~ that is:
+additional files/) with the emphasis of being highly customisable and
+beginner friendly. It configures an extremely usable editor
+(subjectively speaking) with the minimal amount of addons (also
+subjectively speaking), creating a version ~emacs~ that is:
 
 - [[*Simplicity][Simple]] (Visual, Intuitive, Modern)
 - [[*Redundancy][Robust]] (Portable, Efficent)
@@ -20,13 +20,13 @@ The aim of the project is to provide better usability for ~emacs~ on
 parts to it:
 
 1. ~elpa~ packages providing functionality /(keyboard agnostic)/
-- key bindings to those packages /(dvorak specific)/
-- a /*micro framework*/ used for binding the keys to the actual
-  functionality /(keyboard agnostic)/
+2. key bindings to those packages /(dvorak specific)/
+3. a /*micro framework*/ used for binding the keys to the actual
+   functionality /(keyboard agnostic)/
  
 [[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
 
-*Note*
+*So..*
 
 /What is all this fuss around keybindings?/
 
@@ -39,10 +39,10 @@ justify the mutilation of a perfectly great set of defaults.
 
 /Well... Yes./
 
-However, doing this exercise (/etude... get it?/) provides a list of
-~what is essential~ vs ~what is not~. By writing all this down, it
-creates a mental model that can be a guide for design of better
-ergonamics in both Emacs and other tools to come.
+However, doing this exercise (/etude/) provides a list of ~what is
+essential~ vs ~what is not~. By writing all this down, it creates a
+mental model that can be a guide for design of better ergonamics in
+both Emacs and other tools to come.
 
 
 * Dependencies
@@ -80,7 +80,7 @@ major assumptions:
 - a set of characteristics for use the Dvorak keyboard
 - a set of patterns by the user.
 
-In addition, there keys that cannot be remapped - ~C-i~, ~C-x~, ~C-g~,
+In addition, there keys that cannot be remapped: ~C-i~, ~C-x~, ~C-g~,
 ~C-c~, ~C-u~ and ~C-z~. As this setup combined with ~tmux~, the ~tmux~
 prefix has been remapped to ~C-<space>~, allowing ~C-a~ to be used as
 a binding. Futhermore, as terminal sessions inside a remote Emacs are
@@ -116,14 +116,14 @@ switching movement is considered negligible.
 The following rules apply:
 
 1. central keys are given a weight of ~1.0~
-- peripheral keys are given a weight of ~1.3~
+2. peripheral keys are given a weight of ~1.3~
 
 /Examples:/
 
 - ~x~ gives a weight of ~1.0~.
 - ~<backspace>~ gives a weight of ~1.0~
 - ~<F1>~ gives a weight of ~1.3~
-- ~\~ gives a weight of ~1.3~
+- ~=~ gives a weight of ~1.3~
 - ~5~ gives a weight of ~1.3~
 
 *Modifier Keys*
@@ -131,9 +131,9 @@ The following rules apply:
 For a modifier enabled key, the following weights apply:
 
 1. ~1.3~ if the next key is R central
-- ~1.5~ if the next key is L central
-- ~1.5~ if the next key is R peripheral
-- ~2.0~ if the next key is L peripheral
+2. ~1.5~ if the next key is L central
+3. ~1.5~ if the next key is R peripheral
+4. ~2.0~ if the next key is L peripheral
 
 /Examples:/
 
@@ -149,9 +149,9 @@ Escape is up in the top left hand corner. It's treatment is slightly
 different:
 
 1. ~1.5~ if the next key is L peripheral
-- ~1.8~ if the next key is R central
-- ~2.0~ if the next key is R peripheral
-- ~2.3~ if the next key is L central
+2. ~1.8~ if the next key is R central
+3. ~2.0~ if the next key is R peripheral
+4. ~2.3~ if the next key is L central
 
 /Examples:/
 
@@ -197,8 +197,8 @@ more reliable keystrokes are of ~C-x <R>~ type. We can now provide
 some weights:
 
 1. ~1.5~ if the second key is R central
-- ~2.0~ if the second key is R peripheral
-- ~2.5~ if the second key is L central
+2. ~2.0~ if the second key is R peripheral
+3. ~2.5~ if the second key is L central
 
 /Examples:/
 
@@ -216,11 +216,11 @@ TBD
 User inputs are classified based on usage frequency Futhermore, inputs
 can be broken down into categories defining frequency of use:
 
-- *Actions* (*M1*): inputs used between ~1~ to ~20~ times a ~minute~ either in
-  bursts or during workflow.
-- *Commands* (*M2*): inputs used between ~2~ to ~60~ times an ~hour~.
-- *Tasks* (*M3*): inputs used from infrequently up to ~2~ times an
-  ~hour~.
+1. *Actions* (*M1*): inputs used between ~1~ to ~20~ times a ~minute~
+   either in bursts or during workflow.
+2. *Commands* (*M2*): inputs used between ~2~ to ~60~ times an ~hour~.
+3. *Tasks* (*M3*): inputs used from infrequently up to ~2~ times an
+   ~hour~.
 
 These 
 
@@ -243,9 +243,17 @@ Jump movement
 - Jump to buffer
 - Jump to definition
 
-
 *Commands*
+- Find file
+- Find recent
+- Find file containing text
 
+*Meta*
+- Help for 
+   - bindings
+   - keys
+   - 
+ 
 
 
 *Tasks*

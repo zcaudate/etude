@@ -68,8 +68,7 @@
   ::init               ("M-c" "ESC c")      ()
   ::goto-definition    ("C-x ." "C-x C-.")  ()
   ::mode-menu          ("<f8>")  ()
-  ;; 'projectile-find-test-file
-  ::toggle-test-src    ()                   ())
+  ::toggle-test        ()                   ())
 
 ;;
 ;; (EDITING)
@@ -143,13 +142,26 @@ See also `cycle-spacing'."
   ::goto-start           ()   'beginning-of-buffer
   ::goto-end             ()   'end-of-buffer
 
-  ::jump-search          ("C-l")  'swiper     
-  ::jump-bookmark        ()       'counsel-bookmark
-  ::jump-search-project  ("C-f")               'counsel-rg) 
+  ::jump-search          ("C-l")      'swiper     
+  ::jump-bookmark        ()           'counsel-bookmark
+  ::jump-search-project  ("C-f")      'counsel-rg) 
 
 ;;
 ;; (F1) Help and References
 ;;
+
+(defun on/jump-back ()
+  (interactive)
+  (when on/*back-buffer*
+    (switch-to-buffer on/*back-buffer*)
+    (setq on/*back-buffer* nil)))
+
+(defun on/jump-to-workflow ()
+  (interactive)
+  (if on/*back-buffer*
+      (on/jump-back)
+    (progn (setq on/*back-buffer* (current-buffer))
+           (find-library "etude-core-workflow"))))
 
 (on/bind: []
   ::help-for-help       ()                     'help-for-help
@@ -157,13 +169,15 @@ See also `cycle-spacing'."
   ::view-keystroke      ("ESC <f1>" "ESC h" "M-h")      'describe-key
   ::view-function       ()                     'describe-function
   ::view-bindings       ()                     'describe-bindings
-  ::view-package        ()                     'describe-package)
+  ::view-package        ()                     'describe-package
+  ::conf-customise      ()    'customize
+  ::conf-workflow       ()    'on/jump-to-workflow)
 
 (on/menu: [::help-menu  ("<f1>")]
   "
-  ^Help^                        ^References^
-   _0_: Help for Help
-   _1_: About Emacs            
+  ^Help^                               ^Settings^
+   _0_: Help for Help                  _u_: Customise Emacs
+   _1_: About Emacs                    _w_: Customise Workflow
    _2_: About GNU            
    _3_: View Distribution Info            
    _4_: View Bindings
@@ -177,10 +191,33 @@ See also `cycle-spacing'."
   ("4" ::view-bindings)
   ("5" ::view-function)
   ("6" ::view-package)
+  ("u" ::conf-customise nil :exit t)
+  ("w" ::conf-workflow nil :exit t)
+  
   ("z" ::do-nothing "cancel" :exit t))
 
+
+
 ;;
-;; (F2) Window Management
+;; (F2) Find Options
+;;
+;; This is reserved for minor modes to setup their own `jump-to-<LANG>-config' entry
+;;
+
+
+(on/bind: []
+  )
+
+(on/menu: [::counsel-menu  ("<f2>")]
+  "
+  ^Describe^        ^Config^            ^Stats^"
+  ("z" ::do-nothing  "cancel" :exit t)
+ )
+
+
+
+;;
+;; (F3) Window Management
 ;;
 
 (defun on/window-alternate ()
@@ -243,7 +280,7 @@ See also `cycle-spacing'."
   ::window-grow-font     ()                     nil
   ::window-shrink-font   ()                     nil)
 
-(on/menu: [::window-menu  ("<f2>")]
+(on/menu: [::window-menu  ("<f3>")]
   "
   ^Position^                  ^Manage^                    Resize      
   _1_: window focus           _o_: swap                   _<up>_
@@ -267,26 +304,6 @@ See also `cycle-spacing'."
   ("z" ::do-nothing "cancel" :exit t))
 
 
-
-;;
-;; (F3) Find Options
-;;
-;; This is reserved for minor modes to setup their own `jump-to-<LANG>-config' entry
-;;
-
-
-(on/bind: []
-  )
-
-(on/menu: [::counsel-menu  ("<f3>")]
-  "
-  ^Describe^        ^Config^            ^Stats^"
-  ("z" ::do-nothing  "cancel" :exit t)
- )
-
-
-
-
 ;;;
 ;; (F4) System and Files
 ;;
@@ -302,19 +319,6 @@ See also `cycle-spacing'."
   (save-some-buffers)
   (mapc 'kill-buffer (buffer-list)))
 
-(defun on/jump-back ()
-  (interactive)
-  (when on/*back-buffer*
-    (switch-to-buffer on/*back-buffer*)
-    (setq on/*back-buffer* nil)))
-
-(defun on/jump-to-workflow ()
-  (interactive)
-  (if on/*back-buffer*
-      (on/jump-back)
-    (progn (setq on/*back-buffer* (current-buffer))
-           (find-library "etude-core-workflow"))))
-
 (on/bind: []
   ::open              ("C-x C-f" "C-x f")          'find-file
   ::open-recent       ("C-r")                      'counsel-recentf
@@ -328,8 +332,6 @@ See also `cycle-spacing'."
   ::close-all         ()    'on/close-all-buffers
   ::find              ()    'on/menu-fn::find-menu/body
   ::help              ()    'on/menu-fn::help-menu/body
-  ::conf-customise    ()    'customize
-  ::conf-workflow     ()    'on/jump-to-workflow
   ::run-vterm         ()    'multi-vterm
   ::directory         ("ESC 0" "M-0" "C-x 0" "C-x C-0" "C-0")   'treemacs)
 
@@ -337,8 +339,8 @@ See also `cycle-spacing'."
   "
   ^File^                 ^Save^               ^Preferences^
   _1_: open/new          _6_: find            _h_: help
-  _2_: open recent       _7_: save            _u_: conf.customise
-  _3_: open project      _8_: save as         _w_: conf.workflow
+  _2_: open recent       _7_: save            
+  _3_: open project      _8_: save as         
   _4_: close             _9_: save all        
   _5_: close all         _0_: directory       _v_: vterm
   "
@@ -353,15 +355,27 @@ See also `cycle-spacing'."
   ("9" ::save-all)
   ("0" ::directory nil :color blue)
   ("h" ::help nil :exit t)
-  ("u" ::conf-customise nil :exit t)
-  ("w" ::conf-workflow nil :exit t)
   ("v" ::run-vterm nil :exit t)
   ("q" ::quit         "quit emacs" :exit t)
   ("z" ::do-nothing   "cancel" :exit t))
 
+
 ;;
-;; (M-5) Code Management
+;; (F5) Applications
 ;;
+;; This is reserved for minor modes to setup their own `jump-to-<LANG>-config' entry
+;;
+
+
+(on/bind: []
+  )
+
+(on/menu: [::counsel-menu  ("<f2>")]
+  "
+  ^Describe^        ^Config^            ^Stats^"
+  ("z" ::do-nothing  "cancel" :exit t)
+ )
+
 
 
 ;;

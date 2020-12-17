@@ -1,15 +1,13 @@
 (ns: etude-core-management
   (:require etude-core-base))
 
+(use-package no-littering :ensure t)
+
 (use-package recentf
   :defer t
   :config (progn (setq recentf-max-saved-items 200
                        recentf-max-menu-items 15)
                  (recentf-mode t)))
-
-(use-package smex
-  :ensure t
-  :config (progn (smex-initialize)))
 
 (use-package ivy
   :ensure t

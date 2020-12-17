@@ -20,7 +20,7 @@
                             (add-to-list 'org-src-lang-modes '("md.graph" . fundamental))
                             (add-to-list 'org-src-lang-modes '("bash" . shell))))
 
-(defhydra on/org-mode-menu ()`
+(defhydra on/org-mode-menu ()
   ("9" on/preview-markdown  "preview markdown")
   ("0" on/preview-markdeep  "preview markdeep")
   ("x" on/preview-exit      "exit preview" :exit t))
