@@ -1,6 +1,7 @@
 (ns: etude-module-text
   (:require
-   etude-core))
+   etude-core
+   etude-markdown-export))
 
 (use-package markdown-mode
   :ensure t
@@ -10,15 +11,48 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(defun on/show-markdown-html (buffer)
+(defvar on/strapdown-body
+  "<!DOCTYPE html><html><title></title><xmp theme=\"journal\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>")
+
+(defvar on/strapdown-zeta-body
+  "<!DOCTYPE html><html><title></title><xmp theme=\"cosmo\" style=\"display:none;\"> %s  </xmp><script src=\"http://cdn.ztx.io/strapdown/strapdown.min.js\"></script>
+   <style>.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}</style>
+  </html>")
+
+(defvar on/md-footer "<!-- Markdeep: --><style class='fallback'>body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src='markdeep.min.js' charset='utf-8'></script><script src='https://morgan3d.github.io/markdeep/latest/markdeep.min.js' charset='utf-8'></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility='visible')</script>")
+
+(defun on/show-markdeep (buffer)
   (princ (with-current-buffer buffer
-           (format "<!DOCTYPE html><html><title></title><xmp theme=\"simplex\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>"
-                   (buffer-substring-no-properties (point-min) (point-max))))
+           (format "%s\n%s"
+                   (buffer-string)
+                   on/md-footer))
          (current-buffer)))
+
+(defun on/show-markdown (buffer)
+  (princ (with-current-buffer buffer
+           (format on/stapdown-zeta-body))
+         (current-buffer)))
+
+(comment:
+    (with-current-buffer (get-buffer "INSTALL.org")
+      (org-md_et-export-to-markdown))
+  
+  (on/show-org-markdown (get-buffer "INSTALL.org"))
+  (with-current-buffer (get-buffer "INSTALL.org")
+      (org-md_et-export-to-markdown)))
+
+
+;;(type-of  (on/show-markdown-html (get-buffer "INSTALL.org")))
+
+;;(on/show-md (get-buffer "INSTALL.org"))
+;;(on/show-org-html (get-buffer "INSTALL.org"))
+;;(on/show-org (get-buffer "INSTALL.org"))
+
 
 (use-package yaml-mode
   :ensure t
   :mode "\\.yml\\'")
 
-(use-package impatient-mode :ensure t)
+(use-package impatient-mode :ensure t
+  :init (setq impatient-mode-delay 3))
 

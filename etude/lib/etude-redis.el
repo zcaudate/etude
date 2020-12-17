@@ -1,4 +1,6 @@
-;;(require 'cl)
+(ns: etude-redis
+  (:require etude-core))
+  
 (require 'cl-lib)
 (require 'dash)
 

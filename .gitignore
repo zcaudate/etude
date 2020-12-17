@@ -23,3 +23,7 @@
 /transient
 /bookmarks
 /semanticdb
+/persp-confs
+projects
+*.md
+*.md.html

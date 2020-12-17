@@ -10,14 +10,14 @@
 ;;  The menu system is based on a number system, as opposed to a letter abbreviation
 ;;  system. It follows something like an automated phone directory to assist
 ;;  the user in picking the right choice. The aim is to simplify movement and order
-;;  functionality, not merely to overwhelm the user with options.
+;;  functionality, not merely to overswhelm the user with options.
 ;;
 ;;  - Global                           [quit, menu]
 ;;  - Editing                          [cut, copy, paste, undo]
 ;;  - Function Keys        (F1-12)
-;;  - Window Management    (M-`)       
-;;  - File Management      (M-1)       [open, save, close, quit]
-;;  - Navigation           (M-2)       [goto, jump, mark]
+;;  - Window Management    (F-2)       
+;;  - Navigation           (F-3)       [goto, jump, mark]
+;;  - File Management      (F-4)       [open, save, close, quit]
 ;;  - Mode Specific        (M-3)       
 ;;  - Project Management   (M-4)       [find, replace, bulk find, bulk replace] 
 ;;  - Code Management      (M-5)       [history, status, commit, push]
@@ -26,6 +26,7 @@
 
 (ns: etude-core-workflow
   (:require
+   find-func
    etude-core-base
    etude-core-code
    etude-core-management))
@@ -34,14 +35,41 @@
 ;; (GLOBAL)
 ;;
 
-(defun on/no-action ()
-  (interactive))
+(setq on/*back-buffer* nil)
+
+(defun on/no-action () (interactive))
 
 (on/bind: []
-  ::no-action       ()                   'on/no-action
+  ::no-action       ()                          'on/no-action
   ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
-  ::help-bind-key   ("ESC h" "M-h")      'describe-key
-  ::quit            ("ESC q" "M-q")      'save-buffers-kill-terminal)
+  ::quit            ("ESC q" "M-q")             'save-buffers-kill-terminal)
+
+;;
+;; (M-8) Language Specific
+;; 
+;; This is reserved for the given language minor mode to provide
+;; functionality that is specific working within the language.
+;; Usually done for tutorial/walk-through/late-night-brain-dead
+;; programming to show common options that a user might be able to use.
+;;
+;;   - emacs lisp
+;;   - java
+;;   - clojure
+;;   - rust
+;;   - c/c++
+;;   - verilog
+;;   - html/css
+;;   - javascript
+
+(on/mode-init: []
+  ::eval-cursor        ("C-e")   ("P")
+  ::eval-macro         ()        ("P")
+  ::eval-file          ("M-e" "ESC e" "C-x e" "C-x C-e")   ()
+  ::init               ("M-c" "ESC c")      ()
+  ::goto-definition    ("C-x ." "C-x C-.")  ()
+  ::mode-menu          ("<f8>")  ()
+  ;; 'projectile-find-test-file
+  ::toggle-test-src    ()                   ())
 
 ;;
 ;; (EDITING)
@@ -60,33 +88,23 @@ See also `cycle-spacing'."
   (undo-tree-redo))
 
 (on/bind: []
-  ::cut             ("C-a")               'kill-region
-  ::trim            ()                    'on/just-one-space
-  ::copy            ("C-o")   'copy-region-as-kill
-  ::cut-context     ("C-k")               'paredit-kill
-  ::copy-context    ("ESC k")   'on/paredit-copy-as-kill
-  ::paste           ("C-v" "M-v" "C-j")   'yank
-  ::paste-menu      ("C-x C-v" "C-x v" "C-x C-j" "C-x j")  'counsel-yank-pop
-  ::undo            ("C--")               'undo
-  ::redo            ("ESC -")       'on/undo-tree-redo
-  ::undo-menu       ("C-x -")             'undo-tree-visualize
-  ::comment         ("C-x ;" "C-x C-;")   'comment-or-uncomment-region)
+  ::cut             ("C-a")                       'kill-region
+  ::trim            ()                            'on/just-one-space
+  ::copy            ("C-o")                       'copy-region-as-kill
+  ::cut-context     ("C-k")                       'paredit-kill
+  ::copy-context    ("ESC k")                     'on/paredit-copy-as-kill
+  ::paste           ("C-v" "M-v" "C-j")           'yank
+  ::paste-menu      ("C-x C-v" "C-x v")           'counsel-yank-pop
+  ::undo            ("C--")                       'undo
+  ::redo            ("ESC -")                     'on/undo-tree-redo
+  ::undo-menu       ("C-x -")                     'undo-tree-visualize
+  ::comment         ("ESC ;" "C-x ;" "C-x C-;")   'comment-or-uncomment-region)
 
 
-;;;
-;; (F1) File and Buffer Management
+;;
+;; (Buffers and Jumps)
 ;;
 
-(defun on/close-buffer ()
-  (interactive)
-  (if (buffer-file-name (current-buffer))
-      (save-buffer))
-  (kill-buffer (current-buffer)))
-
-(defun on/close-all-buffers ()
-  (interactive)
-  (save-some-buffers)
-  (mapc 'kill-buffer (buffer-list)))
 
 (defun on/last-used-buffer ()
   (interactive)
@@ -95,57 +113,75 @@ See also `cycle-spacing'."
 (defun on/revert-buffer ()
   (interactive)
   (revert-buffer :ignore-auto :noconfirm)
-  (message "Buffer reverted"))
+  (message "Buffer reverted:" ))
+
+(defun on/bufler-toggle ()
+  (interactive)
+  (if (equal "*Bufler*" (buffer-name (current-buffer)))
+      (progn (other-window 1)
+             (if (equal "*Bufler*" (buffer-name (current-buffer)))
+                 (on/close-buffer)
+               (delete-other-windows)))
+    (bufler)))
 
 (on/bind: []
-  ::open              ()                    'find-file
-  ::open-recent       ()                    'counsel-recentf
-  ::open-project      ("ESC t" "M-t" "C-t" "s-t")   'projectile-find-file-dwim
-  ::revert            ("C-x r" "C-x C-r")   'on/revert-buffer
-  ::save              ("ESC s" "C-s" "M-s") 'save-buffer
-  ::save-as           ()                    'write-file
-  ::save-all          ()                    'save-some-buffers
-  ::close             ("ESC `" "M-`")       'on/close-buffer
-  ::close-select      ()                    'kill-buffer  
-  ::close-all         ()                    'on/close-all-buffers
-  ::last-used-buffer  ("ESC \\" "M-\\" "C-\\")       'on/last-used-buffer
-  ::prev-buffer       ("M-/" "ESC /" "C-S-<left>" "C-x C-<left>" "C-x <left>")      'previous-buffer
-  ::next-buffer       ("M-=" "ESC =" "C-S-<right>" "C-x C-<right>" "C-x <right>")    'next-buffer
-  ::jump-recent       ("ESC r" "M-r" "C-r")   'counsel-recentf
-  ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-ibuffer
-  ::list-buffers      ("C-x b" "C-x C-b")     'bufler
-  ::jump-test         ()                      'projectile-find-test-file
-  ::locate-project    ()                      nil
-  ::toggle-project    ("ESC 0" "M-0")         'treemacs
-  ::locate-file       ()                      nil)
+  ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer
+  ::list-buffers      ("C-x b" "C-x C-b")     'on/bufler-toggle
+  ::revert-buffer     ("C-x r" "C-x C-r")     'on/revert-buffer
+  ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'on/last-used-buffer
+  
+  ::prev-buffer
+  ("M-/" "ESC /" "C-x /" "C-x C-/" "C-S-<left>" "C-x C-<left>")
+  'previous-buffer
 
-(on/menu: [::file-menu ("<f1>")]
+  ::next-buffer
+  ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>")
+  'next-buffer)
+
+(on/bind: []
+  ::goto-line            ("C-x C-l" "C-x l")   'goto-line
+  ::goto-start           ()   'beginning-of-buffer
+  ::goto-end             ()   'end-of-buffer
+
+  ::jump-search          ("C-l")  'swiper     
+  ::jump-bookmark        ()       'counsel-bookmark
+  ::jump-search-project  ("C-f")               'counsel-rg) 
+
+;;
+;; (F1) Help and References
+;;
+
+(on/bind: []
+  ::help-for-help       ()                     'help-for-help
+  ::about-emacs         ("C-h C-a")            'about-emacs
+  ::view-keystroke      ("ESC <f1>" "ESC h" "M-h")      'describe-key
+  ::view-function       ()                     'describe-function
+  ::view-bindings       ()                     'describe-bindings
+  ::view-package        ()                     'describe-package)
+
+(on/menu: [::help-menu  ("<f1>")]
   "
-  ^File^            ^Open^                ^Save^            ^Close^
-  _1_: save all     _4_: open             _6_: save         _8_: close 
-  _2_: close all    _5_: open recent      _7_: save as      _q_: quit emacs
-  _3_: open file in project
-  "
-  ("1" ::save-all     "save all")
-  ("2" ::close-all    "close all")
-  ("3" ::open-project "open file in project")
-  ("4" ::open         nil :exit t)
-  ("5" ::open-recent  nil :exit t)
-  ("6" ::save)
-  ("7" ::save-as)
-  ("8" ::close)
-  ("q" ::quit         "quit emacs")
-  ("x" ::do-nothing   "exit" :exit t))
+  ^Help^                        ^References^
+   _0_: Help for Help
+   _1_: About Emacs            
+   _2_: About GNU            
+   _3_: View Distribution Info            
+   _4_: View Bindings
+   _5_: View Function
+   _6_: View Package        
+   "
+  ("0" ::help-for-help :exit t)
+  ("1" ::about-emacs)
+  ("2" ::view-distribution)
+  ("3" ::view-keystroke)
+  ("4" ::view-bindings)
+  ("5" ::view-function)
+  ("6" ::view-package)
+  ("z" ::do-nothing "cancel" :exit t))
 
 ;;
 ;; (F2) Window Management
 ;;
-
-(defun on/window-list ()
-  (seq-filter (lambda (w) 
-                (not (equal (buffer-name (window-buffer w))
-		            " *NeoTree*")))
-              (window-list)))
 
 (defun on/window-alternate ()
   (seq-find (lambda (w)
@@ -180,17 +216,24 @@ See also `cycle-spacing'."
 
 (on/bind: []
   ::window-delete        ("ESC <deletechar>")           'on/window-delete
-  ::window-close         ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x <down>" "C-x C-<down>")   'delete-window      
-  ::window-focus         ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x <up>" "C-x C-<up>")    'delete-other-windows
+
+  ::window-close
+  ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x C-<down>")
+  'delete-window      
+
+  ::window-focus
+  ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x C-<up>")
+  'delete-other-windows
+
   ::window-split-left    ()                     nil
   ::window-split-right   ()                     'split-window-right
   ::window-split-top     ()                     nil
   ::window-split-bottom  ()                     'split-window-below
   ::window-split-toggle  ()                     'on/split-window-toggle
-  ::window-move-left     ("<M-left>"  "ESC <left>")     'windmove-left
-  ::window-move-right    ("<M-right>" "ESC <right>")    'windmove-right
-  ::window-move-up       ("<M-up>"    "ESC <up>")          'windmove-up
-  ::window-move-down     ("<M-down>"  "ESC <down>")     'windmove-down
+  ::window-move-left     ("<M-left>"  "ESC <left>"   "C-x <left>")     'windmove-left
+  ::window-move-right    ("<M-right>" "ESC <right>"  "C-x <right>")    'windmove-right
+  ::window-move-up       ("<M-up>"    "ESC <up>" "C-x <up>")          'windmove-up
+  ::window-move-down     ("<M-down>"  "ESC <down>" "C-x <down>")     'windmove-down
   ::window-balance       ()                     'balance-windows
   ::window-swap          ()                     'ace-swap-window
   ::window-h-plus        ()                     'enlarge-window-horizontally
@@ -221,21 +264,43 @@ See also `cycle-spacing'."
   ("<up>"    ::window-v-minus)
   ("<down>"  ::window-v-plus)
   ("<right>" ::window-h-plus)
-  ("x" ::do-nothing "exit" :exit t))
+  ("z" ::do-nothing "cancel" :exit t))
+
+
 
 ;;
-;; (F3) Meta Options
+;; (F3) Find Options
 ;;
 ;; This is reserved for minor modes to setup their own `jump-to-<LANG>-config' entry
 ;;
 
-(require 'find-func)
 
-(setq on/*back-buffer* nil)
+(on/bind: []
+  )
 
-(defun on/jump-to-config (library)
-  (setq on/*back-buffer* (current-buffer))
-  (find-library library))
+(on/menu: [::counsel-menu  ("<f3>")]
+  "
+  ^Describe^        ^Config^            ^Stats^"
+  ("z" ::do-nothing  "cancel" :exit t)
+ )
+
+
+
+
+;;;
+;; (F4) System and Files
+;;
+
+(defun on/close-buffer ()
+  (interactive)
+  (if (buffer-file-name (current-buffer))
+      (save-buffer))
+  (kill-buffer (current-buffer)))
+
+(defun on/close-all-buffers ()
+  (interactive)
+  (save-some-buffers)
+  (mapc 'kill-buffer (buffer-list)))
 
 (defun on/jump-back ()
   (interactive)
@@ -251,130 +316,60 @@ See also `cycle-spacing'."
            (find-library "etude-core-workflow"))))
 
 (on/bind: []
-  ::describe-key       ("<f4>")   'describe-key
-  ::describe-bindings  ()         'describe-bindings
-  ::line-count         ()         'count-lines-page
-  ::settings-workflow  ()         'on/jump-to-workflow
-  ::settings-back      ()         'on/jump-back)
+  ::open              ("C-x C-f" "C-x f")          'find-file
+  ::open-recent       ("C-r")                      'counsel-recentf
+  ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'projectile-find-file-dwim
+  
+  ::save              ("ESC s" "C-s" "M-s")        'save-buffer
+  ::save-as           ()                           'write-file
+  ::save-all          ()                           'save-some-buffers
+  ::close             ("ESC `" "M-`" "C-`")        'on/close-buffer
+  ::close-select      ()    'kill-buffer  
+  ::close-all         ()    'on/close-all-buffers
+  ::find              ()    'on/menu-fn::find-menu/body
+  ::help              ()    'on/menu-fn::help-menu/body
+  ::conf-customise    ()    'customize
+  ::conf-workflow     ()    'on/jump-to-workflow
+  ::run-vterm         ()    'multi-vterm
+  ::directory         ("ESC 0" "M-0" "C-x 0" "C-x C-0" "C-0")   'treemacs)
 
-(on/menu: [::jump-menu ("<f3>")]
+(on/menu: [::file-menu ("<f4>")]
   "
-  ^Describe^        ^Config^            ^Stats^
-  _1_: key          _w_: workflow       _6_: line count
-  _2_: bindings     _b_: back
+  ^File^                 ^Save^               ^Preferences^
+  _1_: open/new          _6_: find            _h_: help
+  _2_: open recent       _7_: save            _u_: conf.customise
+  _3_: open project      _8_: save as         _w_: conf.workflow
+  _4_: close             _9_: save all        
+  _5_: close all         _0_: directory       _v_: vterm
   "
-  ("1" ::describe-key "key" :exit t)
-  ("2" ::describe-bindings "bindings" :exit t)
-  ("w" ::settings-workflow :exit t)
-  ("b" ::settings-back :exit t)
-  ("6" ::line-count)
-  ("x" ::do-nothing  "exit" :exit t))
-
-;;
-;; (F4) Project Management
-;;
-
-(on/bind: []
-  ::goto-line           ("C-c C-l" "C-c l")    'goto-line
-  ::goto-start          ("C-c C-9" "C-c 9")       'beginning-of-buffer
-  ::goto-end            ("C-c C-0" "C-c 0")   'end-of-buffer
-  ::find                ("C-c C-s" "C-c s")  'swiper
-  ::search-backward     ()             'isearch-backward
-  ::search-forward      ()             'isearch-forward
-  ::replace             ()             nil
-  ::find-in-project     ("C-x C-s" "C-x s")    'counsel-ag
-  ::replace-in-project  ()             nil
-  ::find-in-os          ()             nil
-  ::goto-definition     ()) 
-
-(on/menu: [::search-menu  ()]
-  "
-  ^Goto^            
-  _1_: find             _4_: find in project
-  _2_: goto top
-  _3_: goto bottom
-  _4_: goto line
-  "
-  ("1" ::find)
-  ("2" ::search-backward)
-  ("3" ::search-forward)
-  ("4" ::find-in-project)
-  ("x" ::do-nothing   "exit" :exit t))
+  ("1" ::open         nil :exit t)
+  ("2" ::open-recent  nil :exit t)
+  ("3" ::open-project nil :exit t)
+  ("4" ::close)
+  ("5" ::close-all)
+  ("6" ::find nil)
+  ("7" ::save)
+  ("8" ::save-as)
+  ("9" ::save-all)
+  ("0" ::directory nil :color blue)
+  ("h" ::help nil :exit t)
+  ("u" ::conf-customise nil :exit t)
+  ("w" ::conf-workflow nil :exit t)
+  ("v" ::run-vterm nil :exit t)
+  ("q" ::quit         "quit emacs" :exit t)
+  ("z" ::do-nothing   "cancel" :exit t))
 
 ;;
 ;; (M-5) Code Management
 ;;
 
-(on/bind: []
-  ::git-status         ()             'magit-status
-  ::git-doall          ()             'on/magit-add-commit-push
-  ::git-rebase         ()             'magit-rebase
-  ::git-commit         ()             'magit-commit
-  ::git-push           ()             'magit-push
-  ::git-log            ()             'magit-log)
-
-(on/menu: [::git-menu ()]
-  "
-  ^Basic^                           ^Advanced^
-  _1_: git status
-  _2_: git add, commit, push
-  _3_: git log
-  "
-  ("1" ::git-status   "git status")
-  ("2" ::git-doall    "git add, commit, push")
-  ("3" ::git-log      "git log")
-  ("x" ::do-nothing   "exit" :exit t))
 
 ;;
 ;; (M-6) Container Management
 ;;
 
-(on/bind: []
-  ::docker-ps          ()             'docker)
 
-(on/menu: [::docker-menu ("<f6>")]
-  "
-  ^Basic^                           ^Advanced^
-  _1_: docker-ps
-  "
-  ("1" ::docker-ps)
-  ("x" ::do-nothing   "exit" :exit t))
 
-;;
-;; (M-8) Language Specific
-;; 
-;; This is reserved for the given language minor mode to provide
-;; functionality that is specific working within the language.
-;; Usually done for tutorial/walk-through/late-night-brain-dead
-;; programming to show common options that a user might be able to use.
-;;
-;;   - emacs lisp
-;;   - java
-;;   - clojure
-;;   - rust
-;;   - c/c++
-;;   - verilog
-;;   - html/css
-;;   - javascript
-
-(on/mode-init: []
-  ::eval-cursor        ("C-e")   ("P")
-  ::eval-file          ("M-e" "ESC e" "C-x e" "C-x C-e")   ()
-  ::init               ("M-c" "ESC c")   ())
-
-(on/menu: [::lang-menu  ("<f8>")]
-  "
-  ^Code^            
-  _1_: run          
-  _2_: test      
-  _3_: connect/compile
-  _4_: eval file
-  "
-  ("1" ::run)
-  ("2" ::test)
-  ("3" ::init         "connect/compile")
-  ("4" ::eval-file)
-  ("x" ::do-nothing   "exit" :exit t))
 
 ;;
 ;; (M-9) OS Management 
@@ -418,5 +413,5 @@ See also `cycle-spacing'."
   ("3" ::toggle-scratch)
   ("4" ::toggle-magit)
   ("5" ::toggle-workflow)
-  ("x" ::do-nothing   "exit" :exit t))
+  ("z" ::do-nothing   "cancel" :exit t))
 
