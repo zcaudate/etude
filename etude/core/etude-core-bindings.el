@@ -19,7 +19,8 @@
   ::no-action       ()                          'e/no-action
   ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
   ::quit            ("ESC q" "M-q")             'save-buffers-kill-terminal
-  ::help-key        ("ESC <f1>")                'helpful-key)
+  ::help-key        ("ESC <f1>")                'helpful-key
+  ::eval-elisp      ("ESC l")                   'eval-last-sexp)
 
 (defun e/undo-tree-redo ()
   (interactive)
@@ -75,7 +76,7 @@
              (if (equal "*Bufler*" (buffer-name (current-buffer)))
                  (e/close-buffer)
                (delete-other-windows)))
-    (bufler)))
+    (bufler 0)))
 
 (e/bind []
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer
@@ -99,6 +100,36 @@
   ::jump-search          ("C-l")      'swiper     
   ::jump-bookmark        ()           'counsel-bookmark
   ::jump-search-project  ("C-f")      'counsel-rg) 
+
+
+
+;;;
+;; (System and Files)
+;;
+
+
+(defun e/close-buffer ()
+  (interactive)
+  (if (buffer-file-name (current-buffer))
+      (save-buffer))
+  (kill-buffer (current-buffer)))
+
+(defun e/close-all-buffers ()
+  (interactive)
+  (save-some-buffers)
+  (mapc 'kill-buffer (buffer-list)))
+
+(e/bind []
+  ::open              ("C-x C-f" "C-x f")          'find-file
+  ::open-recent       ("C-r")                      'counsel-recentf
+  ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'projectile-find-file-dwim
+  ::save              ("ESC s" "C-s" "M-s")        'save-buffer
+  ::save-as           ()                           'write-file
+  ::save-all          ("C-x C-s" "C-x s")          'save-some-buffers
+  ::close             ("ESC `" "M-`" "C-`")        'e/close-buffer
+  ::close-all         ()                           'e/close-all-buffers
+  ::directory         ("ESC 0" "M-0" "C-x 0" "C-x C-0" "C-0")   'treemacs)
+
 
 ;;
 ;; (Window Movement)
@@ -128,32 +159,6 @@
   ::window-move-up       ("<M-up>"    "ESC <up>" "C-x <up>")          'windmove-up
   ::window-move-down     ("<M-down>"  "ESC <down>" "C-x <down>")     'windmove-down)
 
-
-
-;;
-;; (F1) Help
-;;
-
-
-(pretty-hydra-define e/menu-fn::help-menu
-  (:title "<F1> Help" :quit-key "z")
-  ("Emacs"
-   (("0" about-emacs "about")
-    ("1" describe-distribution "distribution")
-    ("2" describe-mode      "current mode"))
-   "Packages"
-   (("l" package-list-packages  "list")
-    ("R" package-refresh-contents "refresh")
-    ("i" package-install "install")
-    ("d" package-remove "delete"))
-   "Reference"
-   (("b" describe-bindings  "list bindings"))))
-
-(e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::help-menu/body)
-
-;;
-;; (F2) Applications
-;;
 
 (defun e/jump-back ()
   (interactive)
@@ -190,25 +195,11 @@
   ::toggle-terminal        ("ESC 1" "M-1")   'e/jump-to-terminal
   ::toggle-dashboard       ("ESC 2" "M-2")   'e/jump-to-start-screen
   ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
-  ::toggle-magit           ("ESC 4" "M-4")   'magit
-  ::toggle-bindings        ("ESC 5" "M-5")   'e/jump-to-bindings
-  ::toggle-kmacro          ("ESC 6" "M-6")   'e/menu-fn::kmacro-menu/body)
+  ::toggle-dired           ("ESC 4" "M-4")   'dired-jump)
 
-(pretty-hydra-define e/menu-fn::app-menu
-  (:title "<F2> Applications" :quit-key "z")
-  ("Jump To"
-   (("1" e/jump-to-terminal "terminal")
-    ("2" e/jump-to-start-screen "dashboard")
-    ("3" e/jump-to-scratch      "scratch")
-    ("4" magit      "git")
-    ("5" e/jump-to-bindings      "configuration")
-    ("6" e/menu-fn::kmacro-menu/body  "keyboard macros" :exit t))))
 
-(e/bind [] ::f2-menu   ("<f2>")   'e/menu-fn::app-menu/body)
-
-(e/bind [] ::f4-menu   ("<f4>")   'e/menu-fn::file-menu/body)
 ;;
-;; (F3) Window Movement
+;; (F1) Command
 ;;
 
 
@@ -238,101 +229,128 @@
           (:else
            (delete-other-windows)))))
 
-(pretty-hydra-define e/menu-fn::window-menu
-  (:color red :quit-key "z" :title "<F3> Window")
-  ("Current"
-   (("0"   split-window-right   "split h")
-    ("1"   split-window-below   "split v")
-    ("DEL" delete-window   "close")
-    ("RET" delete-other-windows "focus"))
-
-   "Manage"
+(pretty-hydra-define e/menu-fn::start-menu
+  (:title "<F1> Start" :quit-key "z")
+  ("Application"
+   (("1" e/jump-to-terminal     "Terminal" :exit t)
+    ("2" e/jump-to-start-screen "Dashboard" :exit t)
+    ("3" e/jump-to-scratch      "Scratch" :exit t)
+    ("4"  dired-jump "File Explorer" :exit t)
+    ("Q" save-buffers-kill-terminal "Exit Emacs" :exit t))
+   ""
+   (("D" dash "Dash Docs" :exit t)
+    ("T" tldr "TLDR" :exit t)
+    ("B" wm3          "Browser" :exit t))
+   "File"
+   (("o o"  counsel-projectile-find-file-dwim   "open")
+    ("o r"  counsel-recentf      "open recent")
+    ("o p"  counsel-projectile   "open project")
+    ("s a"  save-some-buffers    "save as")
+    ("s s"  save-some-buffers    "save all"))
+   ""
+   (("f"  counsel-rg             "search text")
+    ("c c"  e/close-all-buffers  "close all"))
+   "Window"
+   (("h"   split-window-right   "split h" :exit nil)
+    ("v"   split-window-below   "split v" :exit nil)
+    ("DEL"   delete-window   "close")
+    ("RET"   delete-other-windows "focus"))
+   ""
    (("b"   'balance-windows-area "balance")
     ("d"   e/window-delete "delete")
-    ("o"   e/split-window-toggle "toggle")
+    ("t"   e/split-window-toggle "toggle")
     ("w"   ace-swap-window "swap"))
-   
    ""
-   (("<left>"  shrink-window-horizontally ""))
-   "Resize"
-   (("<up>"    shrink-window  "")
-    ("<down>"  enlarge-window ""))
+   (("<up>"    shrink-window  "v-")
+    ("<down>"  enlarge-window "v+")
+    ("<left>"  shrink-window-horizontally "h-")
+    ("<right>" enlarge-window-horizontally "h+"))
+   "Help"
+   (("i a" about-emacs   "About Emacs")
+    ("i d" about-distribution   "About Distribution")
+    ("i h" help-for-help "About Help")
+    ("i b" describe-bindings  "Bound Keys")
+    ("i m" describe-mode      "Current Mode"))))
+
+(e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::start-menu/body)
+
+(pretty-hydra-define e/menu-fn::settings-menu
+  (:title "<F2> Settings" :quit-key "z")
+  ("Package"
+   (("p p" package-list-packages  "list" :exit t)
+    ("p h" describe-package  "describe")
+    ("p r" package-refresh-contents "refresh")
+    ("p i" package-install "install")
+    ("p d" package-delete "delete"))
+   "Customise"
+   (("c c" customize "all" :exit t)
+    ("c f" customize-face  "face" :exit t)
+    ("c f" customize-themes "theme" :exit t))
+   "Toggle"
+   (("t l" linum-mode "line number" :toggle t)
+    ("t w" whitespace-mode "whitespace" :toggle t)
+    ("t g" git-gutter-mode "git gutter" :toggle t))))
+
+(e/bind [] ::f2-menu   ("<f2>")   'e/menu-fn::settings-menu/body)
+
+(pretty-hydra-define e/menu-fn::history-menu
+  (:title "<F3> History" :quit-key "z")
+  ("Undo"
+   (("p p" package-list-packages  "list" :exit t))
+   "Repository"
+   (("N" git-gutter:next-hunk      "Next hunk")
+    ("P" git-gutter:previous-hunk  "Prev hunk")
+    ("D" git-gutter:popup-hunk     "Diff hunk")
+    ("R" git-gutter:revert-hunk    "Revert hunk")
+    ("S" git-gutter:stage-hunk     "Stage hunk"))
    ""
-   (("<right>" enlarge-window-horizontally ""))))
-
-(e/bind [] ::f3-menu   ("<f3>")   'e/menu-fn::window-menu/body)
-
-
-;;;
-;; (F4) System and Files
-;;
-
-(defun e/close-buffer ()
-  (interactive)
-  (if (buffer-file-name (current-buffer))
-      (save-buffer))
-  (kill-buffer (current-buffer)))
-
-(defun e/close-all-buffers ()
-  (interactive)
-  (save-some-buffers)
-  (mapc 'kill-buffer (buffer-list)))
-
-(e/bind []
-  ::open              ("C-x C-f" "C-x f")          'find-file
-  ::open-recent       ("C-r")                      'counsel-recentf
-  ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'projectile-find-file-dwim
-  ::save              ("ESC s" "C-s" "M-s")        'save-buffer
-  ::save-as           ()                           'write-file
-  ::save-all          ("C-x C-s" "C-x s")          'save-some-buffers
-  ::close             ("ESC `" "M-`" "C-`")        'e/close-buffer
-  ::close-all         ()    'e/close-all-buffers
-  ::directory         ("ESC 0" "M-0" "C-x 0" "C-x C-0" "C-0")   'treemacs)
-
-(pretty-hydra-define e/menu-fn::file-menu
-  (:color red :quit-key "z" :title "<F4> File")
-  ("Bulk"
-   (("1"  save-some-buffers    "save all")
-    ("2"  e/close-all-buffers  "close all")
-    ("D"  dired-jump "to dired" :exit t))
+   (
+    ("g p"  magit-push    "push")
+    ("g c"  magit-commit  "commit")
+    ("g d"  magit-diff    "diff")
+    ("g l"  magit-log-all "logs")
+    ("g s"  magit-status  "status"))
    
-   "Save"
-   (("s"  save-buffer "save")
-    ("S"  write-file  "save as"))
-   
-   "Open"))
+   "Commands"
+   (("h c" counsel-command-history "all" :exit t))))
 
-(e/bind [] ::f4-menu   ("<f4>")   'e/menu-fn::file-menu/body)
+(e/bind [] ::f2-menu   ("<f3>")   'e/menu-fn::history-menu/body)
 
-
-;;
-;; (F5) System Toggles
-;;
-
-(pretty-hydra-define e/menu-fn::view-menu
-  (:color amaranth :quit-key "z" :title "<F10> View")
-  ("Basic"
-   (("n" linum-mode "line number" :toggle t)
-    ("w" whitespace-mode "whitespace" :toggle t)
-    ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
-    ("r" rainbow-mode "rainbow" :toggle t)
-    ("L" page-break-lines-mode "page break lines" :toggle t))
-   "Highlight"
-   (("s" symbol-overlay-mode "symbol" :toggle t)
-    ("l" hl-line-mode "line" :toggle t)
-    ("x" highlight-sexp-mode "sexp" :toggle t)
-    ("t" hl-todo-mode "todo" :toggle t))
-   "UI"
-   (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
-   "Coding"
-   (("p" smartparens-mode "smartparens" :toggle t)
-    ("P" smartparens-strict-mode "smartparens strict" :toggle t)
-    ("S" show-smartparens-mode "show smartparens" :toggle t)
-    ("f" flycheck-mode "flycheck" :toggle t))
-   "Emacs"
-   (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
-    ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
+(comment
+ 
+ ("g t"  git-timemachine    "Timemachine"  :exit t)
+ ("I" git-gutter:statistic      "File stats"))
     
-(e/bind [] ::f10-menu   ("<f10>")   'e/menu-fn::view-menu/body)
+(comment
+ ;;
+ ;; (F5) System Toggles
+ ;;
 
-(provide 'etude-core-bindings)
+ (pretty-hydra-define e/menu-fn::view-menu
+   (:color amaranth :quit-key "z" :title "<F10> View")
+   ("Basic"
+    (("n" linum-mode "line number" :toggle t)
+     ("w" whitespace-mode "whitespace" :toggle t)
+     ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
+     ("r" rainbow-mode "rainbow" :toggle t)
+     ("L" page-break-lines-mode "page break lines" :toggle t))
+    "Highlight"
+    (
+     ("l" hl-line-mode "line" :toggle t)
+     ("x" highlight-sexp-mode "sexp" :toggle t)
+     ("t" hl-todo-mode "todo" :toggle t))
+    "UI"
+    (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
+    "Coding"
+    (("p" smartparens-mode "smartparens" :toggle t)
+     ("P" smartparens-strict-mode "smartparens strict" :toggle t)
+     ("S" show-smartparens-mode "show smartparens" :toggle t)
+     ("f" flycheck-mode "flycheck" :toggle t))
+    "Emacs"
+    (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
+     ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
+ 
+ (e/bind [] ::f10-menu   ("<f10>")   'e/menu-fn::view-menu/body)
+
+ (provide 'etude-core-bindings)
+ )

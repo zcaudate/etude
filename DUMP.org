@@ -3,7 +3,7 @@
 #+OPTIONS: toc:nil
 #+STARTUP: showall
 
-* Introduction
+* Introduction 
 
 This is [[http://github.com/zcaudate/etude][Etude]] - an /*emacs micro-framework*/ (aka /use-package + two
 additional files/) with the emphasis of being highly customisable and

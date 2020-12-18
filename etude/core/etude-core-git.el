@@ -11,23 +11,7 @@
 
 (pretty-hydra-define e/menu-fn::git-menu
   (:title "<F5> Git" :quit-key "z")
-  ("Explore"
-   (("n" git-gutter:next-hunk      "Next hunk")
-    ("p" git-gutter:previous-hunk  "Prev hunk")
-    ("d" git-gutter:popup-hunk     "Diff hunk")
-    ("s" git-gutter:statistic      "Stats")
-    ("T"  git-timemachine    "Timemachine"  :exit t))
-
-   "Commit"
-   (("r" git-gutter:revert-hunk    "Revert hunk")
-    ("h" git-gutter:stage-hunk     "Stage hunk"))
-   
-   "Project"
-   (("gp" magit-push    "push")
-    ("gc" magit-commit  "commit")
-    ("gd" magit-diff    "diff")
-    ("gl" magit-log-all "logs")
-    ("gs" magit-status  "status"))))
+  ())
 
 (defhydra+ e/menu-fn::git-menu ()
   ("<prior>" scroll-up-command)

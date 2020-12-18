@@ -1,9 +1,14 @@
-;; Helpful
+;; Documentation
 (use-package helpful :ensure t)
+
+(use-package tldr :ensure t)
 
 ;;
 ;; Movement/Cut/Paste/Undo
 ;;
+
+
+(use-package hercules :ensure t)
 
 (use-package ace-window :ensure t)
 
@@ -18,7 +23,10 @@
   :ensure t
   :diminish 'undo-tree-mode
   :config (global-undo-tree-mode t))
-  
+
+(use-package goto-chg :ensure t)
+
+
 ;;
 ;; File Management
 ;;

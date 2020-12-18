@@ -19,8 +19,8 @@
 
 (e/mode-init []
   ::mode-menu          ("<f8>")  ()
-  ::eval-cursor        ("C-e")    ("P")
-  ::eval-cursor-alt    ("C-x m" "C-x C-m")  ("P")
+  ::eval-cursor        ("C-e")   ("P")
+  ::eval-cursor-alt    ("C-x m" "C-x C-m")   ("P")
   ::eval-file          ("C-x c" "C-x C-c")  ()
   ::mode-connect       ("M-c" "ESC c")      ()
   ::mode-build         ()      ()
