@@ -1,5 +1,15 @@
-(ns: etude-core-management
-  (:require etude-core-base))
+;; Helpful
+(use-package helpful :ensure t)
+
+(use-package goggles
+  :ensure t
+  :init   (setq-default goggles-pulse t)
+  :config (goggles-mode))
+
+(use-package undo-tree
+  :ensure t
+  :diminish 'undo-tree-mode
+  :config (global-undo-tree-mode t))
 
 (use-package no-littering :ensure t)
 
@@ -44,7 +54,7 @@
 
 (use-package ace-window :ensure t)
 
-(defun on/start-screen ()
+(defun e/start-screen ()
   (interactive)
   (dashboard-insert-startupify-lists)
   (redisplay)
@@ -56,7 +66,7 @@
   :init (progn (setq dashboard-startup-banner nil)
                (setq dashboard-items '((recents  . 15)
                                        (projects . 5)))
-               (add-hook 'emacs-startup-hook 'on/start-screen)))
+               (add-hook 'emacs-startup-hook 'e/start-screen)))
 
 (use-package treemacs :ensure t
   :init (setq treemacs-no-png-images t))
@@ -66,5 +76,8 @@
 
 (use-package doom-modeline :ensure t
   :init (doom-modeline-mode))
-
+  
 (use-package diff-hl :ensure t)
+
+
+(provide 'etude-core-management)

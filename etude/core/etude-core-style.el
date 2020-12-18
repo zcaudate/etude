@@ -1,7 +1,3 @@
-(ns: etude-core-style)
-
-;; Remove menu, tool, and scrolls
-;;(set-cursor-color "light green")
 (show-paren-mode t)
 (global-hl-line-mode t)
 (setq redisplay-dont-pause t)
@@ -31,11 +27,9 @@
        ;; Show current function in modeline.
        (which-function-mode t))
 
-(comment:
-    (use-package auto-highlight-symbol
-      :ensure t
-      :diminish 'auto-highlight-symbol-mode
-      :config   (progn (setq ahs-idle-interval 0.0)
-                       (global-auto-highlight-symbol-mode t))))
+(use-package auto-highlight-symbol
+  :ensure t
+  :diminish 'auto-highlight-symbol-mode
+  :config   (progn (setq ahs-idle-interval 0.0)))
  
 (provide 'etude-core-style)

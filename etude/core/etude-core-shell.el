@@ -1,5 +1,3 @@
-(ns: etude-core-os)
-
 ;; Add shell defaults
 
 (use-package exec-path-from-shell
@@ -20,10 +18,10 @@
 ;;
 ;; OSX
 ;;
-(defun on/copy-from-osx ()
+(defun e/copy-from-osx ()
   (shell-command-to-string "pbpaste"))
 
-(defun on/paste-to-osx (text &optional push)
+(defun e/paste-to-osx (text &optional push)
     (let ((process-connection-type nil))
       (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
         (process-send-string proc text)
@@ -31,8 +29,8 @@
 
 (if (eq system-type 'darwin)
     (progn
-      (setq interprogram-cut-function 'on/paste-to-osx)
-      (setq interprogram-paste-function 'on/copy-from-osx)))
+      (setq interprogram-cut-function 'e/paste-to-osx)
+      (setq interprogram-paste-function 'e/copy-from-osx)))
 
 ;;
 ;;

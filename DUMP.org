@@ -2,13 +2,48 @@
 #+EMAIL:   z@caudate.me
 #+OPTIONS: toc:nil
 #+STARTUP: showall
- 
+
 * Introduction
 
-This is [[http://github.com/zcaudate/etude][Etude]]. The aim of the project is to provide better usability
-for ~emacs~ on ~tmux~ sessions across various operating systems.
+This is [[http://github.com/zcaudate/etude][Etude]] - an /*emacs micro-framework*/ (aka /use-package + two
+additional files/) with the emphasis of being highly customisable and
+beginner friendly. It configures an extremely usable editor
+(subjectively speaking) with the minimal amount of addons (also
+subjectively speaking), creating a version ~emacs~ that is:
+
+- [[*Simplicity][Simple]] (Visual, Intuitive, Modern)
+- [[*Redundancy][Robust]] (Portable, Efficent)
+- [[*Flexibility][Flexible]] (Easy to Customise, Swappability)
+
+The aim of the project is to provide better usability for ~emacs~ on
+~tmux~ sessions across various operating systems. There are three
+parts to it:
+
+1. ~elpa~ packages providing functionality /(keyboard agnostic)/
+2. key bindings to those packages /(dvorak specific)/
+3. a /*micro framework*/ used for binding the keys to the actual
+   functionality /(keyboard agnostic)/
  
 [[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
+
+*So..*
+
+/What is all this fuss around keybindings?/
+
+The methodology used for determining keybindings is by no means
+authoritative or complete. It's definitely much better described with
+pictures - something that still needs to be done. One who has read
+through it might point out that it's rehashing the completely
+obvious. The cynical might even say that it's a long winded attempt to
+justify the mutilation of a perfectly great set of defaults.
+
+/Well... Yes./
+
+However, doing this exercise (/etude/) provides a list of ~what is
+essential~ vs ~what is not~. By writing all this down, it creates a
+mental model that can be a guide for design of better ergonamics in
+both Emacs and other tools to come.
+
 
 * Dependencies
 
@@ -16,7 +51,7 @@ The framework is built around a very small core set of libraries:
 
 - [[https://github.com/jwiegley/use-package][use-package]] (packages)
 - [[https://github.com/abo-abo/swiper][ivy, counsel and swiper]] (search)
-- [[https://github.com/abo-abo/hydra][hydra]] + [[https://github.com/jerrypnz/major-mode-hydra.el][pretty]] (gui)
+- [[https://github.com/abo-abo/hydra][hydra]] (gui)
 - [[https://github.com/magnars/dash.el][dash]], [[https://github.com/Wilfred/ht.el][ht]], [[https://github.com/magnars/s.el][s]] and [[https://github.com/rejeep/f.el][f]] (utils)
 
 * Methodology

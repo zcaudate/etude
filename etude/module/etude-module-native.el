@@ -35,7 +35,7 @@
   :init   (require 'cargo)
   :hook   cargo-minor-mode
   :config (progn (setq rust-format-on-save t)
-                 (on/mode: [:rust rust-mode  "etude-module-native"]
+                 (e/mode [:rust rust-mode  "etude-module-native"]
                    ::init       'cargo-process-init
                    ::eval-file  'cargo-process-run)))
 
@@ -43,7 +43,7 @@
 ;; MAKE
 ;;
 
-(defun on/make-save-and-compile ()
+(defun e/make-save-and-compile ()
   (interactive)
   (save-buffer)
   (compile "make -j4")

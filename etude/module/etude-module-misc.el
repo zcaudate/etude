@@ -1,4 +1,4 @@
-(ns: etude-module-apps
+(ns: etude-module-misc
   (:require etude-core))
 
 ;;

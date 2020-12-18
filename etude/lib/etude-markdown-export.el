@@ -16,7 +16,7 @@
                      (src-block . org-md_et-example-block)))
 
 (defun org-md_et-star-border (text)
-  (let: [lines (s-lines text)
+  (e/let [lines (s-lines text)
          llen  (-max (-map 'length lines))
          y-border (s-repeat (+ llen 2) "*")]
     (concat
