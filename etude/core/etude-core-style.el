@@ -35,10 +35,10 @@
       uniquify-buffer-name-style 'forward)
 
 
-(e/comment (use-package auto-highlight-symbol
-             :ensure t
-             :diminish 'auto-highlight-symbol-mode
-             :config   (progn (setq ahs-idle-interval 0.0))))
+(use-package auto-highlight-symbol
+  :ensure t
+  :diminish 'auto-highlight-symbol-mode
+  :config   (progn (setq ahs-idle-interval 0.0)))
 
 
 (provide 'etude-core-style)

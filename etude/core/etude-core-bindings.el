@@ -230,7 +230,7 @@
            (delete-other-windows)))))
 
 (pretty-hydra-define e/menu-fn::start-menu
-  (:title "<F1> Start" :quit-key "z")
+  (:title "<F1> Start" :quit-key "z"  :exit nil :foreign-keys run)
   ("Application"
    (("1" e/jump-to-terminal     "Terminal" :exit t)
     ("2" e/jump-to-start-screen "Dashboard" :exit t)
@@ -249,17 +249,18 @@
     ("s s"  save-some-buffers    "save all"))
    ""
    (("f"  counsel-rg             "search text")
-    ("c c"  e/close-all-buffers  "close all"))
+    ("c c"  e/close-buffer       "close")
+    ("c A"  e/close-all-buffers  "close all"))
    "Window"
-   (("h"   split-window-right   "split h" :exit nil)
-    ("v"   split-window-below   "split v" :exit nil)
+   (("H"   split-window-right   "split h" :exit nil)
+    ("V"   split-window-below   "split v" :exit nil)
     ("DEL"   delete-window   "close")
     ("RET"   delete-other-windows "focus"))
    ""
-   (("b"   'balance-windows-area "balance")
-    ("d"   e/window-delete "delete")
-    ("t"   e/split-window-toggle "toggle")
-    ("w"   ace-swap-window "swap"))
+   (("B"   'balance-windows-area "balance")
+    ("D"   e/window-delete "delete")
+    ("T"   e/split-window-toggle "toggle")
+    ("W"   ace-swap-window "swap"))
    ""
    (("<up>"    shrink-window  "v-")
     ("<down>"  enlarge-window "v+")
@@ -275,82 +276,77 @@
 (e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::start-menu/body)
 
 (pretty-hydra-define e/menu-fn::settings-menu
-  (:title "<F2> Settings" :quit-key "z")
+  (:title "<F2> Settings" :quit-key "z" :exit nil :foreign-keys run)
   ("Package"
-   (("p p" package-list-packages  "list" :exit t)
-    ("p h" describe-package  "describe")
-    ("p r" package-refresh-contents "refresh")
-    ("p i" package-install "install")
-    ("p d" package-delete "delete"))
+   (("P" package-list-packages  "List" :exit t)
+    ("p H" describe-package  "Describe")
+    ("p R" package-refresh-contents "Refresh")
+    ("p I" package-install "Install")
+    ("p D" package-delete "Delete"))
    "Customise"
-   (("c c" customize "all" :exit t)
+   (("C" customize "all" :exit t)
     ("c f" customize-face  "face" :exit t)
-    ("c f" customize-themes "theme" :exit t))
+    ("c t" customize-themes "theme" :exit t))
    "Toggle"
-   (("t l" linum-mode "line number" :toggle t)
-    ("t w" whitespace-mode "whitespace" :toggle t)
-    ("t g" git-gutter-mode "git gutter" :toggle t))))
+   (("L" display-line-numbers-mode "Line Numbers" :toggle t)
+    ("V" visual-line-mode "Visual Line" :toggle t)
+    ("W" whitespace-mode "Whitespace" :toggle t)
+    ("H" auto-highlight-symbol-mode "Highlight Symbol" :toggle t))
+   ""
+   (("f s" flyspell-mode "Flyspell" :toggle t)
+    ("f c" flycheck-mode "Flycheck" :toggle t)
+    ("s p" smartparens-mode "Smartparens" :toggle t)
+    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))))
+
 
 (e/bind [] ::f2-menu   ("<f2>")   'e/menu-fn::settings-menu/body)
 
-(pretty-hydra-define e/menu-fn::history-menu
-  (:title "<F3> History" :quit-key "z")
+(pretty-hydra-define e/menu-fn::review-menu
+  (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
   ("Undo"
-   (("p p" package-list-packages  "list" :exit t))
-   "Repository"
-   (("N" git-gutter:next-hunk      "Next hunk")
-    ("P" git-gutter:previous-hunk  "Prev hunk")
-    ("D" git-gutter:popup-hunk     "Diff hunk")
-    ("R" git-gutter:revert-hunk    "Revert hunk")
-    ("S" git-gutter:stage-hunk     "Stage hunk"))
+   (("u p" package-list-packages  "list" :exit t)
+    ("u p" package-list-packages  "list" :exit t))
+   "Annotate"
+   (("A"    annotate-mode "Toggle" :toggle t)
+    ("a a"  annotate-annotate "Add")
+    ("a s"  annotate-show-annotation-summary "Prev")
+    ("a p"  annotate-goto-previous-annotation "Next")
+    ("a n"  annotate-goto-next-annotation "Prev"))
    ""
-   (
-    ("g p"  magit-push    "push")
-    ("g c"  magit-commit  "commit")
-    ("g d"  magit-diff    "diff")
-    ("g l"  magit-log-all "logs")
-    ("g s"  magit-status  "status"))
+   (("a I"  annotate-integrate-annotations "Integrate")
+    ("a X"  annotate-export-annotations "Export")
+    ("a S"  annotate-save-annotations "Save")
+    ("a C"  annotate-clear-annotations "Clear")
+    ("a P"  annotate-purge-annotations "Purge"))
+   "Hunks"
+   (("H"  git-gutter:toggle  "Toggle" :toggle git-gutter-mode)
+    ("h s" git-gutter:clear  "Select")
+    ("h c" git-gutter:clear  "Clear")
+    ("h n" git-gutter:next-hunk      "Next")
+    ("h p" git-gutter:previous-hunk  "Prev"))
+   ""
+   (("h i" git-gutter:statistics   "Stats")
+    ("h d" git-gutter:popup-hunk   "Diff")
+    ("h r" git-gutter:revert-hunk  "Revert")
+    ("h s" git-gutter:stage-hunk   "Stage"))
+   "Git"
+   (("L"  magit-log-all "Log")
+    ("D"  magit-diff    "Diff"))
+   ""
+   (("C"  magit-commit  "Commit")
+    
+    ("F"  magit-pull    "Pull")
+    ("P"  magit-push    "Push")
+    ("S"  magit-status  "Status"))
    
    "Commands"
    (("h c" counsel-command-history "all" :exit t))))
 
-(e/bind [] ::f2-menu   ("<f3>")   'e/menu-fn::history-menu/body)
+(e/bind [] ::f2-menu   ("<f3>")   'e/menu-fn::review-menu/body)
 
 (comment
- 
+
+ (ano)
+  
  ("g t"  git-timemachine    "Timemachine"  :exit t)
  ("I" git-gutter:statistic      "File stats"))
-    
-(comment
- ;;
- ;; (F5) System Toggles
- ;;
-
- (pretty-hydra-define e/menu-fn::view-menu
-   (:color amaranth :quit-key "z" :title "<F10> View")
-   ("Basic"
-    (("n" linum-mode "line number" :toggle t)
-     ("w" whitespace-mode "whitespace" :toggle t)
-     ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
-     ("r" rainbow-mode "rainbow" :toggle t)
-     ("L" page-break-lines-mode "page break lines" :toggle t))
-    "Highlight"
-    (
-     ("l" hl-line-mode "line" :toggle t)
-     ("x" highlight-sexp-mode "sexp" :toggle t)
-     ("t" hl-todo-mode "todo" :toggle t))
-    "UI"
-    (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
-    "Coding"
-    (("p" smartparens-mode "smartparens" :toggle t)
-     ("P" smartparens-strict-mode "smartparens strict" :toggle t)
-     ("S" show-smartparens-mode "show smartparens" :toggle t)
-     ("f" flycheck-mode "flycheck" :toggle t))
-    "Emacs"
-    (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
-     ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
- 
- (e/bind [] ::f10-menu   ("<f10>")   'e/menu-fn::view-menu/body)
-
- (provide 'etude-core-bindings)
- )

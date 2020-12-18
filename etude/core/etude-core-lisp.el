@@ -30,7 +30,7 @@
   (eval-buffer (current-buffer) t))
 
 (pretty-hydra-define e/menu-fn::elisp-menu
-  (:title "<F8> Elisp" :quit-key "z")
+  (:title "<F8> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
   ("Eval"
    (("b" eval-buffer "buffer")
     ("e" eval-defun "defun")
@@ -45,16 +45,11 @@
    (("f"  helpful-callable   "function")
     ("s"  helpful-symbol     "symbol")
     ("c"  helpful-command    "command")
-    ("d"  helpful-at-point   "thing at point"))))
+    ("d"  helpful-at-point   "thing at point"))
+   "Toggle"
+   (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
+    ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
 
-
-(defhydra+ e/menu-fn::elisp-menu ()
-  ("<up>" previous-line)
-  ("<left>" left-char)
-  ("<right>" right-char)
-  ("<down>" next-line)
-  ("C-<up>" previous-paragraph)
-  ("C-<down>" next-paragraph))
 
 
 (e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
