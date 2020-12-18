@@ -120,7 +120,7 @@
   'delete-window      
 
   ::window-focus
-  ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x C-<up>")
+  ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x C-<up>" "C-x t" "C-x C-t")
   'delete-other-windows
   
   ::window-move-left     ("<M-left>"  "ESC <left>"   "C-x <left>")     'windmove-left

@@ -26,8 +26,9 @@
   (declare (indent 1))
   (apply 'e/let:fn bindings body))
 
-(defmacro e/comment (&rest body)
-  (declare (indent 1)))
+(defmacro e/comment (&rest body))
+
+(defmacro comment (&rest body))
 
 (setq e/*lock* nil)
 (setq e/*commands* (ht-create))
