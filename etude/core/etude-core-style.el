@@ -16,6 +16,9 @@
   :ensure t
   :init (load-theme 'nord t))
 
+(use-package doom-modeline :ensure t
+  :init (doom-modeline-mode))
+
 ;; Use smart mode line
 
 (progn (global-display-line-numbers-mode t)
@@ -27,9 +30,15 @@
        ;; Show current function in modeline.
        (which-function-mode t))
 
-(use-package auto-highlight-symbol
-  :ensure t
-  :diminish 'auto-highlight-symbol-mode
-  :config   (progn (setq ahs-idle-interval 0.0)))
- 
+(require 'uniquify)
+(setq uniquify-separator "/"               ;; The separator in buffer names.
+      uniquify-buffer-name-style 'forward)
+
+
+(e/comment (use-package auto-highlight-symbol
+             :ensure t
+             :diminish 'auto-highlight-symbol-mode
+             :config   (progn (setq ahs-idle-interval 0.0))))
+
+
 (provide 'etude-core-style)

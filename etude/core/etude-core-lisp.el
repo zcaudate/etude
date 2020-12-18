@@ -24,19 +24,47 @@
        (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
        (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
-
   
 (defun e/eval-buffer ()
   (interactive)
   (eval-buffer (current-buffer) t))
 
+(pretty-hydra-define e/menu-fn::elisp-menu
+  (:title "<F8> Elisp" :quit-key "z")
+  ("Eval"
+   (("b" eval-buffer "buffer")
+    ("e" eval-defun "defun")
+    ("r" eval-region "region"))
+   "REPL"
+   (("I" ielm "ielm"))
+   "Test"
+   (("t" ert "prompt")
+    ("T" (ert t) "all")
+    ("F" (ert :failed) "failed"))
+   "Describe"
+   (("f"  helpful-callable   "function")
+    ("s"  helpful-symbol     "symbol")
+    ("c"  helpful-command    "command")
+    ("d"  helpful-at-point   "thing at point"))))
+
+(defhydra+ e/menu-fn::elisp-menu ()
+  ("<up>" previous-line)
+  ("<left>" left-char)
+  ("<right>" right-char)
+  ("<down>" next-line)
+  ("C-<up>" previous-paragraph)
+  ("C-<down>" next-paragraph))
+
+
 (e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
   ::eval-cursor   'eval-last-sexp
-  ::eval-file     'e/eval-buffer)
+  ::eval-file     'e/eval-buffer
+  ::mode-menu     'e/menu-fn::elisp-menu/body)
 
 (e/mode [::emacs-lisp    emacs-lisp-mode "etude-core-lisp"]
   ::eval-cursor  'eval-last-sexp
-  ::eval-file    'e/eval-buffer)
+  ::eval-file    'e/eval-buffer
+  ::mode-menu    'e/menu-fn::elisp-menu/body)
 
 ;; (e/mode [::eshell-mode   eshell-mode    "etude-core-lisp"]
 ;;   ::eval-cursor 'eval-last-sexp)
@@ -47,7 +75,7 @@
 
 
 (use-package cider
-  :defer t
+  :ensure t
   :init (progn (setq nrepl-log-messages t)
                (setq nrepl-buffer-name-separator "/")
                (setq nrepl-buffer-name-show-port t)
@@ -63,7 +91,7 @@
   (cider-eval-buffer))
 
 (use-package clojure-mode
-  :defer t
+  :ensure t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
                  (e/mode [::clojure clojure-mode "etude-module-jvm"]
@@ -76,7 +104,7 @@
          (clojure-mode . eldoc-mode)))
 
 (use-package midje-mode
-  :defer t
+  :ensure t
   :config (define-clojure-indent
             (comment 'defun)))
 

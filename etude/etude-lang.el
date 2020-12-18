@@ -99,6 +99,7 @@
 (defun e/mode-key ()
   (ht-get e/*mode-lookup* major-mode))
 
+
 (defun e/mode-dispatch (fn-key &rest args)
   (e/let [mode-key (ht-get e/*mode-lookup* major-mode)
          fn-table (if mode-key
@@ -168,25 +169,3 @@
   (apply 'e/mode:form declaration config specs))
 
 (provide 'etude-lang)
-
-
-
-;; (defun ns::require (forms)
-;;   (e/let [(_ . packages) forms]
-;;     (seq-map (lambda (p)
-;;                `(require (quote ,p)))
-;;              packages)))
-
-;; (setq e/*ns* nil)
-
-;; (defmacro ns: (name &rest body)
-;;   (declare (indent 1))
-;;   (e/let [_     (setq e/*ns* name)
-;;          head `(provide (quote ,name))]
-;;     `(progn ,head
-;;             ,@(seq-mapcat 'ns::require body))))
-
-;;
-;; commands and menus
-;;
-

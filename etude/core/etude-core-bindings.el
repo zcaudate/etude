@@ -1,9 +1,11 @@
 (require 'etude-lang)
 (require 'etude-core-code)
-(require 'etude-core-management)
+(require 'etude-core-git)
 (require 'etude-core-global)
 (require 'etude-core-lisp)
+(require 'etude-core-management)
 (require 'etude-core-shell)
+(require 'etude-core-util)
 
 ;;
 ;; (Command)
@@ -128,12 +130,6 @@
 
 
 
-
-;;
-;; MENUS
-;;
-
-
 ;;
 ;; (F1) Help
 ;;
@@ -145,19 +141,72 @@
    (("0" about-emacs "about")
     ("1" describe-distribution "distribution")
     ("2" describe-mode      "current mode"))
-   
-   "Language"
-   (("f"  helpful-callable   "function")
-    ("s"  helpful-symbol     "symbol")
-    ("c"  helpful-command    "command")
-    ("d"  helpful-at-point   "thing at point"))
-
+   "Packages"
+   (("l" package-list-packages  "list")
+    ("R" package-refresh-contents "refresh")
+    ("i" package-install "install")
+    ("d" package-remove "delete"))
    "Reference"
    (("b" describe-bindings  "list bindings"))))
 
 (e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::help-menu/body)
 
+;;
+;; (F2) Applications
+;;
 
+(defun e/jump-back ()
+  (interactive)
+  (when e/*back-buffer*
+    (switch-to-buffer e/*back-buffer*)
+    (setq e/*back-buffer* nil)))
+
+(defun e/jump-to-bindings ()
+  (interactive)
+  (if e/*back-buffer*
+      (e/jump-back)
+    (progn (setq e/*back-buffer* (current-buffer))
+           (find-library "etude-core-bindings"))))
+
+(defun e/jump-to-buffer (bname command &rest args)
+  (if (not (equal (buffer-name (current-buffer))
+                  bname))
+      (funcall 'apply command args)
+    (previous-buffer)))
+
+(defun e/jump-to-terminal ()
+  (interactive)
+  (e/jump-to-buffer "vterm" 'vterm))
+
+(defun e/jump-to-start-screen ()
+  (interactive)
+  (e/jump-to-buffer "*dashboard*" 'e/start-screen))
+
+(defun e/jump-to-scratch ()
+  (interactive)
+  (e/jump-to-buffer "*scratch*" (lambda () (switch-to-buffer "*scratch*"))))
+
+(e/bind []
+  ::toggle-terminal        ("ESC 1" "M-1")   'e/jump-to-terminal
+  ::toggle-dashboard       ("ESC 2" "M-2")   'e/jump-to-start-screen
+  ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
+  ::toggle-magit           ("ESC 4" "M-4")   'magit
+  ::toggle-bindings        ("ESC 5" "M-5")   'e/jump-to-bindings
+  ::toggle-kmacro          ("ESC 6" "M-6")   'e/menu-fn::kmacro-menu/body)
+
+(pretty-hydra-define e/menu-fn::app-menu
+  (:title "<F2> Applications" :quit-key "z")
+  ("Jump To"
+   (("1" e/jump-to-terminal "terminal")
+    ("2" e/jump-to-start-screen "dashboard")
+    ("3" e/jump-to-scratch      "scratch")
+    ("4" magit      "git")
+    ("5" e/jump-to-bindings      "configuration")
+    ("6" e/menu-fn::kmacro-menu/body  "keyboard macros" :exit t))))
+
+(e/bind [] ::f2-menu   ("<f2>")   'e/menu-fn::app-menu/body)
+
+(e/bind [] ::f4-menu   ("<f4>")   'e/menu-fn::file-menu/body)
 ;;
 ;; (F3) Window Movement
 ;;
@@ -229,7 +278,6 @@
   (save-some-buffers)
   (mapc 'kill-buffer (buffer-list)))
 
-
 (e/bind []
   ::open              ("C-x C-f" "C-x f")          'find-file
   ::open-recent       ("C-r")                      'counsel-recentf
@@ -240,8 +288,6 @@
   ::close             ("ESC `" "M-`" "C-`")        'e/close-buffer
   ::close-all         ()    'e/close-all-buffers
   ::directory         ("ESC 0" "M-0" "C-x 0" "C-x C-0" "C-0")   'treemacs)
-
-
 
 (pretty-hydra-define e/menu-fn::file-menu
   (:color red :quit-key "z" :title "<F4> File")
@@ -256,35 +302,37 @@
    
    "Open"))
 
-(dired default-directory)
-
 (e/bind [] ::f4-menu   ("<f4>")   'e/menu-fn::file-menu/body)
 
 
+;;
+;; (F5) System Toggles
+;;
 
-(e/comment
-    (e/menu [::file-menu ("<f4>")]
-             "
-  ^File^                 ^Save^               ^Preferences^
-  _1_: open/new          _6_: find            _h_: help
-  _2_: open recent       _7_: save            
-  _3_: open project      _8_: save as         
-  _4_: close             _9_: save all        
-  _5_: close all         _0_: directory       _v_: vterm
-  "
-             ("1" ::open         nil :exit t)
-             ("2" ::open-recent  nil :exit t)
-             ("3" ::open-project nil :exit t)
-             ("4" ::close)
-             ("5" ::close-all)
-             ("6" ::find nil)
-             ("7" ::save)
-             ("8" ::save-as)
-             ("9" ::save-all)
-             ("0" ::directory)
-             ("h" ::help nil :exit t)
-             ("v" ::terminal nil :exit t)
-             ("q" ::quit         "quit emacs" :exit t)
-             ("z" ::do-nothing   "cancel" :exit t)))
+(pretty-hydra-define e/menu-fn::view-menu
+  (:color amaranth :quit-key "z" :title "<F10> View")
+  ("Basic"
+   (("n" linum-mode "line number" :toggle t)
+    ("w" whitespace-mode "whitespace" :toggle t)
+    ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
+    ("r" rainbow-mode "rainbow" :toggle t)
+    ("L" page-break-lines-mode "page break lines" :toggle t))
+   "Highlight"
+   (("s" symbol-overlay-mode "symbol" :toggle t)
+    ("l" hl-line-mode "line" :toggle t)
+    ("x" highlight-sexp-mode "sexp" :toggle t)
+    ("t" hl-todo-mode "todo" :toggle t))
+   "UI"
+   (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
+   "Coding"
+   (("p" smartparens-mode "smartparens" :toggle t)
+    ("P" smartparens-strict-mode "smartparens strict" :toggle t)
+    ("S" show-smartparens-mode "show smartparens" :toggle t)
+    ("f" flycheck-mode "flycheck" :toggle t))
+   "Emacs"
+   (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
+    ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
+    
+(e/bind [] ::f10-menu   ("<f10>")   'e/menu-fn::view-menu/body)
 
 (provide 'etude-core-bindings)
