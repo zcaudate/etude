@@ -47,6 +47,7 @@
     ("c"  helpful-command    "command")
     ("d"  helpful-at-point   "thing at point"))))
 
+
 (defhydra+ e/menu-fn::elisp-menu ()
   ("<up>" previous-line)
   ("<left>" left-char)
