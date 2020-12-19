@@ -33,34 +33,33 @@
 
 (pretty-hydra-define e/menu-fn::elisp-menu
   (:title "<F8> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
-  ("Eval"
-   (("b" eval-buffer "buffer")
-    ("e" eval-defun "defun")
-    ("r" eval-region "region"))
-   "REPL"
-   (("I" ielm "ielm"))
-   "Test"
-   (("t" ert "prompt")
-    ("T" (ert t) "all")
-    ("F" (ert :failed) "failed"))
+  ("Actions"
+   (("1" ielm "Repl")
+    ("2" ert  "Test")
+    ("3" (ert t) "Test all")
+    ("4" (ert :failed) "Test failed"))
    "Describe"
    (("f"  helpful-callable   "function")
     ("s"  helpful-symbol     "symbol")
     ("c"  helpful-command    "command")
-    ("d"  helpful-at-point   "thing at point"))
+    ("i"  helpful-at-point   "thing at point"))
    "Toggle"
-   (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
-    ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
+   (("P" paredit-mode "Paredit" :toggle t)
+    ("R" rainbow-delimiters-mode "Rainbow" :toggle t)
+    ("D" toggle-debug-on-error "Debug on error" :toggle (default-value 'debug-on-error))
+    ("X" toggle-debug-on-quit "Debug on quit" :toggle (default-value 'debug-on-quit)))))
 
 (e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
   ::eval-cursor   'eval-last-sexp
   ::eval-file     'e/eval-buffer
+  ::eval-cursor-alt 'pp-macroexpand-last-sexp
   ::mode-menu     'e/menu-fn::elisp-menu/body)
 
 (e/mode [::emacs-lisp    emacs-lisp-mode "etude-core-lisp"]
-  ::eval-cursor  'eval-last-sexp
-  ::eval-file    'e/eval-buffer
-  ::mode-menu    'e/menu-fn::elisp-menu/body)
+  ::eval-cursor     'eval-last-sexp
+  ::eval-file       'e/eval-buffer
+  ::eval-cursor-alt 'pp-macroexpand-last-sexp
+  ::mode-menu       'e/menu-fn::elisp-menu/body)
 
 
 

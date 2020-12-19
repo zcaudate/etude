@@ -17,15 +17,11 @@
 
 (e/bind []
   ::no-action       ()                          'e/no-action
+  ::which-key       ("C-x C-h" "C-x h")         'which-key-show-major-mode
   ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
   ::quit            ("ESC q" "M-q")             'save-buffers-kill-terminal
   ::help-key        ("ESC <f1>")                'helpful-key
   ::eval-elisp      ("ESC l")                   'eval-last-sexp)
-
-(defun e/undo-tree-redo ()
-  (interactive)
-  (undo-tree-mode t)
-  (undo-tree-redo))
 
 (defun e/paredit-copy-context ()
   (interactive)
@@ -40,18 +36,25 @@
     (insert "\n")
     (yank)))
 
+(defun e/select-all ()
+  (interactive)
+  (point-to-register "R")
+  (mark-page)
+  (jump-to-register "R"))
+
 (e/bind []
-  ::select-all      ("ESC a" "C-x C-a" "C-x a")   'mark-whole-buffer
+  ::select-all      ("C-x a" "C-x C-a")           'e/select-all
   ::cut             ("C-a")                       'kill-region
   ::copy            ("C-o")                       'copy-region-as-kill
   ::cut-context     ("C-k")                       'paredit-kill
   ::copy-context    ("C-x k" "C-x C-k")           'e/paredit-copy-context
-  ::paste-context   ("C-x C-o" "C-x o")           'e/paredit-duplicate-context
-  ::paste           ("C-v" "M-v" "C-j")           'yank
-  ::paste-menu      ("C-x C-v" "C-x v")           'counsel-yank-pop
-  ::undo            ("C--")                       'undo
-  ::redo            ("ESC -")                     'e/undo-tree-redo
-  ::undo-menu       ("C-x -" "C-x C--")           'undo-tree-visualize
+  ::paste-context   ("C-x C-o" "C-x o")
+  'e/paredit-duplicate-context
+  ::paste           ("C-v" "M-v" "C-y")           'yank
+  ::paste-menu      ("C-x C-v" "C-x v" "C-x y" "C-x C-y")
+  'counsel-yank-pop
+  ::undo            ("C--")                       'undo-tree-undo
+  ::redo            ("ESC -")                     'undo-tree-redo
   ::comment         ("ESC ;" "C-x ;" "C-x C-;")   'comment-or-uncomment-region)
   
 
@@ -85,11 +88,11 @@
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
 
   ::prev-buffer
-  ("M-/" "ESC /" "C-x /" "C-x C-/" "C-S-<left>" "C-x C-<left>" "C-x h" "C-x C-h")
+  ("M-/" "ESC /" "C-x /" "C-x C-/" "C-S-<left>" "C-x C-<left>")
   'previous-buffer
 
   ::next-buffer
-  ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>" "C-x l" "C-x C-l")
+  ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>")
   'next-buffer)
 
 (e/bind []
@@ -191,11 +194,17 @@
   (e/jump-to-buffer "*scratch*"
                     (lambda () (switch-to-buffer "*scratch*"))))
 
+(defun e/jump-to-ranger ()
+  (interactive)
+  (if (equal major-mode 'ranger-mode)
+      (e/window-delete)
+    (ranger)))
+
 (e/bind []
-  ::toggle-terminal        ("ESC 1" "M-1")   'e/jump-to-terminal
-  ::toggle-dashboard       ("ESC 2" "M-2")   'e/jump-to-start-screen
+  ::toggle-dashboard       ("ESC 1" "M-1")   'e/jump-to-start-screen
+  ::toggle-terminal        ("ESC 2" "M-2")   'e/jump-to-terminal
   ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
-  ::toggle-dired           ("ESC 4" "M-4")   'dired-jump)
+  ::toggle-dired           ("ESC 4" "M-4")   'e/jump-to-ranger)
 
 
 ;;
@@ -236,10 +245,10 @@
 (pretty-hydra-define e/menu-fn::start-menu
   (:title "<F1> Start" :quit-key "z"  :exit nil :foreign-keys run)
   ("Application"
-   (("1" e/jump-to-terminal     "Terminal" :exit t)
-    ("2" e/jump-to-start-screen "Dashboard" :exit t)
+   (("1" e/jump-to-start-screen "Dashboard" :exit t)
+    ("2" e/jump-to-terminal     "Terminal" :exit t)
     ("3" e/jump-to-scratch      "Scratch" :exit t)
-    ("4"  dired-jump "File Explorer" :exit t)
+    ("4" e/jump-to-ranger "Explorer" :exit t)
     ("Q" save-buffers-kill-terminal "Exit Emacs" :exit t))
    ""
    (("r d" dash "Dash Docs" :exit t)
@@ -266,16 +275,24 @@
     ("T"   e/split-window-toggle "toggle")
     ("W"   ace-swap-window "swap"))
    ""
-   (("<up>"    shrink-window  "v-")
-    ("<down>"  enlarge-window "v+")
-    ("<left>"  shrink-window-horizontally "h-")
-    ("<right>" enlarge-window-horizontally "h+"))
+   (("C-↑"   shrink-window  "V-")
+    ("C-↓"   enlarge-window "V+")
+    ("C-←"   shrink-window-horizontally "H-")
+    ("C-→"  enlarge-window-horizontally "H+"))
    "Help"
    (("h a" about-emacs   "About Emacs")
     ("h d" about-distribution   "About Distribution")
     ("h h" help-for-help "About Help")
     ("h b" describe-bindings  "Bound Keys")
     ("h m" describe-mode      "Current Mode"))))
+
+(defhydra+ e/menu-fn::start-menu
+  ()
+  ("i"  e/insert-input)
+  ("C-<up>"    shrink-window)
+  ("C-<down>"  enlarge-window)
+  ("C-<left>"  shrink-window-horizontally)
+  ("C-<right>" enlarge-window-horizontally))
 
 (e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::start-menu/body)
 
@@ -286,7 +303,7 @@
     ("j" goto-last-change "Search in File")
     ("l" swiper "Search and Replace"))))
 
-(e/bind [] ::f2-menu ("<f2>") 'e/menu-fn::search-menu/body)
+(e/bind [] ::f2-menu ("<f2>") 'treemacs)
 
 (pretty-hydra-define e/menu-fn::review-menu
   (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
@@ -302,17 +319,15 @@
     ("a S"  annotate-save-annotations "Save")
     ("a C"  annotate-clear-annotations "Clear")
     ("a P"  annotate-purge-annotations "Purge"))
+   "History"
+   (("h h"  undo-tree-visualize "Undo")
+    ("h x"  command-history "Command")
+    ("h v"  vc-annotate "Changes"))
    "Navigation"
    (("g" goto-line "Goto Line")
-    ("j" goto-last-change "Goto Changed")
+    ("c" goto-last-change "Goto Changed")
     ("l" swiper "Locate")
-    ("n" swiper-thing-at-point "Same As"))
-   ""
-   (("u"  undo-tree-undo  "Undo")
-    ("r"  undo-tree-redo "Redo")
-    ("i"  e/insert-input "Insert")
-    ("h c"  counsel-command-history "History")
-    ("h v"  vc-annotate "VC Log"))
+    ("i" swiper-thing-at-point "Similar"))
    "Git"
    (("S"  magit-status  "Status" :exit t)
     ("L"  magit-log-all "Log" :exit t)
@@ -333,6 +348,10 @@
     ("h d" git-gutter:popup-hunk   "Diff")
     ("h r" git-gutter:revert-hunk  "Revert")
     ("h s" git-gutter:stage-hunk   "Stage"))))
+
+(defhydra+ e/menu-fn::review-menu
+  ()
+  ("i"  e/insert-input nil))
 
 (e/bind [] ::f3-menu   ("<f3>")   'e/menu-fn::review-menu/body)
 
@@ -358,15 +377,47 @@
     ("c f" customize-face  "face" :exit t)
     ("c t" customize-themes "theme" :exit t))))
 
+(defhydra+ e/menu-fn::settings-menu
+  ()
+  ("i"  e/insert-input nil))
+
+(e/bind [] ::f3-menu   ("<f4>")   'e/jump-to-ranger)
 (e/bind [] ::f3-menu   ("<f5>")   'e/menu-fn::settings-menu/body)
+
+
+(pretty-hydra-define e/menu-fn::dired-menu
+  (:title "<F8> Dired" :quit-key "z" :exit nil :foreign-keys run)
+  ("File"
+   (
+    ("c d " dired-create-directory "New Folder")
+    ("c l" dired-do-symlink "New Link"))
+   "Change"
+   (("R" dired-do-rename "Filename")
+    ("T" dired-do-touch "Timestamp")
+    ("G" dired-do-chgrp "Group")
+    ("O" dired-do-chown "Owner")
+    ("X" dired-do-chmod "Modifiers")
+    )))
+
+(e/mode [::info   dired-mode "etude-core-bindings"]
+  ::mode-menu  'e/menu-fn::dired-menu/body)
+
+
+(comment
+ 
+ 
+
+(e/mode [::info   Info-mode "etude-core-bindings"]
+  ::mode-menu  )
+
+
+ 
+
+)
+
+
 
 (provide 'etude-core-bindings)
 
-(comment
- "Commands"
- (("h c" counsel-command-history "all" :exit t))
- (ano)
- 
- ("g t"  git-timemachine    "Timemachine"  :exit t)
- ("I" git-gutter:statistic      "File stats")
- )
+;; tweak binding to taste
+;;(define-key org-mode-map (kbd "C-c C-v") #'org-babel-mode)

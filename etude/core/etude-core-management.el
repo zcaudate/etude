@@ -8,7 +8,8 @@
 ;;
 
 
-(use-package hercules :ensure t)
+(use-package which-key :ensure t
+  :config (which-key-mode))
 
 (use-package ace-window :ensure t)
 
@@ -49,23 +50,36 @@
 
 (use-package dired-filter :ensure t
   :hook (dired-mode . (lambda () (dired-filter-group-mode)
-                                 (dired-filter-by-garbage)))
+                                 ;;(dired-filter-by-garbage)
+                        ))
   :custom
-    (dired-garbage-files-regexp
-      "\\(?:\\.\\(?:aux\\|bak\\|dvi\\|log\\|orig\\|rej\\|toc\\|out\\)\\)\\'")
-    (dired-filter-group-saved-groups
-     '(("default"
-        ("Org"    (extension "org"))
-        ("Executables" (exexutable))
-        ("Directories" (directory))
-        ("PDF"    (extension "pdf"))
-        ("LaTeX"  (extension "tex" "bib"))
-        ("Images" (extension "png"))
-        ("Code"   (extension "java" "el" "clj" "js"))
-        ("Archives"(extension "zip" "rar" "gz" "bz2" "tar"))))))
+  (dired-garbage-files-regexp
+   "*.\\(aux\\|bak\\|dvi\\|log\\|orig\\|rej\\|toc\\|out\\)")
+  (dired-filter-group-saved-groups
+   '(("default"
+      ("Org"    (extension "org"))
+      ("Executables" (exexutable))
+      ("Directories" (directory))
+      ("PDF"    (extension "pdf"))
+      ("LaTeX"  (extension "tex" "bib"))
+      ("Images" (extension "png"))
+      ("Code"   (extension "java" "el" "clj" "js"))
+      ("Archives"(extension "zip" "rar" "gz" "bz2" "tar"))))))
 
 (defun my-demo-function ()
   (setq last-counsel-M-x-command (caar command-history)))
+
+(use-package ranger :ensure t
+  :init (progn (setq ranger-cleanup-on-disable t)
+               (setq ranger-cleanup-eagerly t)
+               (setq ranger-show-hidden t)
+               (setq ranger-modify-header t)
+               (setq ranger-parent-depth 0)
+               (setq ranger-footer-delay 0.2)
+               (setq ranger-preview-delay 0.040)
+               (setq ranger-show-literal nil)
+               (setq ranger-max-preview-size 1)
+               (setq ranger-dont-show-binary nil)))
 
 (advice-add #'counsel-M-x :after #'my-demo-function)
 

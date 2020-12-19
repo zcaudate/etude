@@ -8,8 +8,8 @@
 (require 'etude-core-style)
 (require 'etude-core-util)
 
-(require 'etude-mode-info)
-(require 'etude-mode-dired)
+;;(require 'etude-mode-info)
+;;(require 'etude-mode-dired)
 ;;(require 'etude-mode-ivy)
 
 (provide 'etude-core)

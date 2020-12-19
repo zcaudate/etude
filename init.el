@@ -11,12 +11,12 @@
              (file-name-directory
               (or (buffer-file-name) 
                   (file-chase-links load-file-name))))
-       (add-to-list 'load-path (concat emacs-d "etude"))
-       (require 'etude-boot))
+       (add-to-list 'load-path (concat emacs-d "etude")))
 
 (setq use-package-always-ensure nil)
 
 ;; Core
+(require 'etude-boot)
 (require 'etude-lang)
 (require 'etude-core)
 
