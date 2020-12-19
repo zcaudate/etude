@@ -295,24 +295,21 @@
     ("h b" describe-bindings  "Bound Keys")
     ("h m" describe-mode      "Current Mode"))))
 
-(defhydra+ e/menu-fn::start-menu
-  ()
-  ("i"  e/insert-input)
-  ("C-<up>"    shrink-window)
-  ("C-<down>"  enlarge-window)
-  ("C-<left>"  shrink-window-horizontally)
-  ("C-<right>" enlarge-window-horizontally))
+(progn
+  (defhydra+ e/menu-fn::start-menu
+    ()
+    ("i"  e/insert-input)
+    ("C-<up>"    shrink-window)
+    ("C-<down>"  enlarge-window)
+    ("C-<left>"  shrink-window-horizontally)
+    ("C-<right>" enlarge-window-horizontally))
 
-(e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::start-menu/body)
-
-(pretty-hydra-define e/menu-fn::search-menu
-  (:title "<F2> Search/Replace" :quit-key "z" :exit nil :foreign-keys run)
-  ("Search"
-   (("s" goto-line "Search in Project")
-    ("j" goto-last-change "Search in File")
-    ("l" swiper "Search and Replace"))))
-
-(e/bind [] ::f2-menu ("<f2>") 'e/toggle-treemacs)
+  (e/bind [] ::f1-menu   ("<f1>")
+          (lambda ()
+            (interactive)
+            (if (eq hydra-curr-map e/menu-fn::start-menu/keymap)
+                (hydra-keyboard-quit)
+              (e/menu-fn::start-menu/body)))))
 
 (pretty-hydra-define e/menu-fn::review-menu
   (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
@@ -358,11 +355,14 @@
     ("h r" git-gutter:revert-hunk  "Revert")
     ("h s" git-gutter:stage-hunk   "Stage"))))
 
-(defhydra+ e/menu-fn::review-menu
-  ()
-  ("i"  e/insert-input nil))
-
-(e/bind [] ::f3-menu   ("<f3>")   'e/menu-fn::review-menu/body)
+(progn
+  (defhydra+ e/menu-fn::review-menu () ("i"  e/insert-input nil))
+  (e/bind [] ::f3-menu   ("<f3>")
+          (lambda ()
+            (interactive)
+            (if (eq hydra-curr-map e/menu-fn::review-menu/keymap)
+                (hydra-keyboard-quit)
+              (e/menu-fn::review-menu/body)))))
 
 (pretty-hydra-define e/menu-fn::settings-menu
   (:title "<F5> Settings" :quit-key "z" :exit nil :foreign-keys run)
@@ -386,44 +386,46 @@
     ("c f" customize-face  "face" :exit t)
     ("c t" customize-themes "theme" :exit t))))
 
-(defhydra+ e/menu-fn::settings-menu
-  ()
-  ("i"  e/insert-input nil))
+(progn
+  (defhydra+ e/menu-fn::settings-menu () ("i"  e/insert-input nil))
+  (e/bind [] ::f5-menu   ("<f5>")
+          (lambda ()
+            (interactive)
+            (if (eq hydra-curr-map e/menu-fn::review-menu/keymap)
+                (hydra-keyboard-quit)
+              (e/menu-fn::review-menu/body)))))
 
-(e/bind [] ::f3-menu   ("<f4>")   'e/jump-to-ranger)
-(e/bind [] ::f3-menu   ("<f5>")   'e/menu-fn::settings-menu/body)
+;;
+;; File and Directory Support
+;;
+
+(e/bind []
+  ::f2-menu   ("<f2>")   'e/toggle-treemacs
+  ::f4-menu   ("<f4>")   'e/jump-to-ranger)
 
 
-(pretty-hydra-define e/menu-fn::dired-menu
-  (:title "<F8> Dired" :quit-key "z" :exit nil :foreign-keys run)
+(pretty-hydra-define e/menu-fn::ranger-menu
+  (:title "<F8> Ranger" :quit-key "z" :exit nil :foreign-keys run)
   ("File"
    (
-    ("c d " dired-create-directory "New Folder")
-    ("c l" dired-do-symlink "New Link"))
+    ("+" dired-create-directory "New Folder")
+    ("S" dired-do-symlink "New Link"))
    "Change"
-   (("R" dired-do-rename "Filename")
-    ("T" dired-do-touch "Timestamp")
-    ("G" dired-do-chgrp "Group")
-    ("O" dired-do-chown "Owner")
-    ("X" dired-do-chmod "Modifiers")
-    )))
-
-(e/mode [::info   dired-mode "etude-core-bindings"]
-  ::mode-menu  'e/menu-fn::dired-menu/body)
+   (("c n" dired-do-rename "Filename")
+    ("c t" dired-do-touch  "Timestamp")
+    ("c g" dired-do-chgrp  "Group")
+    ("c o" dired-do-chown  "Owner")
+    ("c x" dired-do-chmod  "Modifiers"))))
 
 
-(comment
- 
- 
+(defun e/ranger-mode-menu ()
+     (interactive)
+     (if (eq hydra-curr-map e/menu-fn::ranger-menu/keymap)
+         (hydra-keyboard-quit)
+       (e/menu-fn::ranger-menu/body)))
 
-(e/mode [::info   Info-mode "etude-core-bindings"]
-  ::mode-menu  )
-
-
- 
-
-)
-
+(e/mode [::ranger   ranger-mode "etude-core-bindings"]
+  ::mode-menu  'e/ranger-mode-menu)
 
 
 (provide 'etude-core-bindings)
