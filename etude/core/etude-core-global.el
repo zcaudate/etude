@@ -21,7 +21,7 @@
   ::mode-menu          ("<f8>")  ()
   ::eval-cursor        ("C-e")   ("P")
   ::eval-cursor-alt    ("C-x m" "C-x C-m")   ("P")
-  ::eval-file          ("C-x c" "C-x C-c")  ()
+  ::eval-file          ("C-x x" "C-x C-x")  ()
   ::mode-connect       ("M-c" "ESC c")      ()
   ::mode-build         ()      ()
   ::mode-jump-to       ("C-x ." "C-x C-.")  ()

@@ -97,11 +97,10 @@
   ::goto-start           ()   'beginning-of-buffer
   ::goto-end             ()   'end-of-buffer
 
-  ::jump-search          ("C-l")      'swiper     
+  ::jump-search          ("C-l")      'swiper
+  ::jump-same            ("C-x i" "C-x C-i") 'swiper-thing-at-point
   ::jump-bookmark        ()           'counsel-bookmark
   ::jump-search-project  ("C-f")      'counsel-rg) 
-
-
 
 ;;;
 ;; (System and Files)
@@ -189,7 +188,8 @@
 
 (defun e/jump-to-scratch ()
   (interactive)
-  (e/jump-to-buffer "*scratch*" (lambda () (switch-to-buffer "*scratch*"))))
+  (e/jump-to-buffer "*scratch*"
+                    (lambda () (switch-to-buffer "*scratch*"))))
 
 (e/bind []
   ::toggle-terminal        ("ESC 1" "M-1")   'e/jump-to-terminal
@@ -202,6 +202,10 @@
 ;; (F1) Command
 ;;
 
+(defun e/insert-input ()
+  "Prompt user to enter a file name, with completion and history support."
+  (interactive)
+  (insert-for-yank (read-string ":")))
 
 (defun e/window-alternate ()
   (seq-find (lambda (w)
@@ -238,9 +242,9 @@
     ("4"  dired-jump "File Explorer" :exit t)
     ("Q" save-buffers-kill-terminal "Exit Emacs" :exit t))
    ""
-   (("D" dash "Dash Docs" :exit t)
-    ("T" tldr "TLDR" :exit t)
-    ("B" wm3          "Browser" :exit t))
+   (("r d" dash "Dash Docs" :exit t)
+    ("r t" tldr "TLDR" :exit t)
+    ("r l" wm3          "Browser" :exit t))
    "File"
    (("o o"  counsel-projectile-find-file-dwim   "open")
     ("o r"  counsel-recentf      "open recent")
@@ -254,10 +258,10 @@
    "Window"
    (("H"   split-window-right   "split h" :exit nil)
     ("V"   split-window-below   "split v" :exit nil)
-    ("DEL"   delete-window   "close")
-    ("RET"   delete-other-windows "focus"))
+    ("9"   delete-window   "close")
+    ("0"   delete-other-windows "focus"))
    ""
-   (("B"   'balance-windows-area "balance")
+   (("B"   balance-windows-area "balance")
     ("D"   e/window-delete "delete")
     ("T"   e/split-window-toggle "toggle")
     ("W"   ace-swap-window "swap"))
@@ -267,47 +271,38 @@
     ("<left>"  shrink-window-horizontally "h-")
     ("<right>" enlarge-window-horizontally "h+"))
    "Help"
-   (("i a" about-emacs   "About Emacs")
-    ("i d" about-distribution   "About Distribution")
-    ("i h" help-for-help "About Help")
-    ("i b" describe-bindings  "Bound Keys")
-    ("i m" describe-mode      "Current Mode"))))
+   (("h a" about-emacs   "About Emacs")
+    ("h d" about-distribution   "About Distribution")
+    ("h h" help-for-help "About Help")
+    ("h b" describe-bindings  "Bound Keys")
+    ("h m" describe-mode      "Current Mode"))))
 
 (e/bind [] ::f1-menu   ("<f1>")   'e/menu-fn::start-menu/body)
 
-(pretty-hydra-define e/menu-fn::settings-menu
-  (:title "<F2> Settings" :quit-key "z" :exit nil :foreign-keys run)
-  ("Package"
-   (("P" package-list-packages  "List" :exit t)
-    ("p H" describe-package  "Describe")
-    ("p R" package-refresh-contents "Refresh")
-    ("p I" package-install "Install")
-    ("p D" package-delete "Delete"))
-   "Customise"
-   (("C" customize "all" :exit t)
-    ("c f" customize-face  "face" :exit t)
-    ("c t" customize-themes "theme" :exit t))
-   "Toggle"
-   (("L" display-line-numbers-mode "Line Numbers" :toggle t)
-    ("V" visual-line-mode "Visual Line" :toggle t)
-    ("W" whitespace-mode "Whitespace" :toggle t)
-    ("H" auto-highlight-symbol-mode "Highlight Symbol" :toggle t))
-   ""
-   (("f s" flyspell-mode "Flyspell" :toggle t)
-    ("f c" flycheck-mode "Flycheck" :toggle t)
-    ("s p" smartparens-mode "Smartparens" :toggle t)
-    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))))
+(pretty-hydra-define e/menu-fn::search-menu
+  (:title "<F2> Search/Replace" :quit-key "z" :exit nil :foreign-keys run)
+  ("Search"
+   (("s" goto-line "Search in Project")
+    ("j" goto-last-change "Search in File")
+    ("l" swiper "Search and Replace"))))
 
-
-(e/bind [] ::f2-menu   ("<f2>")   'e/menu-fn::settings-menu/body)
+(e/bind [] ::f2-menu ("<f2>") 'e/menu-fn::search-menu/body)
 
 (pretty-hydra-define e/menu-fn::review-menu
   (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
-  ("Undo"
-   (("u p" package-list-packages  "list" :exit t)
-    ("u p" package-list-packages  "list" :exit t))
+  ("Navigation"
+   (("g" goto-line "Goto Line")
+    ("j" goto-last-change "Goto Changed")
+    ("l" swiper "Locate")
+    ("n" swiper-thing-at-point "Same As"))
+   ""
+   (("u"  undo-tree-undo  "Undo")
+    ("r"  undo-tree-redo "Redo")
+    ("i"  e/insert-input "Insert")
+    ("h c"  counsel-command-history "History")
+    ("h v"  vc-annotate "VC Log"))
    "Annotate"
-   (("A"    annotate-mode "Toggle" :toggle t)
+   (("A"    annotate-mode "On/Off" :toggle t)
     ("a a"  annotate-annotate "Add")
     ("a s"  annotate-show-annotation-summary "Prev")
     ("a p"  annotate-goto-previous-annotation "Next")
@@ -318,8 +313,17 @@
     ("a S"  annotate-save-annotations "Save")
     ("a C"  annotate-clear-annotations "Clear")
     ("a P"  annotate-purge-annotations "Purge"))
+   "Git"
+   (("S"  magit-status  "Status" :exit t)
+    ("L"  magit-log-all "Log" :exit t)
+    ("D"  magit-diff    "Diff" :exit t)
+    ("T" git-timemachine "Timemachine" :exit t))
+   ""
+   (("C"  magit-commit  "Commit" :exit t)
+    ("F"  magit-pull    "Pull" :exit t) 
+    ("P"  magit-push    "Push" :exit t))
    "Hunks"
-   (("H"  git-gutter:toggle  "Toggle" :toggle git-gutter-mode)
+   (("H"  git-gutter:toggle  "On/Off" :toggle git-gutter-mode)
     ("h s" git-gutter:clear  "Select")
     ("h c" git-gutter:clear  "Clear")
     ("h n" git-gutter:next-hunk      "Next")
@@ -328,25 +332,43 @@
    (("h i" git-gutter:statistics   "Stats")
     ("h d" git-gutter:popup-hunk   "Diff")
     ("h r" git-gutter:revert-hunk  "Revert")
-    ("h s" git-gutter:stage-hunk   "Stage"))
-   "Git"
-   (("L"  magit-log-all "Log")
-    ("D"  magit-diff    "Diff"))
-   ""
-   (("C"  magit-commit  "Commit")
-    
-    ("F"  magit-pull    "Pull")
-    ("P"  magit-push    "Push")
-    ("S"  magit-status  "Status"))
-   
-   "Commands"
-   (("h c" counsel-command-history "all" :exit t))))
+    ("h s" git-gutter:stage-hunk   "Stage"))))
 
-(e/bind [] ::f2-menu   ("<f3>")   'e/menu-fn::review-menu/body)
+(e/bind [] ::f3-menu   ("<f3>")   'e/menu-fn::review-menu/body)
+
+
+
+(pretty-hydra-define e/menu-fn::settings-menu
+  (:title "<F5> Settings" :quit-key "z" :exit nil :foreign-keys run)
+  ("Toggle"
+   (("L" display-line-numbers-mode "Line Numbers" :toggle t)
+    ("V" visual-line-mode "Visual Line" :toggle t)
+    ("W" whitespace-mode "Whitespace" :toggle t)
+    ("H" auto-highlight-symbol-mode "Highlight Symbol" :toggle t))
+   ""
+   (("f s" flyspell-mode "Flyspell" :toggle t)
+    ("f c" flycheck-mode "Flycheck" :toggle t)
+    ("s p" smartparens-mode "Smartparens" :toggle t)
+    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))"Package"
+   (("P" package-list-packages  "List" :exit t)
+    ("p H" describe-package  "Describe")
+    ("p R" package-refresh-contents "Refresh")
+    ("p I" package-install "Install")
+    ("p D" package-delete "Delete"))
+   "Customise"
+   (("C" customize "all" :exit t)
+    ("c f" customize-face  "face" :exit t)
+    ("c t" customize-themes "theme" :exit t))))
+
+(e/bind [] ::f3-menu   ("<f5>")   'e/menu-fn::settings-menu/body)
+
+(provide 'etude-core-bindings)
 
 (comment
-
+ "Commands"
+ (("h c" counsel-command-history "all" :exit t))
  (ano)
-  
+ 
  ("g t"  git-timemachine    "Timemachine"  :exit t)
- ("I" git-gutter:statistic      "File stats"))
+ ("I" git-gutter:statistic      "File stats")
+ )

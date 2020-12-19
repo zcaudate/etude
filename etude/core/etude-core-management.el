@@ -26,6 +26,7 @@
 
 (use-package goto-chg :ensure t)
 
+(use-package annotate :ensure t)
 
 ;;
 ;; File Management
@@ -82,7 +83,7 @@
   (dashboard-insert-startupify-lists)
   (redisplay)
   (switch-to-buffer "*dashboard*")
-  (define-key dashboard-mode-map [down-mouse-1] nil))
+  (define-key dashboard-mode-map [down-mouse-1] 'nil))
 
 (use-package dashboard
   :ensure t

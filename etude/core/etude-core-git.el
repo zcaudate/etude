@@ -9,28 +9,9 @@
 
 (use-package diff-hl :ensure t)
 
-(pretty-hydra-define e/menu-fn::git-menu
-  (:title "<F5> Git" :quit-key "z" :exit nil :foreign-keys run)
-  ("HELLO"
-   (("a" counsel-aprops "aprops"))))
-
-(defhydra+ e/menu-fn::git-menu ()
-  ("<prior>" scroll-up-command)
-  ("<next>" scroll-down-command)
-  ("<up>" previous-line)
-  ("<left>" left-char)
-  ("<right>" right-char)
-  ("<down>" next-line)
-  ("C-<up>" previous-paragraph)
-  ("C-<down>" next-paragraph)
-  ;;(down-mouse-1 mouse-drag-region)
-  ("<wheel-up>" e/scroll-down-one)
-  ("<wheel-down>" e/scroll-up-one))
-
-(e/bind [] ::f5-menu   ("<f5>")   'e/menu-fn::git-menu/body)
+(provide 'etude-core-git)
 
 (comment
- (provide 'etude-core-git)
 
  (defhydra hydra-timemachine
    (:hint nil 

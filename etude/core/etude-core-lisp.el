@@ -20,11 +20,13 @@
        (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
        (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
+       (add-hook 'lisp-interaction-mode-hook 'annotate-mode)
        (add-hook 'emacs-lisp-mode-hook 'smartparens-strict-mode)
        (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-       (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
-  
+       (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+       (add-hook 'lisp-interaction-mode-hook 'annotate-mode))
+
 (defun e/eval-buffer ()
   (interactive)
   (eval-buffer (current-buffer) t))
@@ -50,8 +52,6 @@
    (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
     ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
 
-
-
 (e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
   ::eval-cursor   'eval-last-sexp
   ::eval-file     'e/eval-buffer
@@ -61,6 +61,8 @@
   ::eval-cursor  'eval-last-sexp
   ::eval-file    'e/eval-buffer
   ::mode-menu    'e/menu-fn::elisp-menu/body)
+
+
 
 ;; (e/mode [::eshell-mode   eshell-mode    "etude-core-lisp"]
 ;;   ::eval-cursor 'eval-last-sexp)
@@ -97,7 +99,8 @@
   :hook ((clojure-mode . smartparens-strict-mode)
          (clojure-mode . rainbow-delimiters-mode)
          (clojure-mode . paredit-mode)
-         (clojure-mode . eldoc-mode)))
+         (clojure-mode . eldoc-mode)
+         (clojure-mode . annotate-mode)))
 
 (use-package midje-mode
   :ensure t
