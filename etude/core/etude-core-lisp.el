@@ -28,7 +28,7 @@
        (add-hook 'emacs-lisp-mode-hook 'annotate-mode)
        (add-hook 'emacs-lisp-mode-hook (lambda ()
                                          (if which-key-mode
-                                             (which-key-mode)))))
+                                             (which-key-mode t)))))
 
 (defun e/eval-buffer ()
   (interactive)
@@ -58,10 +58,6 @@
      (if (eq hydra-curr-map e/menu-fn::elisp-menu/keymap)
          (hydra-keyboard-quit)
        (e/menu-fn::elisp-menu/body)))
-
-(e/mode [::ranger   ranger-mode "etude-core-bindings"]
-  ::mode-menu  'e/ranger-mode-menu)
-
 
 (e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
   ::eval-cursor   'eval-last-sexp
