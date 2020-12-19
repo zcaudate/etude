@@ -1,4 +1,10 @@
-(use-package magit :ensure t)
+(use-package magit :ensure t
+  :config (add-hook 'git-commit-setup-hook
+                    (lambda ()
+                      (add-hook 'with-editor-post-finish-hook
+                                (lambda ()
+                        (call-interactively #'magit-push-current-to-upstream))
+                                t t))))
 
 (use-package git-gutter
   :ensure t
