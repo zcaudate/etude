@@ -290,7 +290,19 @@
 
 (pretty-hydra-define e/menu-fn::review-menu
   (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
-  ("Navigation"
+  ("Annotate"
+   (("A"    annotate-mode "On/Off" :toggle t)
+    ("a a"  annotate-annotate "Add")
+    ("a p"  annotate-goto-previous-annotation "Next")
+    ("a n"  annotate-goto-next-annotation "Prev")
+    ("a s"  annotate-show-annotation-summary "Summary"))
+   ""
+   (("a I"  annotate-integrate-annotations "Integrate")
+    ("a X"  annotate-export-annotations "Export")
+    ("a S"  annotate-save-annotations "Save")
+    ("a C"  annotate-clear-annotations "Clear")
+    ("a P"  annotate-purge-annotations "Purge"))
+   "Navigation"
    (("g" goto-line "Goto Line")
     ("j" goto-last-change "Goto Changed")
     ("l" swiper "Locate")
@@ -301,18 +313,6 @@
     ("i"  e/insert-input "Insert")
     ("h c"  counsel-command-history "History")
     ("h v"  vc-annotate "VC Log"))
-   "Annotate"
-   (("A"    annotate-mode "On/Off" :toggle t)
-    ("a a"  annotate-annotate "Add")
-    ("a s"  annotate-show-annotation-summary "Prev")
-    ("a p"  annotate-goto-previous-annotation "Next")
-    ("a n"  annotate-goto-next-annotation "Prev"))
-   ""
-   (("a I"  annotate-integrate-annotations "Integrate")
-    ("a X"  annotate-export-annotations "Export")
-    ("a S"  annotate-save-annotations "Save")
-    ("a C"  annotate-clear-annotations "Clear")
-    ("a P"  annotate-purge-annotations "Purge"))
    "Git"
    (("S"  magit-status  "Status" :exit t)
     ("L"  magit-log-all "Log" :exit t)
@@ -329,14 +329,12 @@
     ("h n" git-gutter:next-hunk      "Next")
     ("h p" git-gutter:previous-hunk  "Prev"))
    ""
-   (("h i" git-gutter:statistics   "Stats")
+   (("h i" git-gutter:statistic   "Stats")
     ("h d" git-gutter:popup-hunk   "Diff")
     ("h r" git-gutter:revert-hunk  "Revert")
     ("h s" git-gutter:stage-hunk   "Stage"))))
 
 (e/bind [] ::f3-menu   ("<f3>")   'e/menu-fn::review-menu/body)
-
-
 
 (pretty-hydra-define e/menu-fn::settings-menu
   (:title "<F5> Settings" :quit-key "z" :exit nil :foreign-keys run)
