@@ -194,8 +194,17 @@
   (e/jump-to-buffer "*scratch*"
                     (lambda () (switch-to-buffer "*scratch*"))))
 
+(defun e/toggle-treemacs ()
+  (interactive)
+  (if (equal major-mode 'ranger-mode)
+      (e/window-delete))
+  (treemacs))
+
 (defun e/jump-to-ranger ()
   (interactive)
+  (if (equal (treemacs-current-visibility)
+             'visible)
+      (delete-window (treemacs-get-local-window)))
   (if (equal major-mode 'ranger-mode)
       (e/window-delete)
     (ranger)))
@@ -303,7 +312,7 @@
     ("j" goto-last-change "Search in File")
     ("l" swiper "Search and Replace"))))
 
-(e/bind [] ::f2-menu ("<f2>") 'treemacs)
+(e/bind [] ::f2-menu ("<f2>") 'e/toggle-treemacs)
 
 (pretty-hydra-define e/menu-fn::review-menu
   (:title "<F3> Review" :quit-key "z" :exit nil :foreign-keys run)
