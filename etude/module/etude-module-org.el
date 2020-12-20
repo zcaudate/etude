@@ -1,5 +1,5 @@
-(ns: etude-module-org
-  (:require etude-core etude-module-text))
+(require 'etude-core) 
+(require 'etude-lib-preview)
 
 (use-package org-cliplink :ensure t)
 
@@ -38,7 +38,7 @@
 (defun e/show-org-markdeep (buffer)
   (save-window-excursion
     (with-current-buffer buffer
-      (org-md_et-export-as-markdown))
+      (org-markdeep-export-as-markdeep))
     (princ (with-current-buffer (get-buffer "*Org MD:Etude Export*")
              (format "%s\n%s"
                      (buffer-string)

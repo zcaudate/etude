@@ -1,6 +1,3 @@
-(ns: etude-redis
-  (:require etude-core))
-  
 (require 'cl-lib)
 (require 'dash)
 
@@ -311,4 +308,4 @@ as it first constructs a list of key value pairs then uses that to construct the
 (defalias 'e/redis-kthxbye 'e/redis-disconnect)
 
 
-(provide 'etude-redis)
+(provide 'etude-lib-redis)

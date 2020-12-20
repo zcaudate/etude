@@ -1,19 +1,5 @@
-(ns: etude-module-text
-  (:require
-   etude-core
-   etude-markdown-export))
-
-
-(use-package dockerfile-mode
-  :ensure t)
-     
-(use-package markdown-mode
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . gfm-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+(require 'etude-core)
+(require 'etude-lib-markdeep-export)
 
 (defvar e/strapdown-body
   "<!DOCTYPE html><html><title></title><xmp theme=\"journal\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>")
@@ -37,26 +23,4 @@
            (format e/stapdown-zeta-body))
          (current-buffer)))
 
-(e/comment
-    (with-current-buffer (get-buffer "INSTALL.org")
-      (org-md_et-export-to-markdown))
-  
-  (e/show-org-markdown (get-buffer "INSTALL.org"))
-  (with-current-buffer (get-buffer "INSTALL.org")
-      (org-md_et-export-to-markdown)))
-
-
-;;(type-of  (e/show-markdown-html (get-buffer "INSTALL.org")))
-
-;;(e/show-md (get-buffer "INSTALL.org"))
-;;(e/show-org-html (get-buffer "INSTALL.org"))
-;;(e/show-org (get-buffer "INSTALL.org"))
-
-
-(use-package yaml-mode
-  :ensure t
-  :mode "\\.yml\\'")
-
-(use-package impatient-mode :ensure t
-  :init (setq impatient-mode-delay 3))
-
+(provide 'etude-lib-preview)

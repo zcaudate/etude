@@ -1,3 +1,5 @@
+(require 'etude-core-global)
+
 (use-package magit :ensure t
   :config (add-hook 'git-commit-setup-hook
                     (lambda ()
@@ -15,21 +17,27 @@
 
 (use-package diff-hl :ensure t)
 
+(pretty-hydra-define e/menu-fn::git-timemachine-menu
+  (:title "Git Timemachine" 
+   :body-pre (git-timemachine)
+   :quit-key "z"  :exit nil :foreign-keys run)
+  ("Travel"
+   (("p" git-timemachine-show-previous-revision "Prev")
+    ("n" git-timemachine-show-next-revision  "Next")
+    ("j" git-timemachine-show-nth-revision "To Nth")
+    ("h" git-timemachine-help "Help")
+    ("X" git-timemachine-quit "Exit"))
+   ""
+   (("L" git-timemachine-blame)
+    ("T" git-timemachine-toggle)
+    ("C" git-timemachine-show-commit)
+    ("K" git-timemachine-kill-revision)
+    ("B" git-timemachine-switch-branch))))
+
+(defun e/git-timemachive-mode-menu ()
+     (interactive)
+     (if (eq hydra-curr-map e/menu-fn::git-timemachine-menu/keymap)
+         (hydra-keyboard-quit)
+       (e/menu-fn::git-timemachine-menu/body)))
+
 (provide 'etude-core-git)
-
-(comment
-
- (defhydra hydra-timemachine
-   (:hint nil 
-    :post (progn (message "in post") (git-timemachine-quit))
-    :body-pre (git-timemachine)
-    :foreign-keys run )
-   "Time machine"
-   ("<up>" #'git-timemachine-show-previous-revision "Previous revision"
-    :column "Navigation")
-   ("<down>" #'git-timemachine-show-next-revision "Next revision")
-   ("C-c h" #'git-timemachine-show-current-revision "Current revision")
-   ("C-c C-c" "Quit" :color blue )
-   ("C-c b" #'git-timemachine-blame "Show culprits" :column "Operations")
-   ("C-c r" #'git-timemachine-kill-revision "Yank revision")
-   ("C-c s" #'git-timemachine-kill-abbreviated-revision "Yank abbreviated revision")))

@@ -104,7 +104,7 @@
                  (e/mode [::clojure clojure-mode "etude-module-jvm"]
                    ::eval-cursor   'cider-eval-last-sexp
                    ::eval-file     'e/cider-eval-buffer
-                   ::init          'cider-connect))
+                   ::mode-connect  'cider-connect))
   :hook ((clojure-mode . smartparens-strict-mode)
          (clojure-mode . rainbow-delimiters-mode)
          (clojure-mode . paredit-mode)

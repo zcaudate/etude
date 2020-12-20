@@ -88,11 +88,11 @@
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
 
   ::prev-buffer
-  ("M-/" "ESC /" "C-x /" "C-x C-/" "C-S-<left>" "C-x C-<left>")
+  ("M-/" "ESC /" "C-x /" "C-x C-/" "C-S-<left>" "C-x C-<left>" "C-x <left>")
   'previous-buffer
 
   ::next-buffer
-  ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>")
+  ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>" "C-x <right>")
   'next-buffer)
 
 (e/bind []
@@ -149,17 +149,21 @@
   'e/window-delete
   
   ::window-close
-  ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x C-<down>")
+  ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x C-<down>" "C-x <down>")
   'delete-window      
 
   ::window-focus
-  ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x C-<up>" "C-x t" "C-x C-t")
+  ("ESC RET" "M-RET" "C-<return>" "C-x RET" "C-x C-<up>" "C-x <up>" "C-x t" "C-x C-t")
   'delete-other-windows
   
-  ::window-move-left     ("<M-left>"  "ESC <left>"   "C-x <left>")     'windmove-left
-  ::window-move-right    ("<M-right>" "ESC <right>"  "C-x <right>")    'windmove-right
-  ::window-move-up       ("<M-up>"    "ESC <up>" "C-x <up>")          'windmove-up
-  ::window-move-down     ("<M-down>"  "ESC <down>" "C-x <down>")     'windmove-down)
+  ::window-move-left     ("<M-left>"  "ESC <left>")
+  'windmove-left
+  ::window-move-right    ("<M-right>" "ESC <right>")
+  'windmove-right
+  ::window-move-up       ("<M-up>"    "ESC <up>")
+  'windmove-up
+  ::window-move-down     ("<M-down>"  "ESC <down>")
+  'windmove-down)
 
 
 (defun e/jump-back ()
@@ -196,16 +200,15 @@
 
 (defun e/toggle-treemacs ()
   (interactive)
-  (if hydra-base-map
-      (hydra-keyboard-quit))
+  (if hydra-base-map (hydra-keyboard-quit))
   (if (equal major-mode 'ranger-mode)
       (e/window-delete)
     (treemacs)))
 
 (defun e/jump-to-ranger ()
   (interactive)
-  (if (equal (treemacs-current-visibility)
-             'visible)
+  (if hydra-base-map (hydra-keyboard-quit))
+  (if (equal (treemacs-current-visibility) 'visible)
       (delete-window (treemacs-get-local-window)))
   (if (equal major-mode 'ranger-mode)
       (e/window-delete)
@@ -288,6 +291,12 @@
     ("C-↓"   enlarge-window "V+")
     ("C-←"   shrink-window-horizontally "H-")
     ("C-→"  enlarge-window-horizontally "H+"))
+   "Package"
+   (("P" package-install "Install")
+    ("p h" describe-package  "Describe")
+    ("p r" package-refresh-contents "Refresh")
+    ("p l" package-list-packages  "List" :exit t)
+    ("p d" package-delete "Delete"))
    "Help"
    (("h a" about-emacs   "About Emacs")
     ("h h" help-for-help "About Help")
@@ -310,32 +319,26 @@
                 (hydra-keyboard-quit)
               (e/menu-fn::start-menu/body)))))
 
-(pretty-hydra-define e/menu-fn::review-menu
-  (:title "<F4> Review" :quit-key "z" :exit nil :foreign-keys run)
-  ("Annotate"
-   (("A"    annotate-mode "On/Off" :toggle t)
-    ("a a"  annotate-annotate "Add")
-    ("a p"  annotate-goto-previous-annotation "Next")
-    ("a n"  annotate-goto-next-annotation "Prev")
-    ("a s"  annotate-show-annotation-summary "Summary"))
+(pretty-hydra-define e/menu-fn::edit-menu
+  (:title "<F2> Edit" :quit-key "z" :exit nil :foreign-keys run)
+  ("Find/Replace"
+   (("f"    counsel-rg             "Find" :exit t)
+    ("s"    replace-string         "Replace" :exit t)
+    ("r"    replace-regexp         "Replace Regex" :exit t)
+    ("e"    iedit-mode             "Multi Edit" :exit t))
    ""
-   (("a I"  annotate-integrate-annotations "Integrate")
-    ("a X"  annotate-export-annotations "Export")
-    ("a S"  annotate-save-annotations "Save")
-    ("a C"  annotate-clear-annotations "Clear")
-    ("a P"  annotate-purge-annotations "Purge"))
-   "Find"
-   (("f"  counsel-rg             "Find" :exit t))
+   ()
+
    "Navigation"
    (("g" goto-line "Goto Line")
     ("c" goto-last-change "Goto Changed")
     ("l" swiper "Locate")
-    ("i" swiper-thing-at-point "Similar"))
+    ("t" swiper-thing-at-point "Similar"))
    "Git"
    (("S"  magit-status  "Status" :exit t)
     ("L"  magit-log-all "Log" :exit t)
     ("D"  magit-diff    "Diff" :exit t)
-    ("T" git-timemachine "Timemachine" :exit t))
+    ("T"  git-timemachine "Timemachine" :exit t))
    ""
    (("C"  magit-commit  "Commit" :exit t)
     ("P"  magit-pull    "Pull" :exit t) 
@@ -357,16 +360,16 @@
     ("h v"  vc-annotate "Changes"))))
 
 (progn
-  (defhydra+ e/menu-fn::review-menu () ("i"  e/insert-input nil))
-  (e/bind [] ::f4-menu   ("<f4>")
+  (defhydra+ e/menu-fn::edit-menu () ("i"  e/insert-input nil))
+  (e/bind [] ::f2-menu   ("<f2>")
           (lambda ()
             (interactive)
-            (if (eq hydra-curr-map e/menu-fn::review-menu/keymap)
+            (if (eq hydra-curr-map e/menu-fn::edit-menu/keymap)
                 (hydra-keyboard-quit)
-              (e/menu-fn::review-menu/body)))))
+              (e/menu-fn::edit-menu/body)))))
 
-(pretty-hydra-define e/menu-fn::settings-menu
-  (:title "<F5> Settings" :quit-key "z" :exit nil :foreign-keys run)
+(pretty-hydra-define e/menu-fn::meta-menu
+  (:title "<F5> Meta" :quit-key "z" :exit nil :foreign-keys run)
   ("Toggle"
    (("L" display-line-numbers-mode "Line Numbers" :toggle t)
     ("V" visual-line-mode "Visual Line" :toggle t)
@@ -377,33 +380,40 @@
    (("f s" flyspell-mode "Flyspell" :toggle t)
     ("f c" flycheck-mode "Flycheck" :toggle t)
     ("s p" smartparens-mode "Smartparens" :toggle t)
-    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))"Package"
-   (("P" package-list-packages  "List" :exit t)
-    ("p H" describe-package  "Describe")
-    ("p R" package-refresh-contents "Refresh")
-    ("p I" package-install "Install")
-    ("p D" package-delete "Delete"))
+    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))
+   "Annotate"
+   (("A"    annotate-mode "On/Off" :toggle t)
+    ("a a"  annotate-annotate "Add")
+    ("a p"  annotate-goto-previous-annotation "Next")
+    ("a n"  annotate-goto-next-annotation "Prev")
+    ("a s"  annotate-show-annotation-summary "Summary"))
+   ""
+   (("a I"  annotate-integrate-annotations "Integrate")
+    ("a X"  annotate-export-annotations "Export")
+    ("a S"  annotate-save-annotations "Save")
+    ("a C"  annotate-clear-annotations "Clear")
+    ("a P"  annotate-purge-annotations "Purge"))
    "Customise"
    (("C" customize "all" :exit t)
     ("c f" customize-face  "face" :exit t)
     ("c t" customize-themes "theme" :exit t))))
 
 (progn
-  (defhydra+ e/menu-fn::settings-menu () ("i"  e/insert-input nil))
+  (defhydra+ e/menu-fn::meta-menu () ("i"  e/insert-input nil))
   (e/bind [] ::f5-menu   ("<f5>")
           (lambda ()
             (interactive)
-            (if (eq hydra-curr-map e/menu-fn::settings-menu/keymap)
+            (if (eq hydra-curr-map e/menu-fn::meta-menu/keymap)
                 (hydra-keyboard-quit)
-              (e/menu-fn::settings-menu/body)))))
+              (e/menu-fn::meta-menu/body)))))
 
 ;;
 ;; File and Directory Support
 ;;
 
 (e/bind []
-  ::f2-menu   ("<f2>")   'e/toggle-treemacs
-  ::f3-menu   ("<f3>")   'e/jump-to-ranger)
+  ::f3-menu   ("<f3>")   'e/jump-to-ranger
+  ::f4-menu   ("<f4>")   'e/toggle-treemacs)
 
 
 (pretty-hydra-define e/menu-fn::ranger-menu

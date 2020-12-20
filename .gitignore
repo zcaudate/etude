@@ -24,6 +24,7 @@
 /bookmarks
 /semanticdb
 /persp-confs
+/annotations
 projects
 *.md
 *.md.html
