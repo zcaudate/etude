@@ -19,10 +19,9 @@
 (require 'etude-boot)
 (require 'etude-lang)
 (require 'etude-core)
+(require 'etude-bindings)
 
-;;(require 'etude-module-text)
-;;(require 'etude-module-org)
-;;(require 'etude-module-apps)
+(require 'etude-module-org)
 
 (setq gc-cons-threshold (* 2 1000 1000))
 (custom-set-faces
@@ -33,13 +32,14 @@
  '(goggles-added ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
- '(org-link ((t (:foreground "blue" :underline nil)))))
+ '(org-link ((t (:foreground "brightblue" :underline nil)))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
  '(doom-modeline-icon nil)
  '(global-linum-mode nil)
  '(org-babel-load-languages
@@ -52,4 +52,4 @@
  '(org-mouse-1-follows-link 'double)
  '(org-support-shift-select 'always)
  '(package-selected-packages
-   '(ivy-posframe iedit visual-regexp ample-regexps auto-highlight-symbol counsel-dash 0blayout hercules annotate goto-chg tldr symbol-overlay dired-filter dired-collapse dired-subtree goggles helpful no-littering org-cliplink diff-hl wgrep gdscript-mode eglot git-timemachine bufler multi-vterm w3m company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit dockerfile-mode midje-mode cider nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(ivy-posframe iedit auto-highlight-symbol counsel-dash annotate goto-chg tldr symbol-overlay dired-filter dired-collapse dired-subtree goggles helpful no-littering org-cliplink diff-hl wgrep eglot git-timemachine bufler multi-vterm w3m company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit dockerfile-mode midje-mode cider nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

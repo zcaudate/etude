@@ -15,3 +15,5 @@
   :init (setq markdown-command "multimarkdown"))
   
 (use-package graphviz-dot-mode :ensure t)
+
+(provide 'etude-core-filetype)

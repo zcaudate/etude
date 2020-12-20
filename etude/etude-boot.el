@@ -1,6 +1,3 @@
-(setq true t)
-(setq false -1)
-
 (add-to-list 'load-path (concat emacs-d "etude/core"))
 (add-to-list 'load-path (concat emacs-d "etude/module"))
 (add-to-list 'load-path (concat emacs-d "etude/mode"))

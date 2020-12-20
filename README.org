@@ -2,353 +2,45 @@
 #+EMAIL:   z@caudate.me
 #+OPTIONS: toc:nil
 #+STARTUP: showall
- 
+
 * Introduction
 
 This is [[http://github.com/zcaudate/etude][Etude]]. The aim of the project is to provide better usability
 for ~emacs~ on ~tmux~ sessions across various operating systems.
- 
-[[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
-
-* Dependencies
-
-The framework is built around a very small core set of libraries:
-
-- [[https://github.com/jwiegley/use-package][use-package]] (packages)
-- [[https://github.com/abo-abo/swiper][ivy, counsel and swiper]] (search)
-- [[https://github.com/abo-abo/hydra][hydra]] + [[https://github.com/jerrypnz/major-mode-hydra.el][pretty]] (gui)
-- [[https://github.com/magnars/dash.el][dash]], [[https://github.com/Wilfred/ht.el][ht]], [[https://github.com/magnars/s.el][s]] and [[https://github.com/rejeep/f.el][f]] (utils)
-
-* Methodology
-
-/*Question:*/
-
-/How would we remap the keys if we have to start from scratch?/
-
-/*Answer:*/
-
-/Map the most widely used functions back to the most accessible
-keys. Duh./
-
-/*Note to Reader*/
-
-Feel free to skip this section and go to the code itself, as the
-methods outlined here doesn't have anything to do with the code. This
-section is here mainly to explain how the keybindings within ~Etude~
-came about.
-
-** Overview
-
-We're essentially dealing with an optimisation problem. We rely on two
-major assumptions:
-
-- a set of characteristics for use the Dvorak keyboard
-- a set of patterns by the user.
-
-In addition, there keys that cannot be remapped: ~C-i~, ~C-x~, ~C-g~,
-~C-c~, ~C-u~ and ~C-z~. As this setup combined with ~tmux~, the ~tmux~
-prefix has been remapped to ~C-<space>~, allowing ~C-a~ to be used as
-a binding. Futhermore, as terminal sessions inside a remote Emacs are
-preferred over nesting ~tmux~ instances, ~C-b~ (the default prefix for
-nested ~tmux~'s) can also be used.
-
-
-** Keyboard
-
-The keys on the keyboard is divided up into central (~C~) or
-peripheral (~P~) as well as a left (~L~) or right (~R~) marker. A key
-will be given the shortform ~LC~ for left central, ~LP~ for left
-peripheral, ~RC~ for right central and ~RP~ for right peripheral.
-
-The central areas are the alphabet keys (~A-Z~), all the *big* keys
-(~RET~, ~DEL~) and the arrow keys are also considered central. The
-peripheral are the numbers, the ~<Fn>~ keys, and the symbol keys near
-of the ~RET~. The analysis done provides a rough measure of keystroke
-difficulty for the Dvorak keyboard. Qwerty keyboards can use the same
-weights but the layout will be different, especially when we get to
-chords.
-
-*Note:* Arrow keys are considered central. Although there is a
-movement of hand position when switching between typing and going to
-the arrow keys, it corresponds to a mode change (from typing in input
-to navigation). Since the requirement for a mode change is at least an
-order of magnitude less than normal usage (~<many inputs>~,
-~<switch>~, ~<many movements>~, ~<switch>~, ~<many inputs>~) This
-switching movement is considered negligible.
-
-*Single Keys*
-
-The following rules apply:
-
-1. central keys are given a weight of ~1.0~
-2. peripheral keys are given a weight of ~1.3~
-
-/Examples:/
-
-- ~x~ gives a weight of ~1.0~.
-- ~<backspace>~ gives a weight of ~1.0~
-- ~<F1>~ gives a weight of ~1.3~
-- ~=~ gives a weight of ~1.3~
-- ~5~ gives a weight of ~1.3~
-
-*Modifier Keys*
-
-For a modifier enabled key, the following weights apply:
-
-1. ~1.3~ if the next key is R central
-2. ~1.5~ if the next key is L central
-3. ~1.5~ if the next key is R peripheral
-4. ~2.0~ if the next key is L peripheral
-
-/Examples:/
-
-- ~C-c~ gives a weight of ~1.3~
-- ~C-x~ gives a weight of ~1.5~
-- ~C-0~ gives a weight of ~1.5~
-- ~C-1~ gives a weight of ~2.0~
-- ~C-<F1>~ gives a weight of ~2.0~
-
-*Escape Keys*
-
-Escape is up in the top left hand corner. It's treatment is slightly
-different:
-
-1. ~1.5~ if the next key is L peripheral
-2. ~1.8~ if the next key is R central
-3. ~2.0~ if the next key is R peripheral
-4. ~2.3~ if the next key is L central
-
-/Examples:/
-
-- ~Esc <F1>~ gives a weight of ~1.5~
-- ~Esc RET~ gives a weight of ~1.8~
-- ~Esc t~ gives a weight of ~2.0~
-- ~Esc a~ gives a weight of ~2.3~
-
-*Chorded Keys (~C-x~)*
-
-Chorded keys are keys that are combined such as ~C-c C-e~ or ~C-x C-k~
-and other such combinations. If we take all possible combinations of
-chords, then the analysis gets complicated very quickly. However, we
-know that the key chord will start either with ~C-x~ or ~C-c~ and can
-begin from there. Furthermore, because ~C-c~ chords tend to be
-reserved for specific modal functionality and left up to the modal
-developers, we look only at ~C-x~ chords.
-
-There is a slight difference in the ergonamics for a key chord with
-repeated modifier (~C-x C-e~) and that without (~C-x e~). This is
-because in the second case, one has to lift up the ~Ctrl~ key in order
-to invoke the chord. The second case is slightly more difficult than
-the first case.
-
-We ignore this distinction completely in Etude. This means that ~C-x
-C-c~ and ~C-x c~ will be bound to the same function. The reason to
-treat ~C-x C-<key>~ and ~C-x <key>~ as the same invocation is for
-robustness. This is to overcome contraints experienced over the
-terminal where only a limited number of ~C-<key>~ sequences are
-allowed. So typing ~C-x C-<key>~ ande ~C-x <key>~ actually become the
-same thing.
-
-An exception to this is made with arrow keys - this is the only
-exception that is made due to the modal nature of movement. Such fine
-grained actions are needed to add more enhanced features so that
-movement across buffers and movement between windows can be
-distiguished.
-
-~x~ is located in the lower middle section of the keypad, ~C-x <L>~
-keys are therefore generally difficult to access. We completely
-discard ~C-x <LP>~ cases because they are too difficult to reach. The
-more reliable keystrokes are of ~C-x <R>~ type. We can now provide
-some weights:
-
-1. ~1.5~ if the second key is R central
-2. ~2.0~ if the second key is R peripheral
-3. ~2.5~ if the second key is L central
-
-/Examples:/
-
-- ~C-x C-c~ gives a weight of ~1.5~
-- ~C-x C-=~ gives a weight of ~2.0~
-- ~C-x C-;~ gives a weight of ~2.5~
-
-
-*Function Key Chords (~<Fn>~)*
-
-TBD
-
-** Inputs 
-
-User inputs are classified based on usage frequency Futhermore, inputs
-can be broken down into categories defining frequency of use:
-
-1. *Actions* (*M1*): inputs used between ~1~ to ~20~ times a ~minute~
-   either in bursts or during workflow.
-2. *Commands* (*M2*): inputs used between ~2~ to ~60~ times an ~hour~.
-3. *Tasks* (*M3*): inputs used from infrequently up to ~2~ times an
-   ~hour~.
-
-These 
-
-*Actions*
-
-Input
-- All self inserts (Alphanumeric + Grammer)
-
-Iterative movement
-- Planar movement within the buffer or minibuffer (Up, Down, Left,
-  Right)
-- Lateral movement across words
-- Vertical movement across paragraphs or sections
-- Planar movement within windows contained within a frame
-- Lateral movement between buffers
-
-Jump movement
-- Jump to line
-- Jump to word
-- Jump to buffer
-- Jump to definition
-
-*Commands*
-- Find file
-- Find recent
-- Find file containing text
-
-*Meta*
-- Help for 
-   - bindings
-   - keys
-   - 
- 
-
-
-*Tasks*
-
-
-
-
-** Additional Considerations
-
-*** Simplicity
-
-- *Modern*: Repurpose unused Emacs global keys for the modern
-  keyboard. For example, ~C-f~ and ~C-b~ are keys for forward and back
-  and using a combination of modifier keys, allow for for incremental
-  movements as well as movement and selection. Generally using arrow
-  keys and the mouse /(shock horror)/ suffice and so keys bound to
-  ~<C>~ that govern movement/selection can be repurposed for something
-  else. For marking and rectangles, it's just much faster in general
-  to select with the mouse.
-
-- *Visual* Have a overaching way to customise mod
-
-Emacs has become known for its infinite customisability. This causes
-problems because there are too many options and too many different
-teams customising. IDEs such as ~Eclipse~ and ~Visual Code~ are big
-and bulky - but they have also gotten very fundamental things
-right. The primary thing all IDEs have is consistent way to Run and
-Debug programs. Yes, it's possible to compile your code, surf the net,
-organise your holiday and message your friends without leaving Emacs
-but having to run Lisp code via ~C-c C-k~ and then compiling C with
-some other key binding should be a concern. Etude solves this by
-enforcing a global keybindings system based on clojure's multimethod
-approach to retro-fit an IDE-like interface for any major modes.
-
-
-*** Redundancy
-
-Allowing multiple ways of performing a very common task. For example,
-~M-x~, which brings up the command prompt has an analogue of ~C-p~ in
-Sublime Text. When in the terminal the ~Meta~ key stops
-working. Sometimes people bind ~C-p~ as their prefix key on
-~tmux~. Therefore having multiple ways of accessing a very commonly
-used function helps a lot and increases usability.
-
-
-*** Portability 
-
-In this case, portability refers to the user. This is primarily
-motivated by having to constantly switch between ~Ctrl~, ~Super~, and
-~Meta~ between operating systems. In this case, certain commonly used
-commands like the /Save/ operation will be bound to all three ~C-s~,
-~M-s~ and ~S-s~ for consistency's sake (as well as to perform the same
-action with minimal readjustment of muscle memory when a modifier key
-become unusable).
-
-
-
-*** Flexibility
-
-A looser coupling between function implementation so that bindings and
-modes can be swapped out
-
-* Library
-
-** Core
-
-There are 2 file associated purely with the framework:
-
-- [[https://github.com/zcaudate/etude/blob/master/etude/etude-boot.el][etude-boot.el]] (to initialise ~use-package~)
-- [[https://github.com/zcaudate/etude/blob/master/etude/etude-lang.el][etude-lang.el]] (defining key binding macros)
-
-The core libraries, loaded via [[https://github.com/zcaudate/etude/blob/master/etude/etude-core.el][etude-core.el]] are organised into a
-couple of categories:
-
-- [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-base.el][base]] (various sane defaults)
-- [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-management.el][management]] (recentf, smex, ivy, projectile, wgrep, treemacs)
-- [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-code.el][code]] (magit, company, eglot)
-- [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-os.el][os]] (vterm, eshell, cut/paste)
-- [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-style.el][style]] (nord)
-
-** Modules
-
-Etude also provides a very basic module system. The module libraries
-are simply loaded via init.el and provide supplemental customisations
-to the core. 
-
-They can be optional. Some current ones that I'm working with are:
-
-- [[https://github.com/zcaudate/etude/blob/master/etude/module/etude-module-lisp.el][lisp]] (elisp, clojure)
-- [[https://github.com/zcaudate/etude/blob/master/etude/module/etude-module-org.el][org]]  (previews)
-- [[https://github.com/zcaudate/etude/blob/master/etude/module/etude-module-text.el][text]] (yaml, markdown)
-
-As can be seen by the listing, it's very basic. Where is comes
-together is in the setup of the [[https://github.com/zcaudate/etude/blob/master/etude/core/etude-core-workflow.el][workflow]] file where the majority of it
-all comes together.
-
-** Workflow
-
-The workflow file define bindings as well as menu layouts. These work
-on a number of principles. Programmer Intent in emacs can be thought
-of being Movements, Actions and Tasks. In this context both are
-fundamentally the same except differ in the regularity that the are
-performed (Tasks are actions that are performed less than onc). So To
-be So an action like Move Forward might be used 50 times a minute, an
-action like Check Git Repository might be used
-
-
-* Installation 
 
 ** Prerequisites
 
 Libraries:
-
 - [[https://github.com/BurntSushi/ripgrep][ripgrep]] - search and replace (counsel)
-- [[https://github.com][fd]] - find locator (counsel)
-- [[https://github.com/junegunn/fzf][fzf]] - fuzzy search (counsel)
 - [[https://www.gnu.org/software/ispell/][ispell]] - spell checker (native)
 
-** OSX
+** Packages
 
-For installation on OSX, install all the tools using brew
+Packages installed:
 
-#+BEGIN_SRC bash :os osx
-brew install bat fd tree fzf ripgrep ispell
-#+END_SRC
+- treemacs
+- ranger
+- ivy
+- wgrep
+- googles
+- projectile
+- hydra
+- doom-modeline
+- annotate
+- bufler
+- vterm
+- nord-theme
+- dashboard
+- ace-widow
+- helpful
+- no-littering
+- company
+- w3m
+- magit
+- iedit
+ 
+** Preview
 
-** Ubuntu
+Text Editing via tmux on alacritty:
 
-For installation
-
-#+BEGIN_SRC shell :os ubuntu
-apt install bat fd tree fzf ripgrep ispell
-#+END_SRC
+[[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]

@@ -1,3 +1,5 @@
+(require 'etude-core-shell)
+
 ;; Documentation
 (use-package helpful :ensure t)
 

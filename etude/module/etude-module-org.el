@@ -25,8 +25,15 @@
   ("0" e/preview-markdeep  "preview markdeep")
   ("x" e/preview-exit      "exit preview" :exit t))
 
+(defun e/org-fill-all ()
+  (interactive)
+  (save-excursion
+    (mark-page)
+    (fill-region (region-beginning) (region-end) nil)))
+
 (e/mode [::org   org-mode "etude-module-org"]
   ::eval-cursor   'org-ctrl-c-ctrl-c
+  ::eval-file     nil ;;'e/org-fill-all
   ::mode-menu     'e/org-mode-menu/body)
 
 ;; Org JS Workaround
@@ -85,3 +92,4 @@
   (if (imp-buffer-enabled-p (current-buffer))
       (impatient-mode)))
 
+(provide 'etude-module-org)

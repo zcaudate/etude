@@ -5,12 +5,12 @@
 ;; When not in a terminal, configure a few window system specific things.
 (when window-system
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (tooltip-mode false)
+  (tooltip-mode nil)
   (mouse-wheel-mode t)
-  (blink-cursor-mode false))
+  (blink-cursor-mode nil))
 
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-  (when (fboundp mode) (funcall mode false)))
+  (when (fboundp mode) (funcall mode -1)))
 
 (use-package nord-theme
   :ensure t
@@ -39,6 +39,5 @@
   :ensure t
   :diminish 'auto-highlight-symbol-mode
   :config   (progn (setq ahs-idle-interval 0.0)))
-
 
 (provide 'etude-core-style)
