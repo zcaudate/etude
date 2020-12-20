@@ -284,12 +284,8 @@
 (progn
   (defhydra+ e/menu-fn::start-menu
     ()
-    ("i"  e/insert-input)
-    ("C-<up>"    shrink-window)
-    ("C-<down>"  enlarge-window)
-    ("C-<left>"  shrink-window-horizontally)
-    ("C-<right>" enlarge-window-horizontally))
-
+    ("i"       e/insert-input))
+  
   (e/bind [] ::f1-menu   ("<f1>")
           (lambda ()
             (interactive)
@@ -301,26 +297,25 @@
   (:title "<F2> Edit" :quit-key "z" :exit nil :foreign-keys run)
   ("Find/Replace"
    (("f"    counsel-rg             "Find" :exit t)
-    ("s"    replace-string         "Replace" :exit t)
-    ("r"    replace-regexp         "Replace Regex" :exit t)
+    ("r"    replace-string         "Replace" :exit t)
+    ("R"    replace-regexp         "Replace Regex" :exit t)
     ("e"    iedit-mode             "Multi Edit" :exit t))
    ""
    ()
 
    "Navigation"
-   (("g" goto-line "Goto Line")
+   (("l" goto-line "Goto Line")
     ("c" goto-last-change "Goto Changed")
-    ("l" swiper "Locate")
     ("t" swiper-thing-at-point "Similar"))
    "Git"
-   (("S"  magit-status  "Status" :exit t)
-    ("L"  magit-log-all "Log" :exit t)
-    ("D"  magit-diff    "Diff" :exit t)
-    ("T"  git-timemachine "Timemachine" :exit t))
+   (("s"  magit-status  "Status" :exit t)
+    ("g l"  magit-log-all "Log" :exit t)
+    ("g d"  magit-diff    "Diff" :exit t)
+    ("g t"  git-timemachine "Timemachine" :exit t))
    ""
-   (("C"  magit-commit  "Commit" :exit t)
-    ("P"  magit-pull    "Pull" :exit t) 
-    ("U"  magit-push    "Push" :exit t))
+   (("g c"  magit-commit  "Commit" :exit t)
+    ("g f"  magit-pull    "Pull" :exit t) 
+    ("g p"  magit-push    "Push" :exit t))
    "Hunks"
    (("H"  git-gutter:toggle  "On/Off" :toggle git-gutter-mode)
     ("h s" git-gutter:clear  "Select")
@@ -382,13 +377,18 @@
     ("T"   e/split-window-toggle "Toggle")
     ("W"   ace-swap-window "Swap"))
    ""
-   (("C-↑"   shrink-window  "V-")
-    ("C-↓"   enlarge-window "V+")
-    ("C-←"   shrink-window-horizontally "H-")
-    ("C-→"  enlarge-window-horizontally "H+"))))
+   (("↑"   shrink-window  "V-")
+    ("↓"   enlarge-window "V+")
+    ("←"   shrink-window-horizontally "H-")
+    ("→"  enlarge-window-horizontally "H+"))))
 
 (progn
-  (defhydra+ e/menu-fn::meta-menu () ("i"  e/insert-input nil))
+  (defhydra+ e/menu-fn::meta-menu ()
+    ("i"  e/insert-input nil)
+    ("<up>"    shrink-window)
+    ("<down>"  enlarge-window)
+    ("<left>"  shrink-window-horizontally)
+    ("<right>" enlarge-window-horizontally))
   (e/bind [] ::f5-menu   ("<f5>")
           (lambda ()
             (interactive)
