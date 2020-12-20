@@ -6,7 +6,8 @@
 * Introduction
 
 This is [[http://github.com/zcaudate/etude][Etude]]. The aim of the project is to provide better usability
-for ~emacs~ on ~tmux~ sessions across various operating systems.
+for ~emacs~ with a ~dvorak~ keyboard on ~tmux~ sessions across various
+operating systems.
 
 ** Prerequisites
 
@@ -16,31 +17,32 @@ Libraries:
 
 ** Packages
 
-Packages installed:
+A rougle list of packages installed:
 
-- treemacs
-- ranger
-- ivy
-- wgrep
-- googles
-- projectile
-- hydra
-- doom-modeline
+- ace-widow
 - annotate
 - bufler
-- vterm
-- nord-theme
-- dashboard
-- ace-widow
-- helpful
-- no-littering
 - company
-- w3m
-- magit
+- dashboard
+- doom-modeline
+- googles
+- helpful
+- hydra
 - iedit
+- impatient
+- ivy
+- magit
+- no-littering
+- nord-theme
+- projectile
+- ranger
+- treemacs
+- vterm
+- w3m
+- wgrep
  
 ** Preview
 
-Text Editing via tmux on alacritty:
+Emacs ia tmux on alacritty:
 
 [[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
