@@ -1,0 +1,14 @@
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+~Rust~
+
+[[https://zaiste.net/posts/shell-commands-rust/][Rewritten in Rust: Modern Alternatives of Command-Line Tools]]
+[[https://github.com/rust-unofficial/awesome-rust][GitHub - rust-unofficial/awesome-rust: A curated list of Rust code and
+resour...]]
+[[https://zaiste.net/posts/shell-commands-rust/][Rewritten in Rust: Modern Alternatives of Command-Line Tools]]
+#+BEGIN_SRC bash
+cargo install bat exa fd hyperfine hyperfine procs ripgrep sd tokei tree
+#+END_SRC

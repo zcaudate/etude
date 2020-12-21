@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: SETUP
+# key: SETUP
+# --
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall

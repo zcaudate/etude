@@ -1,0 +1,26 @@
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+#+TITLE: Vpn Setup
+
+
+* Services
+
+
+** Shadowsocks
+
+
+
+#+BEGIN_SRC bash
+docker run -e PASSWORD=coolies -p8777:8388 -p8777:8388/udp -d shadowsocks/shadowsocks-libev
+#+END_SRC
+
+
+* Main
+
+#+BEGIN_SRC bash
+
+#+END_SRC
+
+

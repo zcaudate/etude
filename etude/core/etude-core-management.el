@@ -34,8 +34,6 @@
 
 (use-package annotate :ensure t)
 
-(use-package plain-org-wiki :ensure t)
-
 (use-package yasnippet :ensure t
   :init (yas-global-mode 1)
   :config

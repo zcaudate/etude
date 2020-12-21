@@ -1,0 +1,145 @@
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+TITLE:  Ubuntu 20.04.1 Setup
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+*  Introduction
+
+This will use org-mode for the setup and installation of some sane
+defaults on a brand new system using org mode. The system is assumed
+to have [[https://www.emacs.org][emacs]] installed.
+
+* Variables
+
+* Prerequisites
+
+** Environment
+
+Checking that the following environment variables are set:
+
+
+** Apt
+
+#+BEGIN_SRC bash :results output silent :cache yes :tangle setup/ubuntu.sh
+echo "Updating Apt"
+apt update -y
+#+END_SRC
+
+** Runtimes
+
+We start off by installing docker and all the standard runtimes
+
+
+#+BEGIN_SRC bash :results output verbatim :cache no :tangle setup/ubuntu.sh
+echo "Installing Runtimes"
+apt install -y docker nodejs python3 luarocks cargo nim openjdk-11-jdk golang
+#+END_SRC
+
+#+RESULTS[989787536afbe4ee77b67aaeb575fc2e99a2df77]:
+#+begin_example
+Installing Runtimes
+Reading package lists...
+Building dependency tree...
+Reading state information...
+golang is already the newest version (2:1.13~1ubuntu2).
+python3 is already the newest version (3.8.2-0ubuntu2).
+docker is already the newest version (1.5-2).
+luarocks is already the newest version (2.4.2+dfsg-1).
+nim is already the newest version (1.0.6-1).
+nodejs is already the newest version (10.19.0~dfsg-3ubuntu1).
+openjdk-11-jdk is already the newest version (11.0.9.1+1-0ubuntu1~20.04).
+cargo is already the newest version (0.44.1-0ubuntu1~20.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 36 not upgraded.
+#+end_example
+
+** General Utils
+
+*** Oh My Bash
+[[https://github.com/ohmybash/oh-my-bash][GitHub - ohmybash/oh-my-bash: A delightful community-driven framework for man...]]
+#+BEGIN_SRC bash :results output silent :cache no :tangle setup/ubuntu.sh
+echo "Installing Oh my Bash"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+#+END_SRC
+
+*** Search and Encryption
+
+~Util~
+[[https://www.brow.sh/docs/mosh/][Mosh is better than SSH - Browsh]]
+[[https://goaccess.io/][GoAccess - Visual Web Log Analyzer]]
+[[https://github.com/junegunn/fzf][GitHub - junegunn/fzf: A command-line fuzzy finder]]
+[[https://gnupg.org/][The GNU Privacy Guard]]
+#+BEGIN_SRC bash :results output silent :cache no :tangle setup/ubuntu.sh
+apt install -y fzf gpg browsh goaccess
+#+END_SRC
+
+~Rust~
+[[https://github.com/BurntSushi/ripgrep][GitHub - BurntSushi/ripgrep: ripgrep recursively searches directories for a r...]]
+#+BEGIN_SRC bash :results output silent :cache no :tangle setup/ubuntu.sh
+cargo install ripgrep
+#+END_SRC
+
+~Mosh~
+#+BEGIN_SRC bash :results output silent :cache no :eval no  :tangle setup/mosh.sh
+echo "Installing Mosh"
+git clone https://github.com/mobile-shell/mosh
+cd mosh
+sudo apt-get install automake libtool g++ protobuf-compiler \
+  libprotobuf-dev libboost-dev libutempter-dev libncurses5-dev \
+  zlib1g-dev libio-pty-perl libssl-dev pkg-config
+./autogen.sh
+./configure
+make
+make install
+#+END_SRC
+
+*** General Utils
+
+~lazydocker~
+[[https://github.com/jesseduffield/lazydocker][GitHub - jesseduffield/lazydocker: The lazier way to manage everything docker]]
+#+BEGIN_SRC bash
+go get -y github.com/jesseduffield/lazydocker
+#+END_SRC
+
+
+~ntangle~
+[[https://github.com/OrgTangle/ntangle][GitHub - OrgTangle/ntangle: Command-line utility for Tangling of Org document...]]
+#+BEGIN_SRC bash  :results output silent :cache no :tangle setup/ubuntu.sh
+nimble install -y ntangle
+#+END_SRC
+
+** Config
+
+Adding paths 
+
+#+BEGIN_SRC bash
+add .bashrc /root/.nimble/bin
+add .bashrc /root/.cargo/bin
+#+END_SRC
+
+** Tangle
+
+
+
+
+** Docker
+
+** Create a docker image
+*** Generate a simple Dockerfile (Ubuntu bash) in the build directory
+# C-c C-v t 
+#+name: generate-dockerfile
+#+BEGIN_SRC docker-build :exports code :padline no :tangle build/Dockerfile
+FROM ubuntu
+CMD bash
+#+END_SRC
+
+
+#+BEGIN_SRC docker-build :dir "./build" :push registry.tahto.im/foundation:0.0.1 :tag registry.tahto.im/foundation:0.0.1 :tangle 
+FROM ubuntu:20.04
+#+END_SRC
+
+#+RESULTS:
+: #<window 42 on *docker-push*>
+
+
+

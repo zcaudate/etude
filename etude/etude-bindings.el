@@ -13,7 +13,7 @@
 ;;
 (defun e/no-action () (interactive))
 
-(e/bind []
+(e/bind [*]
   ::no-action       ()                          'e/no-action
   ::which-key       ("C-x C-h" "C-x h")         'which-key-show-major-mode
   ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
@@ -34,9 +34,13 @@
     (insert "\n")
     (yank)))
 
+
+
 (e/bind []
   ::select-all      ("C-x a" "C-x C-a")           'mark-page
-  ::cut             ("C-a")                       'kill-region
+  ::cut             ("C-a")                       'kill-region)
+
+(e/bind [*]
   ::copy            ("C-o")                       'copy-region-as-kill
   ::cut-context     ("C-k")                       'paredit-kill
   ::copy-context    ("C-x k" "C-x C-k")           'e/paredit-copy-context

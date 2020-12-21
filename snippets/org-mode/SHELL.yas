@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: BASH
+# key: <bash
+# --
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+$0
+#+END_SRC
