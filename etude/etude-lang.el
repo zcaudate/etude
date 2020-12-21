@@ -49,19 +49,21 @@
 
 (defun e/bind:fn (declaration &rest specs)
   (e/let [bind-map (if (seq-empty-p declaration)
-                      nil
-                    (seq-elt declaration 0))
-         body (seq-mapcat (lambda (spec)
-                            (e/let [(key bindings fn) spec]
-                              (if fn
-                                  (progn (e/put-command key (cadr fn))
-                                         (seq-map (lambda (binding)
-                                                    `(progn ,(if bind-map
-                                                                 `(bind-key ,binding ,fn ,bind-map)
-                                                               `(bind-key* ,binding ,fn))
-                                                            (vector ,key ,binding ,fn)))
-                                                  bindings)))))
-                          (seq-partition specs 3))]
+                       nil
+                     (seq-elt declaration 0))
+          body (seq-mapcat (lambda (spec)
+                             (e/let [(key bindings fn) spec]
+                               (if fn
+                                   (progn (e/put-command key (cadr fn))
+                                          (seq-map (lambda (binding)
+                                                     `(progn ,(if bind-map
+                                                                  (if (eq bind-map '*)
+                                                                      `(bind-key*, binding ,fn)
+                                                                    `(bind-key ,binding ,fn ,bind-map))
+                                                                `(bind-key, binding ,fn))
+                                                             (vector ,key ,binding ,fn)))
+                                                   bindings)))))
+                           (seq-partition specs 3))]
     (cons 'list body)))
 
 (defmacro e/bind (declaration &rest specs)

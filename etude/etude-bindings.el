@@ -1,3 +1,4 @@
+
 (require 'etude-lang)
 (require 'etude-core-code)
 (require 'etude-core-git)
@@ -44,10 +45,9 @@
   ::paste           ("C-v" "M-v" "C-y")           'yank
   ::paste-menu      ("C-x C-v" "C-x v" "C-x y" "C-x C-y")
   'counsel-yank-pop
-  ::undo            ("C--")                       'undo-tree-undo
-  ::redo            ("ESC -")                     'undo-tree-redo
+  ::undo            ("C-w")                       'undo-tree-undo
+  ::redo            ("C-x w" "C-x C-w")           'undo-tree-redo
   ::comment         ("ESC ;" "C-x ;" "C-x C-;")   'comment-or-uncomment-region)
-  
 
 ;;
 ;; (Buffers and Jumps)
@@ -154,6 +154,7 @@
   ::window-move-down     ("<M-down>"  "ESC <down>")
   'windmove-down)
 
+(setq e/*back-buffer* nil)
 
 (defun e/jump-back ()
   (interactive)
@@ -166,7 +167,7 @@
   (if e/*back-buffer*
       (e/jump-back)
     (progn (setq e/*back-buffer* (current-buffer))
-           (find-library "etude-core-bindings"))))
+           (find-library "etude-bindings"))))
 
 (defun e/jump-to-buffer (bname command &rest args)
   (if (not (equal (buffer-name (current-buffer))
@@ -206,7 +207,8 @@
 (e/bind []
   ::toggle-dashboard       ("ESC 1" "M-1")   'e/jump-to-start-screen
   ::toggle-terminal        ("ESC 2" "M-2")   'e/jump-to-terminal
-  ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch)
+  ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
+  ::toggle-bindings        ("ESC 4" "M-4")   'e/jump-to-bindings)
 
 
 ;;
@@ -250,27 +252,28 @@
    (("1" e/jump-to-start-screen "Dashboard" :exit t)
     ("2" e/jump-to-terminal     "Terminal" :exit t)
     ("3" e/jump-to-scratch      "Scratch" :exit t)
+    ("4" e/jump-to-bindings    "Bindings" :exit t)
     ("Q" save-buffers-kill-terminal "Exit Emacs" :exit t))
    ""
    (("r d" dash "Dash Docs" :exit t)
     ("r t" tldr "TLDR" :exit t)
     ("r l" wm3          "Browser" :exit t))
    "File"
-   (("o o"  counsel-projectile-find-file-dwim   "Open")
-    ("o r"  counsel-recentf      "Open Recent")
-    ("o p"  counsel-projectile   "Open Project")
-    ("s a"  save-some-buffers    "Save As")
+   (("o o"  counsel-projectile-find-file-dwim   "Open" :exit t)
+    ("o r"  counsel-recentf      "Open Recent" :exit t)
+    ("o p"  counsel-projectile   "Open Project" :exit t)
+    ("s a"  save-some-buffers    "Save As" :exit t)
     ("s s"  save-some-buffers    "Save All"))
    ""
-   (("f"  counsel-rg             "Find")
-    ("c c"  e/close-buffer       "Close")
+   (("f"  counsel-rg             "Find" :exit t)
+    ("c c"  e/close-buffer       "Close" :exit t)
     ("c A"  e/close-all-buffers  "Close All"))
    "Package"
-   (("P" package-install "Install")
-    ("p h" describe-package  "Describe")
+   (("P" package-install "Install" :exit t)
+    ("p h" describe-package  "Describe" :exit t)
     ("p r" package-refresh-contents "Refresh")
     ("p l" package-list-packages  "List" :exit t)
-    ("p d" package-delete "Delete"))
+    ("p d" package-delete "Delete" :exit t))
    "Customise"
    (("C" customize "all" :exit t)
     ("c f" customize-face  "face" :exit t)
@@ -343,7 +346,22 @@
 
 (pretty-hydra-define e/menu-fn::meta-menu
   (:title "<F5> Meta" :quit-key "z" :exit nil :foreign-keys run)
-  ("Toggle"
+  ("Window"
+   (("H"   split-window-right   "Split H" :exit nil)
+    ("V"   split-window-below   "Split V" :exit nil)
+    ("9"   delete-window   "Hide")
+    ("0"   delete-other-windows "Focus"))
+   ""
+   (("B"   balance-windows-area "Balance")
+    ("D"   e/window-delete "Delete")
+    ("T"   e/split-window-toggle "Toggle")
+    ("W"   ace-swap-window "Swap"))
+   ""
+   (("↑"   shrink-window  "V-")
+    ("↓"   enlarge-window "V+")
+    ("←"   shrink-window-horizontally "H-")
+    ("→"  enlarge-window-horizontally "H+"))
+   "Toggle"
    (("L" display-line-numbers-mode "Line Numbers" :toggle t)
     ("V" visual-line-mode "Visual Line" :toggle t)
     ("W" whitespace-mode "Whitespace" :toggle t)
@@ -365,22 +383,7 @@
     ("a X"  annotate-export-annotations "Export")
     ("a S"  annotate-save-annotations "Save")
     ("a C"  annotate-clear-annotations "Clear")
-    ("a P"  annotate-purge-annotations "Purge"))
-   "Window"
-   (("H"   split-window-right   "Split H" :exit nil)
-    ("V"   split-window-below   "Split V" :exit nil)
-    ("9"   delete-window   "Hide")
-    ("0"   delete-other-windows "Focus"))
-   ""
-   (("B"   balance-windows-area "Balance")
-    ("D"   e/window-delete "Delete")
-    ("T"   e/split-window-toggle "Toggle")
-    ("W"   ace-swap-window "Swap"))
-   ""
-   (("↑"   shrink-window  "V-")
-    ("↓"   enlarge-window "V+")
-    ("←"   shrink-window-horizontally "H-")
-    ("→"  enlarge-window-horizontally "H+"))))
+    ("a P"  annotate-purge-annotations "Purge"))))
 
 (progn
   (defhydra+ e/menu-fn::meta-menu ()

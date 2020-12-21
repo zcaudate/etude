@@ -32,6 +32,7 @@
  '(goggles-added ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
+ '(hydra-face-blue ((t (:foreground "blue" :weight bold))))
  '(org-link ((t (:foreground "brightblue" :underline nil)))))
 
 (custom-set-variables
@@ -52,4 +53,4 @@
  '(org-mouse-1-follows-link 'double)
  '(org-support-shift-select 'always)
  '(package-selected-packages
-   '(ivy-posframe iedit auto-highlight-symbol counsel-dash annotate goto-chg tldr symbol-overlay dired-filter dired-collapse dired-subtree goggles helpful no-littering org-cliplink diff-hl wgrep eglot git-timemachine bufler multi-vterm w3m company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit dockerfile-mode midje-mode cider nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+   '(plain-org-wiki org-roam yasnippet docker ivy-posframe iedit auto-highlight-symbol counsel-dash annotate goto-chg tldr symbol-overlay dired-filter dired-collapse dired-subtree goggles helpful no-littering org-cliplink diff-hl wgrep eglot git-timemachine bufler multi-vterm w3m company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs fish-completion pcomplete-extension fish-mode undo-tree magit dockerfile-mode midje-mode cider nord-theme dashboard neotree ace-window counsel-tramp counsel-projectile counsel-etags counsel projectile ivy company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))

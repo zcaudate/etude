@@ -34,6 +34,8 @@
 
 (use-package annotate :ensure t)
 
+(use-package plain-org-wiki :ensure t)
+
 ;;
 ;; Web + Web Server
 ;;
