@@ -36,6 +36,11 @@
 
 (use-package plain-org-wiki :ensure t)
 
+(use-package yasnippet :ensure t
+  :init (yas-global-mode 1)
+  :config
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+
 ;;
 ;; Web + Web Server
 ;;
@@ -94,7 +99,7 @@
                (setq ranger-preview-delay 0.040)
                (setq ranger-show-literal nil)
                (setq ranger-max-preview-size 1)
-               (setq ranger-dont-show-binary nil))
+               (setq ranger-dont-show-binary t))
   :hook (range-mode . which-key-mode))
 
 ;;

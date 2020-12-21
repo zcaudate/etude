@@ -6,7 +6,7 @@
 (defun e/org-fill-paragraph ()
   (interactive)
   (if (org-in-src-block-p)
-      nil
+      (org-babel-remove-result)
     (org-fill-paragraph)))
 
 (add-hook 'org-mode-hook '(lambda ()
@@ -21,6 +21,7 @@
                             (add-to-list 'org-src-lang-modes '("bash" . shell))))
 
 (defhydra e/org-mode-menu ()
+  ("8" e/preview-html  "preview html")
   ("9" e/preview-markdown  "preview markdown")
   ("0" e/preview-markdeep  "preview markdeep")
   ("x" e/preview-exit      "exit preview" :exit t))
@@ -86,6 +87,16 @@
   (imp-set-user-filter 'e/show-org-markdown)
   (browse-url (s-concat "http://localhost:8080/imp/live/"
                         (buffer-name (current-buffer)))))
+
+(defun e/preview-html ()
+  (interactive)
+  (if (not (httpd-running-p))
+      (httpd-start))
+  (impatient-mode t)
+  (imp-set-user-filter 'e/show-org-html)
+  (browse-url (s-concat "http://localhost:8080/imp/live/"
+                        (buffer-name (current-buffer)))))
+
 
 (defun e/preview-exit ()
   (interactive)
