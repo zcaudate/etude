@@ -45,6 +45,7 @@
 
 (e/mode [::org   org-mode "etude-module-org"]
   ::eval-cursor   'org-ctrl-c-ctrl-c
+  ::eval-cursor-alt 'ob-tangle
   ::eval-file     nil ;;'e/org-fill-all
   ::mode-menu     'e/org-mode-menu/body)
 
