@@ -31,7 +31,7 @@ apt update -y
 We start off by installing docker and all the standard runtimes
 
 
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
 echo "Installing Runtimes"
 apt install -y docker nodejs python3 luarocks cargo nim openjdk-11-jdk golang
 #+END_SRC
@@ -40,7 +40,7 @@ apt install -y docker nodejs python3 luarocks cargo nim openjdk-11-jdk golang
 
 *** Oh My Bash
 [[https://github.com/ohmybash/oh-my-bash][GitHub - ohmybash/oh-my-bash: A delightful community-driven framework for man...]]
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Oh my Bash"
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 #+END_SRC
@@ -52,28 +52,28 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
 [[https://goaccess.io/][GoAccess - Visual Web Log Analyzer]]
 [[https://github.com/junegunn/fzf][GitHub - junegunn/fzf: A command-line fuzzy finder]]
 [[https://gnupg.org/][The GNU Privacy Guard]]
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 apt install -y browsh goaccess ahg
 #+END_SRC
 
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 apt install -y fzf
 
 #+END_SRC
 
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 apt install -y gpg
 ssh-keygen -f id_rsa -t rsa -N ''
 #+END_SRC
 
 ~Rust~
 [[https://github.com/BurntSushi/ripgrep][GitHub - BurntSushi/ripgrep: ripgrep recursively searches directories for a r...]]
-#+BEGIN_SRC bash :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 cargo install ripgrep
 #+END_SRC
 
 ~Mosh~
-#+BEGIN_SRC bash :results output silent :cache no :eval no :tangle Ubuntu/mosh.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :eval no :tangle Ubuntu/mosh.sh
 echo "Installing Mosh"
 git clone https://github.com/mobile-shell/mosh
 cd mosh
@@ -90,14 +90,14 @@ make install
 
 ~lazydocker~
 [[https://github.com/jesseduffield/lazydocker][GitHub - jesseduffield/lazydocker: The lazier way to manage everything docker]]
-#+BEGIN_SRC bash  :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Lazydocker"
 go get -y github.com/jesseduffield/lazydocker
 #+END_SRC
 
 ~redis-tOBui~
 [[https://github.com/mylxsw/redis-tui][GitHub - mylxsw/redis-tui: A Redis Text-based UI client in CLI]]
-#+BEGIN_SRC bash  :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Redis TUI"
 git clone https://github.com/mylxsw/redis-tui.git
 cd redis-tui
@@ -106,7 +106,7 @@ make
 
 ~ntangle~
 [[https://github.com/OrgTangle/ntangle][GitHub - OrgTangle/ntangle: Command-line utility for Tangling of Org document...]]
-#+BEGIN_SRC bash  :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing nTangle"
 nimble install -y ntangle
 #+END_SRC

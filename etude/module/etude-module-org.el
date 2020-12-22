@@ -5,14 +5,15 @@
 
 (use-package plain-org-wiki :ensure t)
 
-(use-package docker :ensure t)
+(use-package ob-async :ensure t)
+;; (use-package docker :ensure t)
 
-(use-package ob-docker-build
-  :ensure t
-  :quelpa ((ob-docker-build :fetcher github :repo "ifitzpat/ob-docker-build") :upgrade t)
-  :config
-  (add-to-list 'org-babel-load-languages '(docker-build . t))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+;; (use-package ob-docker-build
+;;   :ensure t
+;;   :quelpa ((ob-docker-build :fetcher github :repo "ifitzpat/ob-docker-build") :upgrade t)
+;;   :config
+;;   (add-to-list 'org-babel-load-languages '(docker-build . t))
+;;   (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
 
 (defun e/org-fill-paragraph ()
   (interactive)

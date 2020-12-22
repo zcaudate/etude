@@ -30,3 +30,5 @@ projects
 *.md.html
 .org-id-locations
 /quelpa/
+/automation
+!/automation/*.org
