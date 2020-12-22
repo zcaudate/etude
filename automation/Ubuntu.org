@@ -142,17 +142,17 @@ mv tangle.sh ~/bin
 
 This org file generates various files in a `Ubuntu` directory after tangle that can be run in order to build a container.
 
-The previous code blocks are tangled together to produce a container setup script:
+The previous code blocks are tangled together to produce a single setup script, used by a Dockerfile:
 
-- Ubuntu/setup.sh
+- ~Ubuntu/setup.sh~
 
-This section will outline three additional scripts used for container generation.
+This section will outline three additional scripts used for container generation:
 
-- Ubuntu/build.sh
-- Ubuntu/Dockerfile
-- Ubuntu/inception.sh
+- ~<Ubuntu/build.sh>~
+- ~<Ubuntu/Dockerfile>~
+- ~<Ubuntu/inception.sh>~
 
-For containerisation of the setup, We will create a simple `Dockerfile` (Ubuntu bash) in the build directory.
+For containerization of the setup, We create a ~Dockerfile~ in the build directory.
 
 ~<Ubuntu/Dockerfile>~
 #+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle Ubuntu/Dockerfile 
@@ -178,27 +178,37 @@ We also create a simple `build.sh` script.
 docker build . -t zcaudate/etude:0.0.1 | tee build.out
 #+END_SRC
 
+*** Building
 
-** Tangle Build
-
-To build a docker image, run
+To untangle Ubuntu.org (this file)
 
 #+NAME: Bootstrap
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-rm -R Ubuntu
-mkdir -p Ubuntu
+cd automation
 tangle.sh Ubuntu.org
+#+END_SRC
+
+To build a docker image, run
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
 cd Ubuntu
-rm build.out
 chmod +x ./build.sh
 #+END_SRC
 
-** Inception Mode
+The image ~zcaudate/etude:0.0.1~ will be built. It can be run by calling:
 
-We now create the `inception.sh` that uses tangle again to build
-the image (very fast because we are using the host).
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+docker run --rm -it zcaudate/etude
+..
+<L1>$ emacs
+#+END_SRC
 
-`<Ubuntu/inception.sh>`
+
+** Inception
+
+We now detail ~inception.sh~ script. This just goes through the `tangle/build` ceremony again to recreate the build steps for the project. It is purely academic.
+
+~<Ubuntu/inception.sh>~
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/inception.sh
 cd /root/.emacs.d/automation
 mkdir Ubuntu
@@ -208,8 +218,7 @@ chmod +x ./build.sh
 ./build.sh
 #+END_SRC
 
-This is purely academic but we can now use tangle.sh to reconstruct
-it's own build.
+We now can do emacs build inception:
 
 #+BEGIN_SRC bash :results output silent :eval no
 host$ docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock zcaudate/etude:0.0.1
