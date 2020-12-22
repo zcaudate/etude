@@ -7,13 +7,13 @@
 
 This is [[http://github.com/zcaudate/etude][Etude]]. The aim of the project is to provide better usability
 for ~emacs~ with a ~dvorak~ keyboard on ~tmux~ sessions across various
-operating systems.
+operating systems. It is also an experiment for deployment reproducibility using containers and emacs org mode.
 
 ** Preview
 
 Etude 
-- LHS <Document> 
-- RHS Vterm[Docker[Etude<Document>]]
+- LHS ~>~ Document 
+- RHS ~>~ Vterm ~>~ Docker ~>~ Emacs ~>~ Document
 
 [[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
 
@@ -53,17 +53,17 @@ A rougle list of packages installed:
 
 ** Dockerized Setup
 
-This is outlined here: [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][here]]:
+This is outlined in more detail here: [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][here]]:
 
-To build the container run `tangle.sh` to generate the build file 
+1. Generate the build scripts:
 
 #+NAME: Bootstrap
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-cd <etude>/automation
-tangle.sh Ubuntu.org
+cd ETUDE/automation
+tangle.sh Ubuntu.org   # detailed in Ubuntu.org
 #+END_SRC
 
-And then run:
+2. Run the build:
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
 cd Ubuntu
