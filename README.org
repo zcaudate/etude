@@ -53,7 +53,7 @@ A rougle list of packages installed:
 
 ** Dockerized Setup
 
-This is outlined in more detail here: [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][here]]:
+This is outlined in more detail in [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][Ubuntu.org]]:
 
 1. Generate the build scripts:
 
