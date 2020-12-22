@@ -6,77 +6,90 @@
 
 *  Introduction
 
-This will use org-mode for the setup and installation of some sane
-defaults on a brand new system using org mode. The system is assumed
-to have [[https://www.emacs.org][emacs]] installed.
+This will setup and installation of default packages on a brand new
+Ubuntu 20.04 system.
 
-
-
-
-* Variables
-
-* Prerequisites
-
-** Environment
-
-Checking that the following environment variables are set:
-
-
-** Apt
+** Emacs
 
 #+BEGIN_SRC bash :results output silent :cache yes :tangle Ubuntu/setup.sh
-echo "Updating Apt"
-apt update -y
+echo "Installing Apt Toolings"
+apt-get update
+apt-get install -y apt-utils software-properties-common git make curl wget gpg
+
+echo "Installing Emacs 27.1"
+add-apt-repository ppa:kelleyk/emacs
+apt-get update
+apt-get install -y emacs27-nox
 #+END_SRC
 
 ** Runtimes
 
 We start off by installing docker and all the standard runtimes
 
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+echo "Installing Docker"
+apt-get install -y docker.io
+#+END_SRC
 
 #+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
-echo "Installing Runtimes"
-apt install -y docker nodejs python3 luarocks cargo nim openjdk-11-jdk golang
+echo "Installing Nodejs"
+apt-get install -y nodejs
 #+END_SRC
+
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+echo "Installing Python3"
+apt-get install -y python3
+#+END_SRC
+
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+echo "Installing Lua"
+apt-get install -y luarocks
+#+END_SRC
+
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+echo "Installing Go"
+apt-get install -y golang 
+#+END_SRC
+
+#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+echo "Installing Openjdk"
+apt-get install -y openjdk-11-jdk
+#+END_SRC
+
 
 ** General Utils
-
-*** Oh My Bash
-[[https://github.com/ohmybash/oh-my-bash][GitHub - ohmybash/oh-my-bash: A delightful community-driven framework for man...]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-echo "Installing Oh my Bash"
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
-#+END_SRC
 
 *** Search and Encryption
 
 ~Util~
+
 [[https://www.brow.sh/docs/mosh/][Mosh is better than SSH - Browsh]]
 [[https://goaccess.io/][GoAccess - Visual Web Log Analyzer]]
 [[https://github.com/junegunn/fzf][GitHub - junegunn/fzf: A command-line fuzzy finder]]
 [[https://gnupg.org/][The GNU Privacy Guard]]
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Browsh"
-apt install -y browsh
+wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
+apt-get install ./browsh_1.6.4_linux_amd64.deb
+rm ./browsh_1.6.4_linux_amd64.deb
 #+END_SRC
 
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing fzf"
-apt install -y fzf
-
+apt-get install -y fzf
 #+END_SRC
 
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-echo "Installing Mosh"
-apt install -y gpg
+echo "Installing basic"
+apt-get install -y gpg curl wget
 ssh-keygen -f id_rsa -t rsa -N ''
 #+END_SRC
 
 ~Rust~
 [[https://github.com/BurntSushi/ripgrep][GitHub - BurntSushi/ripgrep: ripgrep recursively searches directories for a r...]]
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-echo "Installing Mosh"
-cargo install ripgrep
+echo "Installing Ripgrep"
+apt-get install ripgrep
 #+END_SRC
 
 ~Mosh~
@@ -84,7 +97,7 @@ cargo install ripgrep
 echo "Installing Mosh"
 git clone https://github.com/mobile-shell/mosh
 cd mosh
-sudo apt-get install automake libtool g++ protobuf-compiler \
+apt-get -y install automake libtool g++ protobuf-compiler \
   libprotobuf-dev libboost-dev libutempter-dev libncurses5-dev \
   zlib1g-dev libio-pty-perl libssl-dev pkg-config
 ./autogen.sh
@@ -94,20 +107,19 @@ make install
 cd ..
 #+END_SRC
 
+[[https://github.com/ohmybash/oh-my-bash][GitHub - ohmybash/oh-my-bash: A delightful community-driven framework for man...]]
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+echo "Installing Oh my Bash"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+#+END_SRC
+
 *** General Utils
 
 ~lazydocker~
 [[https://github.com/jesseduffield/lazydocker][GitHub - jesseduffield/lazydocker: The lazier way to manage everything docker]]
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Lazydocker"
-go get -y github.com/jesseduffield/lazydocker
-#+END_SRC
-
-~ntangle~
-[[https://github.com/OrgTangle/ntangle][GitHub - OrgTangle/ntangle: Command-line utility for Tangling of Org document...]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-echo "Installing nTangle"
-nimble install -y ntangle
+go get github.com/jesseduffield/lazydocker
 #+END_SRC
 
 ** Config
@@ -118,15 +130,25 @@ Adding paths
 echo $PATH
 #+END_SRC
 
-#+BEGIN_SRC bash
-echo 'export PATH=$HOME/'
-echo 'export PATH=$HOME/.nimble/bin:$HOME/.cargo/bin:$PATH' >>~/.bash_profile
-#+END_SRC
-
 ** Tangle
 
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/tangle.sh
+#!/bin/sh
+# Tangle files with Org mode
+#
+emacs -Q --batch --eval "
+    (progn
+      (require 'ob-tangle)
+      (dolist (file command-line-args-left)
+        (with-current-buffer (find-file-noselect file)
+          (org-babel-tangle))))
+  " "$@"
+#+END_SRC
 
-
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+chmod +x Ubuntu/tangle.sh
+mv tangle.sh ~~/bin
+#+END_SRC
 
 * Docker
 
@@ -136,15 +158,51 @@ Generate a simple Dockerfile (Ubuntu bash) in the build directory
 
 #+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle Ubuntu/Dockerfile 
 FROM ubuntu:20.04
-ADD  setup.sh /tmp/setup.sh
-RUN  chmod +x setup.sh
-RUN  /tmp/setup.sh
+ARG DEBIAN_FRONTEND=noninteractive
+WORKDIR /tmp
+ADD tangle.sh /root/bin/tangle.sh
+RUN chmod +x  /root/bin/tangle.sh
+ADD setup.sh  /tmp/setup.sh
+RUN cd /tmp && chmod +x ./setup.sh && ./setup.sh
+RUN rm /tmp/setup.sh
+ADD inception.sh /tmp/inception.sh
+RUN chmod +x /tmp/inception.sh
+RUN echo 'export PATH=$HOME/bin:$PATH' >> /root/.bashrc
+RUN echo "--"
+RUN git clone https://github.com/zcaudate/etude.git /root/.emacs.d
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/build.sh
+docker build . -t zcaudate/etude:0.0.1 | tee build.out
+#+END_SRC
+
+
+** Testing
+
+To test with docker, run
+
+#+NAME: Bootstrap
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+rm -R Ubuntu
+mkdir -p Ubuntu
+tangle.sh Ubuntu.org
+cd Ubuntu
+rm build.out
+chmod +x ./build.sh
+#+END_SRC
+
+** Inception Mode
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/inception.sh
+cd /root/.emacs.d/automation
+mkdir Ubuntu
+tangle.sh Ubuntu.org
+cd Ubuntu
+chmod +x ./build.sh
+./build.sh
 #+END_SRC
 
 
 
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/docker_build.sh
-docker build . -t zcaudate/etude:0.0.1
-#+END_SRC
 
 

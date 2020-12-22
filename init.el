@@ -20,7 +20,6 @@
 (require 'etude-lang)
 (require 'etude-core)
 (require 'etude-bindings)
-
 (require 'etude-module-org)
 
 (setq gc-cons-threshold (* 2 1000 1000))

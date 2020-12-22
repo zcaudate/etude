@@ -76,8 +76,10 @@
                (delete-other-windows)))
     (bufler 0)))
 
+(e/bind [*]
+  ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer)
+
 (e/bind []
-  ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer
   ::list-buffers      ("C-x b" "C-x C-b")     'e/bufler-toggle
   ::revert-buffer     ("C-x r" "C-x C-r")     'e/revert-buffer
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer

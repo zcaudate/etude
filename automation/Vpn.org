@@ -12,15 +12,10 @@
 
 
 
-#+BEGIN_SRC bash
+#+BEGIN_SRC bash :tangle out.sh
 docker run -e PASSWORD=coolies -p8777:8388 -p8777:8388/udp -d shadowsocks/shadowsocks-libev
 #+END_SRC
 
 
-* Main
-
-#+BEGIN_SRC bash
-
-#+END_SRC
 
 

@@ -37,7 +37,8 @@
       (format "```%s\n%s\n```" lang body))))
 
 ;;;###autoload
-(defun org-markdeep-export-as-markdeep (&optional async subtreep visible-only)
+(defun org-markdeep-export-as-markdeep
+    (&optional async subtreep visible-only)
   "See `org-md-export-as-markdeep'."
   (interactive)
   (org-export-to-buffer 'markdeep "*Org MD:Etude Export*"
@@ -50,15 +51,17 @@
   (org-export-replace-region-by 'markdeep))
 
 ;;;###autoload
-(defun org-markdeep-export-to-markdeep (&optional async subtreep visible-only)
+(defun org-markdeep-export-to-markdeep
+    (&optional async subtreep visible-only)
   "See `org-md-export-to-md'."
   (interactive)
   (let ((outfile (org-export-output-file-name ".md" subtreep)))
     (org-export-to-file 'markdeep outfile async subtreep visible-only)))
 
 ;;;###autoload
-(defun org-markdeep-publish-to-markdeep (plist filename pub-dir)
+(defun org-markdeep-publish-to-markdeep
+    (plist filename pub-dir)
   "Analogous to `org-md-publish-to-md'."
   (org-publish-org-to 'markdeep filename ".md" plist pub-dir))
   
-(provide 'org-markdeep)
+(provide 'ox-markdeep)
