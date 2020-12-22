@@ -168,7 +168,7 @@ RUN rm /tmp/setup.sh
 ADD inception.sh /tmp/inception.sh
 RUN chmod +x /tmp/inception.sh
 RUN echo 'export PATH=$HOME/bin:$PATH' >> /root/.bashrc
-RUN echo "--"
+RUN echo "-"
 RUN git clone https://github.com/zcaudate/etude.git /root/.emacs.d
 #+END_SRC
 
