@@ -6,8 +6,9 @@
 
 *  Introduction
 
-This will setup an installation of Emacs with Etude of default packages on a brand new Ubuntu 20.04 system with some generally useful packages for development. 
-
+This will setup an installation of Emacs with Etude on a brand new
+Ubuntu 20.04 system with some generally useful packages for
+development.
 
 ** Emacs
 

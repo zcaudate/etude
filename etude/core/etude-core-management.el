@@ -43,8 +43,6 @@
 ;; Web + Web Server
 ;;
 
-(use-package w3m :ensure t)
-
 (use-package impatient-mode :ensure t
   :config (setq impatient-mode-delay 3))
 

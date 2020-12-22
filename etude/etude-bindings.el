@@ -132,16 +132,10 @@
 ;; (Window Movement)
 ;;
 
-
-(defun e/window-delete ()
-  (interactive)
-  (delete-other-windows)
-  (e/close-buffer))
-
 (e/bind []
   ::window-delete
-  ("ESC <deletechar>" "C-x 9" "C-x C-d" "C-x d")
-  'e/window-delete
+  ("C-x C-d" "C-x d")
+  'e/close-buffer
   
   ::window-close
   ("ESC DEL" "M-DEL" "C-<backspace>" "C-x DEL" "C-x C-<down>" "C-x <down>")
