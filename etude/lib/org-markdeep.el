@@ -1,4 +1,3 @@
-(require 'etude-core)
 (require 'ox-md)
 (require 'dash)
 
@@ -62,4 +61,4 @@
   "Analogous to `org-md-publish-to-md'."
   (org-publish-org-to 'markdeep filename ".md" plist pub-dir))
   
-(provide 'etude-lib-markdeep-export)
+(provide 'org-markdeep)

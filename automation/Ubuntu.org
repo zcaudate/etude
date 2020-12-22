@@ -133,9 +133,8 @@ echo 'export PATH=$HOME/.nimble/bin:$HOME/.cargo/bin:$PATH' >>~/.bash_profile
 
 ** Create a docker image
 *** Generate a simple Dockerfile (Ubuntu bash) in the build directory
-# C-c C-v t 
 #+name: generate-dockerfile
-#+BEGIN_SRC docker-build :exports code :padline no :tangle Ubuntu/Dockerfile
+#+BEGIN_SRC dockerfile :exports code :padline no :tangle Ubuntu/Dockerfile
 FROM ubuntu
 CMD bash
 #+END_SRC

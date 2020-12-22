@@ -1,5 +1,4 @@
-(require 'etude-core)
-(require 'etude-lib-markdeep-export)
+(require 'org-markdeep)
 
 (defvar e/strapdown-body
   "<!DOCTYPE html><html><title></title><xmp theme=\"journal\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>")
@@ -23,4 +22,4 @@
            (format e/stapdown-zeta-body))
          (current-buffer)))
 
-(provide 'etude-lib-preview)
+(provide 'etude-module-org-preview)
