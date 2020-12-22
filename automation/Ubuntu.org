@@ -176,7 +176,6 @@ RUN git clone https://github.com/zcaudate/etude.git /root/.emacs.d
 docker build . -t zcaudate/etude:0.0.1 | tee build.out
 #+END_SRC
 
-
 ** Testing
 
 To test with docker, run
@@ -193,6 +192,9 @@ chmod +x ./build.sh
 
 ** Inception Mode
 
+We now create the `inception.sh` that uses tangle again to build
+the image (very fast because we are using the host).
+
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/inception.sh
 cd /root/.emacs.d/automation
 mkdir Ubuntu
@@ -200,6 +202,23 @@ tangle.sh Ubuntu.org
 cd Ubuntu
 chmod +x ./build.sh
 ./build.sh
+#+END_SRC
+
+This is purely academic but we can now use tangle.sh to reconstruct
+it's own build.
+
+#+BEGIN_SRC bash :results output silent :eval no
+host$ docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock zcaudate/etude:0.0.1
+..
+
+<L1>$ ./inception.sh
+<L1>$ docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock zcaudate/etude:0.0.1
+..
+
+<L2>$ ./inception.sh
+<L2>$ docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock zcaudate/etude:0.0.1
+..
+
 #+END_SRC
 
 
