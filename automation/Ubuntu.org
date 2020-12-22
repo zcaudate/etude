@@ -115,7 +115,7 @@ go get github.com/jesseduffield/lazydocker
 
 * Tangle
 
-Usually, tangling an org file is done via a shortcut key but it's a really mportant script that can be extracted as a script.
+Usually, tangling an org file is done via a shortcut key but it's a really important operation that can be extracted as a script.
 
 ~<Ubuntu/tangle.sh>~
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/tangle.sh
@@ -206,7 +206,7 @@ docker run --rm -it zcaudate/etude
 
 ** Inception
 
-We now detail ~inception.sh~ script. This just goes through the `tangle/build` ceremony again to recreate the build steps for the project. It is purely academic.
+We now detail ~inception.sh~ script. This just goes through the ~tangle~ and ~build~ ceremony again, recreating build steps for the containerized instance. It is purely academic.
 
 ~<Ubuntu/inception.sh>~
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/inception.sh

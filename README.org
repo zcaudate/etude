@@ -50,10 +50,11 @@ A rougle list of packages installed:
 - vterm
 - wgrep
 
-
 ** Dockerized Setup
 
-This is outlined in more detail in [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][Ubuntu.org]]:
+This is outlined in more detail in [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][Ubuntu.org]].
+
+To build:
 
 1. Generate the build scripts:
 
