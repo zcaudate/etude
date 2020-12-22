@@ -1,4 +1,4 @@
-(require 'org-markdeep)
+(require 'ox-markdeep)
 
 (defvar e/strapdown-body
   "<!DOCTYPE html><html><title></title><xmp theme=\"journal\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>")

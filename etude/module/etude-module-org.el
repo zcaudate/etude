@@ -13,6 +13,14 @@
       (org-babel-remove-result)
     (org-fill-paragraph)))
 
+(defun e/org-babel-tangle-block()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively 'org-babel-tangle)))
+
+(defun org-babel-execute:dockerfile (body params)
+  body)
+
 (add-hook 'org-mode-hook '(lambda ()
                             (visual-line-mode)
                             (org-indent-mode)
@@ -23,6 +31,7 @@
                             (define-key org-mode-map (kbd "C-c C-g") 'org-cliplink)
                             (add-to-list 'org-src-lang-modes '("md.graph" . fundamental))
                             (add-to-list 'org-src-lang-modes '("bash" . shell))))
+
 
 (defhydra e/org-mode-menu ()
   ("8" e/preview-html  "preview html")
@@ -38,7 +47,8 @@
 
 (e/mode [::org   org-mode "etude-module-org"]
   ::eval-cursor   'org-ctrl-c-ctrl-c
-  ::eval-cursor-alt 'ob-tangle
+  ::eval-cursor-alt 'e/org-babel-tangle-block
+  ::mode-connect  'org-babel-tangle
   ::eval-file     nil ;;'e/org-fill-all
   ::mode-menu     'e/org-mode-menu/body)
 

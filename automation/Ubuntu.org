@@ -10,6 +10,9 @@ This will use org-mode for the setup and installation of some sane
 defaults on a brand new system using org mode. The system is assumed
 to have [[https://www.emacs.org][emacs]] installed.
 
+
+
+
 * Variables
 
 * Prerequisites
@@ -21,7 +24,7 @@ Checking that the following environment variables are set:
 
 ** Apt
 
-#+BEGIN_SRC bash :results output silent :cache yes :tangle Ubuntu/ubuntu.sh
+#+BEGIN_SRC bash :results output silent :cache yes :tangle Ubuntu/setup.sh
 echo "Updating Apt"
 apt update -y
 #+END_SRC
@@ -53,15 +56,18 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
 [[https://github.com/junegunn/fzf][GitHub - junegunn/fzf: A command-line fuzzy finder]]
 [[https://gnupg.org/][The GNU Privacy Guard]]
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-apt install -y browsh goaccess ahg
+echo "Installing Browsh"
+apt install -y browsh
 #+END_SRC
 
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+echo "Installing fzf"
 apt install -y fzf
 
 #+END_SRC
 
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+echo "Installing Mosh"
 apt install -y gpg
 ssh-keygen -f id_rsa -t rsa -N ''
 #+END_SRC
@@ -69,11 +75,12 @@ ssh-keygen -f id_rsa -t rsa -N ''
 ~Rust~
 [[https://github.com/BurntSushi/ripgrep][GitHub - BurntSushi/ripgrep: ripgrep recursively searches directories for a r...]]
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+echo "Installing Mosh"
 cargo install ripgrep
 #+END_SRC
 
 ~Mosh~
-#+BEGIN_SRC bash :async :results output silent :cache no :eval no :tangle Ubuntu/mosh.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :eval no :tangle Ubuntu/setup.sh
 echo "Installing Mosh"
 git clone https://github.com/mobile-shell/mosh
 cd mosh
@@ -84,6 +91,7 @@ sudo apt-get install automake libtool g++ protobuf-compiler \
 ./configure
 make
 make install
+cd ..
 #+END_SRC
 
 *** General Utils
@@ -93,15 +101,6 @@ make install
 #+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
 echo "Installing Lazydocker"
 go get -y github.com/jesseduffield/lazydocker
-#+END_SRC
-
-~redis-tOBui~
-[[https://github.com/mylxsw/redis-tui][GitHub - mylxsw/redis-tui: A Redis Text-based UI client in CLI]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
-echo "Installing Redis TUI"
-git clone https://github.com/mylxsw/redis-tui.git
-cd redis-tui
-make
 #+END_SRC
 
 ~ntangle~
@@ -129,24 +128,23 @@ echo 'export PATH=$HOME/.nimble/bin:$HOME/.cargo/bin:$PATH' >>~/.bash_profile
 
 
 
-** Docker
+* Docker
 
 ** Create a docker image
-*** Generate a simple Dockerfile (Ubuntu bash) in the build directory
-#+name: generate-dockerfile
-#+BEGIN_SRC dockerfile :exports code :padline no :tangle Ubuntu/Dockerfile
-FROM ubuntu
-CMD bash
-#+END_SRC
 
+Generate a simple Dockerfile (Ubuntu bash) in the build directory
 
-#+BEGIN_SRC docker-build :dir "./build" :push registry.tahto.im/foundation:0.0.1 :tag registry.tahto.im/foundation:0.0.1 :tangle 
+#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle Ubuntu/Dockerfile 
 FROM ubuntu:20.04
+ADD  setup.sh /tmp/setup.sh
+RUN  chmod +x setup.sh
+RUN  /tmp/setup.sh
 #+END_SRC
 
-#+RESULTS:
-: #<window 42 on *docker-push*>
 
 
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/docker_build.sh
+docker build . -t zcaudate/etude:0.0.1
+#+END_SRC
 
 
