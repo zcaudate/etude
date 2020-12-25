@@ -371,19 +371,7 @@
    (("f s" flyspell-mode "Flyspell" :toggle t)
     ("f c" flycheck-mode "Flycheck" :toggle t)
     ("s p" smartparens-mode "Smartparens" :toggle t)
-    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))
-   "Annotate"
-   (("A"    annotate-mode "On/Off" :toggle t)
-    ("a a"  annotate-annotate "Add")
-    ("a p"  annotate-goto-previous-annotation "Next")
-    ("a n"  annotate-goto-next-annotation "Prev")
-    ("a s"  annotate-show-annotation-summary "Summary"))
-   ""
-   (("a I"  annotate-integrate-annotations "Integrate")
-    ("a X"  annotate-export-annotations "Export")
-    ("a S"  annotate-save-annotations "Save")
-    ("a C"  annotate-clear-annotations "Clear")
-    ("a P"  annotate-purge-annotations "Purge"))))
+    ("s t" smartparens-strict-mode "Smartparens strict" :toggle t))))
 
 (progn
   (defhydra+ e/menu-fn::meta-menu ()

@@ -32,8 +32,6 @@
 
 (use-package goto-chg :ensure t)
 
-(use-package annotate :ensure t)
-
 (use-package yasnippet :ensure t
   :init (yas-global-mode 1)
   :config
