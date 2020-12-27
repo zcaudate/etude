@@ -68,8 +68,8 @@
   ::eval-cursor-alt 'pp-macroexpand-last-sexp
   ::mode-menu       'e/elisp-mode-menu)
 
-(e/mode [::eshell-mode   eshell-mode    "etude-core-lisp"]
-  ::eval-cursor 'eval-last-sexp)
+;; (e/mode [::eshell-mode   eshell-mode    "etude-core-lisp"]
+;;   ::eval-cursor 'eval-last-sexp)
 
 ;;
 ;; Clojure
@@ -116,7 +116,7 @@
 
 (autoload 'cider--make-result-overlay "cider-overlays")
 
-(defun endless/eval-overlay (value point)
+(defun e/eval-overlay (value point)
   (cider--make-result-overlay (format "%S" value)
     :where point
     :duration 'command)
@@ -125,17 +125,17 @@
 
 (advice-add 'eval-region :around
             (lambda (f beg end &rest r)
-              (endless/eval-overlay
+              (e/eval-overlay
                (apply f beg end r)
                end)))
 
 (advice-add 'eval-last-sexp :filter-return
             (lambda (r)
-              (endless/eval-overlay r (point))))
+              (e/eval-overlay r (point))))
 
 (advice-add 'eval-defun :filter-return
             (lambda (r)
-              (endless/eval-overlay
+              (e/eval-overlay
                r
                (save-excursion
                  (end-of-defun)

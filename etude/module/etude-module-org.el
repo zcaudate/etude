@@ -1,4 +1,4 @@
-(require 'etude-core) 
+(require 'etude-core)
 (require 'etude-module-org-preview)
 
 (use-package org-cliplink :ensure t)
@@ -10,7 +10,7 @@
 (defun e/org-fill-paragraph ()
   (interactive)
   (if (org-in-src-block-p)
-      (org-babel-remove-result)
+      (insert "\t")
     (org-fill-paragraph)))
 
 (defun e/org-babel-tangle-block()
@@ -48,8 +48,8 @@
 (e/mode [::org   org-mode "etude-module-org"]
   ::eval-cursor   'org-ctrl-c-ctrl-c
   ::eval-cursor-alt 'e/org-babel-tangle-block
-  ::mode-connect  'org-babel-tangle
-  ::eval-file     nil ;;'e/org-fill-all
+  ::mode-connect  nil
+  ::eval-file     'org-babel-tangle
   ::mode-menu     'e/org-mode-menu/body)
 
 ;; Org JS Workaround
@@ -71,7 +71,7 @@
 (defun e/show-org-markdown (buffer)
   (save-window-excursion
     (with-current-buffer buffer
-      (org-md-export-as-markdown))
+      (org-markdeep-export-as-markdeep))
     (princ (with-current-buffer (get-buffer "*Org MD Export*")
              (format e/strapdown-zeta-body
                      (buffer-string)))
