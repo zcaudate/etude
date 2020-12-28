@@ -12,7 +12,9 @@
 
 
 ;; VTerm support
-(use-package vterm :ensure t)
+(use-package vterm :ensure t
+  :init (setq vterm-always-compile-module t))
+
 (use-package multi-vterm :ensure t)
 
 ;;

@@ -14,7 +14,7 @@ development.
 
 Emacs 27 is a good version to be on.
 
-#+BEGIN_SRC bash :results output silent :cache yes :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :results output silent :cache yes :tangle build/setup.sh
 echo "Installing Apt Toolings"
 apt-get update
 apt-get install -y apt-utils software-properties-common git make curl wget gpg
@@ -29,32 +29,32 @@ apt-get install -y emacs27-nox
 
 These are various runtimes that are handy to have around.
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Docker"
 apt-get install -y docker.io
 #+END_SRC
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Nodejs"
 apt-get install -y nodejs
 #+END_SRC
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Python3"
 apt-get install -y python3
 #+END_SRC
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Lua"
 apt-get install -y luarocks
 #+END_SRC
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Go"
 apt-get install -y golang 
 #+END_SRC
 
-#+BEGIN_SRC bash :async :results output :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output :cache no :tangle build/setup.sh
 echo "Installing Openjdk"
 apt-get install -y openjdk-11-jdk
 #+END_SRC
@@ -63,7 +63,7 @@ apt-get install -y openjdk-11-jdk
 
 ~browsh~
 [[https://www.brow.sh/docs/mosh/][Browsh]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle build/setup.sh
 echo "Installing Browsh"
 wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
 apt-get install ./browsh_1.6.4_linux_amd64.deb
@@ -72,21 +72,21 @@ rm ./browsh_1.6.4_linux_amd64.deb
 
 ~fzf~
 [[https://github.com/junegunn/fzf][GitHub - junegunn/fzf]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle build/setup.sh
 echo "Installing fzf"
 apt-get install -y fzf
 #+END_SRC
 
 ~ripgrep~
 [[https://github.com/BurntSushi/ripgrep][GitHub - BurntSushi/ripgrep]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle build/setup.sh
 echo "Installing Ripgrep"
 apt-get install ripgrep
 #+END_SRC
 
 ~mosh~
 [[https://github.com/mobile-shell/mosh][Mosh Shell]]
-#+BEGIN_SRC bash :async :results output silent :cache no :eval no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :eval no :tangle build/setup.sh
 echo "Installing Mosh"
 git clone https://github.com/mobile-shell/mosh
 cd mosh
@@ -102,14 +102,14 @@ cd ..
 
 ~oh-my-bash~
 [[https://github.com/ohmybash/oh-my-bash][GitHub - ohmybash/oh-my-bash]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle build/setup.sh
 echo "Installing Oh my Bash"
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 #+END_SRC
 
 ~lazydocker~
 [[https://github.com/jesseduffield/lazydocker][GitHub - jesseduffield/lazydocker]]
-#+BEGIN_SRC bash :async :results output silent :cache no :tangle Ubuntu/setup.sh
+#+BEGIN_SRC bash :async :results output silent :cache no :tangle build/setup.sh
 echo "Installing Lazydocker"
 go get github.com/jesseduffield/lazydocker
 #+END_SRC
@@ -118,8 +118,8 @@ go get github.com/jesseduffield/lazydocker
 
 Usually, tangling an org file is done via a shortcut key but it's a really important operation that can be extracted as a script.
 
-~<Ubuntu/tangle.sh>~
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/tangle.sh
+~<build/tangle.sh>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/tangle.sh
 #!/bin/sh
 # Tangle files with Org mode
 #
@@ -135,7 +135,7 @@ emacs -Q --batch --eval "
 And move it somewhere on the $PATH
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-chmod +x Ubuntu/tangle.sh
+chmod +x build/tangle.sh
 mv tangle.sh ~/bin
 #+END_SRC
 
@@ -145,18 +145,18 @@ This org file generates various files in a `Ubuntu` directory after tangle that 
 
 The previous code blocks are tangled together to produce a single setup script, used by a Dockerfile:
 
-- ~Ubuntu/setup.sh~
+- ~build/setup.sh~
 
 This section will outline three additional scripts used for container generation:
 
-- ~<Ubuntu/build.sh>~
-- ~<Ubuntu/Dockerfile>~
-- ~<Ubuntu/inception.sh>~
+- ~<build/build.sh>~
+- ~<build/Dockerfile>~
+- ~<build/inception.sh>~
 
 For containerization of the setup, We create a ~Dockerfile~ in the build directory.
 
-~<Ubuntu/Dockerfile>~
-#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle Ubuntu/Dockerfile 
+~<build/Dockerfile>~
+#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle build/Dockerfile 
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /tmp
@@ -174,8 +174,8 @@ RUN git clone https://github.com/zcaudate/etude.git /root/.emacs.d
 
 We also create a simple `build.sh` script.
 
-~<Ubuntu/build.sh>~
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/build.sh
+~<build/build.sh>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/build.sh
 docker build . -t zcaudate/etude:0.0.1 | tee build.out
 #+END_SRC
 
@@ -185,15 +185,14 @@ To untangle Ubuntu.org (this file)
 
 #+NAME: Bootstrap
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-cd automation
+cd infra/Ubuntu
 tangle.sh Ubuntu.org
 #+END_SRC
 
 To build a docker image, run
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-cd Ubuntu
-chmod +x ./build.sh
+chmod +x build/build.sh
 #+END_SRC
 
 The image ~zcaudate/etude:0.0.1~ will be built. It can be run by calling:
@@ -209,14 +208,14 @@ docker run --rm -it zcaudate/etude
 
 We now detail ~inception.sh~ script. This just goes through the ~tangle~ and ~build~ ceremony again, recreating build steps for the containerized instance. It is purely academic.
 
-~<Ubuntu/inception.sh>~
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle Ubuntu/inception.sh
-cd /root/.emacs.d/automation
-mkdir Ubuntu
+~<build/inception.sh>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/inception.sh
+cd /root/.emacs.d/infra/Ubuntu
+mkdir build
 tangle.sh Ubuntu.org
-cd Ubuntu
+cd build
 chmod +x ./build.sh
-./build.sh
+# ./build.sh
 #+END_SRC
 
 We now can do emacs build inception:

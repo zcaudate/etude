@@ -1,0 +1,40 @@
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+** ~tmux~
+
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cp tmux/.tmux.conf ~/.tmux.conf
+#+END_SRC
+
+then within ~tmux~, type ~<prefix> I~ to install the plugins
+
+
+** ~autojump~
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cd ~/dev/build
+git clone git://github.com/wting/autojump.git
+cd autojump
+./install.py
+#+END_SRC
+
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autojump/etc/profile.d/autojump.sh" >> ~/.bashrc
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+cat ~/.bashrc
+#+END_SRC
+
+
+
+

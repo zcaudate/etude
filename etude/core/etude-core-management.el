@@ -16,7 +16,7 @@
 
 (use-package ace-window :ensure t)
 
-;;(use-package bufler :ensure t)
+(use-package bufler :ensure t)
 
 (use-package goggles
   :ensure t

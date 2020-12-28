@@ -81,7 +81,7 @@
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer)
 
 (e/bind []
-  ::list-buffers      ("C-x b" "C-x C-b")     'ibuffer ;; 'e/bufler-toggle
+  ::list-buffers      ("C-x b" "C-x C-b")     'e/bufler-toggle
   ::revert-buffer     ("C-x r" "C-x C-r")     'e/revert-buffer
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
 
