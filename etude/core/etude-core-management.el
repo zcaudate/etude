@@ -16,7 +16,7 @@
 
 (use-package ace-window :ensure t)
 
-(use-package bufler :ensure t)
+;;(use-package bufler :ensure t)
 
 (use-package goggles
   :ensure t
@@ -80,21 +80,19 @@
       ("Code"   (extension "java" "el" "clj" "js"))
       ("Archives"(extension "zip" "rar" "gz" "bz2" "tar"))))))
 
-(defun my-demo-function ()
-  (setq last-counsel-M-x-command (caar command-history)))
-
-(use-package ranger :ensure t
-  :init (progn (setq ranger-cleanup-on-disable t)
-               (setq ranger-cleanup-eagerly t)
-               (setq ranger-show-hidden t)
-               (setq ranger-modify-header t)
-               (setq ranger-parent-depth 0)
-               (setq ranger-footer-delay 0.2)
-               (setq ranger-preview-delay 0.040)
-               (setq ranger-show-literal nil)
-               (setq ranger-max-preview-size 1)
-               (setq ranger-dont-show-binary t))
-  :hook (range-mode . which-key-mode))
+(comment
+ (use-package ranger :ensure t
+   :init (progn (setq ranger-cleanup-on-disable t)
+                (setq ranger-cleanup-eagerly t)
+                (setq ranger-show-hidden t)
+                (setq ranger-modify-header t)
+                (setq ranger-parent-depth 0)
+                (setq ranger-footer-delay 0.2)
+                (setq ranger-preview-delay 0.040)
+                (setq ranger-show-literal nil)
+                (setq ranger-max-preview-size 1)
+                (setq ranger-dont-show-binary t))
+   :hook (range-mode . which-key-mode)))
 
 ;;
 ;; Project Management
@@ -123,7 +121,7 @@
   :init (setq treemacs-no-png-images t))
 
 (use-package treemacs-projectile :ensure t)
-(use-package treemacs-magit :ensure t)
+;;(use-package treemacs-magit :ensure t)
           
 ;;
 ;; Search

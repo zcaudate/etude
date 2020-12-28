@@ -67,20 +67,21 @@
   (revert-buffer :ignore-auto :noconfirm)
   (message "Buffer reverted:" ))
 
-(defun e/bufler-toggle ()
-  (interactive)
-  (if (equal "*Bufler*" (buffer-name (current-buffer)))
-      (progn (other-window 1)
-             (if (equal "*Bufler*" (buffer-name (current-buffer)))
-                 (e/close-buffer)
-               (delete-other-windows)))
-    (bufler 0)))
+(comment
+ (defun e/bufler-toggle ()
+   (interactive)
+   (if (equal "*Bufler*" (buffer-name (current-buffer)))
+       (progn (other-window 1)
+              (if (equal "*Bufler*" (buffer-name (current-buffer)))
+                  (e/close-buffer)
+                (delete-other-windows)))
+     (bufler 0))))
 
 (e/bind [*]
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer)
 
 (e/bind []
-  ::list-buffers      ("C-x b" "C-x C-b")     'e/bufler-toggle
+  ::list-buffers      ("C-x b" "C-x C-b")     'ibuffer ;; 'e/bufler-toggle
   ::revert-buffer     ("C-x r" "C-x C-r")     'e/revert-buffer
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
 

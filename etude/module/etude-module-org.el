@@ -9,8 +9,8 @@
 
 (defun e/org-fill-paragraph ()
   (interactive)
-  (if (org-in-src-block-p)
-      (insert "\t")
+  (if (not (org-in-src-block-p))
+      ;;(insert "\t")
     (org-fill-paragraph)))
 
 (defun e/org-babel-tangle-block()

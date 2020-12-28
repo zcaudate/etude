@@ -96,10 +96,12 @@
   :ensure t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
-                 (e/mode [::clojure clojure-mode "etude-module-jvm"]
+                 (e/mode [::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor   'cider-eval-last-sexp
                    ::eval-file     'e/cider-eval-buffer
-                   ::mode-connect  'cider-connect))
+                   ::mode-connect  'cider-connect)
+                 (e/mode [::cider-repl cider-repl-mode "etude-core-lisp"]
+                   ::eval-file     'cider-repl-clear-buffer))
   :hook ((clojure-mode . smartparens-strict-mode)
          (clojure-mode . rainbow-delimiters-mode)
          (clojure-mode . paredit-mode)
