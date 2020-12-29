@@ -16,7 +16,6 @@ cp tmux/.tmux.conf ~/.tmux.conf
 
 then within ~tmux~, type ~<prefix> I~ to install the plugins
 
-
 ** ~autojump~
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
@@ -35,6 +34,62 @@ echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autoju
 cat ~/.bashrc
 #+END_SRC
 
+** ~gitp~
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+cp bin/gitp ~/bin/gitp
+chmod +x ~/bin/gitp
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+git config --global user.name "Chris Zheng"
+git config --global user.email z@caudate.me
+#+END_SRC
 
 
+** rust tools
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/sharkdp/fd
+cd fd
+cargo install --path .
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/sharkdp/bat.git
+cd bat
+cargo install --path .
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/BurntSushi/ripgrep
+cd ripgrep
+cargo install --path .
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cargo install tokei
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cargo install ytop
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/bootandy/dust.git
+cd dust
+cargo install --path .
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cargo install hyperfine
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cargo install bandwhich
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+cargo install procs
+#+END_SRC
 
