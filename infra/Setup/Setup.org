@@ -5,7 +5,6 @@
 
 ** ~tmux~
 
-
 #+BEGIN_SRC bash :results output silent :cache no :eval no
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 #+END_SRC
@@ -16,6 +15,25 @@ cp tmux/.tmux.conf ~/.tmux.conf
 
 then within ~tmux~, type ~<prefix> I~ to install the plugins
 
+
+** lazydocker
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+go get github.com/jesseduffield/lazydocker
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+echo "alias d=\"lazydocker\"" >> ~/.bashrc
+#+END_SRC
+
+** lazygit
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+go get github.com/jesseduffield/lazygit
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+echo "alias g=\"lazygit\"" >> ~/.bashrc
+#+END_SRC
+
 ** ~autojump~
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
@@ -23,29 +41,37 @@ cd ~/dev/build
 git clone git://github.com/wting/autojump.git
 cd autojump
 ./install.py
-#+END_SRC
 
-
-#+BEGIN_SRC bash :results output silent :cache no :eval no
 echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autojump/etc/profile.d/autojump.sh" >> ~/.bashrc
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-cat ~/.bashrc
 #+END_SRC
 
 ** ~gitp~
 
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
+#+BEGIN_SRC bash :results output silent :cache no :eval no
 cp bin/gitp ~/bin/gitp
 chmod +x ~/bin/gitp
 #+END_SRC
 
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
+#+BEGIN_SRC bash :results output silent :cache no :eval no
 git config --global user.name "Chris Zheng"
 git config --global user.email z@caudate.me
 #+END_SRC
 
+
+** ~fzf~
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+apt install -y fzf
+
+echo "export FZF_DEFAULT_COMMAND='fd --type f --color=never'"  >> ~/.bashrc
+echo "export FZF_CTRL_T_COMMAND=\"$FZF_DEFAULT_COMMAND\"" >> ~/.bashrc
+echo "export FZF_ALT_C_COMMAND='fd --type d . --color=never'" >> ~/.bashrc
+echo "export FZF_CTRL_T_OPTS=\"--preview 'bat --color=always --line-range :500 {}'\"" >> ~/.bashrc
+
+# Find out paths
+dpkg -L fzf | grep .bash
+echo "source /usr/share/doc/fzf/examples/completion.bash" >> ~/.bashrc
+echo "source /usr/share/doc/fzf/examples/key-bindings.bash" >> ~/.bashrc
+#+END_SRC
 
 ** rust tools
 
@@ -56,9 +82,8 @@ cargo install --path .
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
-git clone https://github.com/sharkdp/bat.git
-cd bat
-cargo install --path .
+wget https://github.com/sharkdp/bat/releases/download/v0.17.1/bat_0.17.1_amd64.deb
+apt-get install ./bat_0.17.1_amd64.deb
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
@@ -68,17 +93,17 @@ cargo install --path .
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
+git clone https://github.com/bootandy/dust.git
+cd dust
+cargo install --path .
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
 cargo install tokei
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
 cargo install ytop
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval no
-git clone https://github.com/bootandy/dust.git
-cd dust
-cargo install --path .
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
