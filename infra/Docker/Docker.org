@@ -11,31 +11,31 @@
 #+PKG_TAG:        tahto/dev.os
 #+PKG_VERSION:    20.04
 
+** Scripts
 
-#+NAME: SETUP_EMACS
-#+BEGIN_SRC dockerfile :results output silent :cache no :eval no
-RUN add-apt-repository ppa:kelleyk/emacs
-RUN apt-get update
-RUN apt-get install -y emacs27-nox 
-RUN curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+#+BEGIN_SRC shell :results output silent :cache no :eval no :tangle build/.bash_custom
+export PATH=$HOME/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH
+
+# fzf + fd, bat
+export FZF_DEFAULT_COMMAND='fd --type f --color=never'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND='fd --type d . --color=never'
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :500 {}'"
+source /root/.fzf/completion.bash
+source /root/.fzf/key-bindings.bash
+
+# autojump
+[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autojump/etc/profile.d/autojump.sh
+
+# alias
+export EDITOR="emacsclient -t -c --alternate-editor=" # $EDITOR opens in terminal
+alias e="emacsclient -t --alternate-editor="
+alias d="lazydocker"
+alias g="lazygit"
+alias fd="fdfind"
 #+END_SRC
 
-
-
-#+NAME: Dockerfile
-#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle build/Dockerfile :noweb yes
-FROM ubuntu:20.04
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y apt-utils software-properties-common git make curl wget gpg tmux
-RUN apt-get install -y docker.io python3 nodejs golang cargo
-
-WORKDIR /tmp
-<<SETUP_EMACS>>
-#+END_SRC
-
-
-#+BEGIN_SRC bash :results output silent :cache no :eval no :tangle build/tangle.sh
+#+BEGIN_SRC shell :results output silent :cache no :eval no :tangle build/tangle.sh
 #!/bin/sh
 # Tangle files with Org mode
 #
@@ -48,8 +48,7 @@ emacs -Q --batch --eval "
   " "$@"
 #+END_SRC
 
-
-** Docker
+** Build
 
 #+NAME: image_build.sh
 #+BEGIN_SRC bash :results output silent :cache no :eval no :tangle build/image_build.sh
@@ -64,13 +63,126 @@ docker build . -t tahto/dev.os:20.04 | tee image_build.out
 docker push tahto/dev.os:20.04
 #+END_SRC
 
+** Docker
+
+#+NAME: SETUP_EMACS
+#+BEGIN_SRC dockerfile :results output silent :cache no :eval no
+RUN add-apt-repository ppa:kelleyk/emacs
+RUN apt-get update
+RUN apt-get install -y emacs27-nox 
+RUN curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python3
+#+END_SRC
+
+#+NAME: SETUP_TOOLS
+#+BEGIN_SRC dockerfile :results output silent :cache no :eval no
+
+# Oh My Bash
+RUN bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
+# Tmux
+RUN apt-get install -y tmux
+ADD .tmux.conf /root/.tmux.conf
+RUN git clone https://github.com/tmux-plugins/tpm /root/.tmux/plugins/tpm
+
+# Autojump
+RUN apt-get install -y autojump
+
+# fzf, fd, ripgrep, bat
+RUN apt-get install -y fzf fd-find ripgrep
+RUN wget https://github.com/sharkdp/bat/releases/download/v0.17.1/bat_0.17.1_amd64.deb \
+  && apt-get install -y ./bat_0.17.1_amd64.deb \
+  && rm ./bat_0.17.1_amd64.deb
+
+# Git
+RUN go get github.com/jesseduffield/lazygit
+RUN wget -O /usr/local/bin/grv https://github.com/rgburke/grv/releases/download/v0.3.2/grv_v0.3.2_linux64 \
+ && chmod +x /usr/local/bin/grv
+
+# Docker
+RUN go get github.com/jesseduffield/lazydocker
+RUN wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb \
+  && apt install -y ./dive_0.9.2_linux_amd64.deb \
+  && rm ./dive_0.9.2_linux_amd64.deb 
+RUN  wget -O /usr/local/bin/ctop https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 \
+  && chmod +x /usr/local/bin/ctop
+
+# Redis
+RUN git clone https://github.com/mylxsw/redis-tui.git \
+  && cd redis-tui && go install && cd .. && rm -R redis-tui
+
+# Termshark
+RUN apt-get install -y tshark
+RUN git clone https://github.com/gcla/termshark.git \
+  && cd termshark && go install && cd .. && rm -R termshark
+
+# Browsh
+RUN wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb \
+  && apt-get install -y ./browsh_1.6.4_linux_amd64.deb \
+  && rm ./browsh_1.6.4_linux_amd64.deb
+
+# Load Testing
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61 \
+  && echo "deb https://dl.bintray.com/loadimpact/deb stable main" | tee -a /etc/apt/sources.list \
+  && apt-get update && apt-get install -y k6
+
+# Monitor
+RUN add-apt-repository ppa:bashtop-monitor/bashtop \
+ && apt-get update && apt-get install -y bashtop
+
+RUN apt-get install -y network-manager
+RUN apt-get install -y asciinema
+RUN apt-get install -y pspg
+
+# Table
+RUN apt-get install -y python3-pip
+RUN pip3 install visidata
+
+
+# Rust Utils
+# RUN cargo install bandwhich
+# RUN cargo install tokei
+# RUN cargo install procs
+# RUN cargo install gping
+
+
+#+END_SRC
+
+
+
+#+NAME: Dockerfile
+#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle build/Dockerfile :noweb yes
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y apt-utils software-properties-common git make curl wget gpg
+RUN apt-get install -y docker.io python3 nodejs golang cargo
+
+# Mosh
+RUN apt-get -y install automake libtool g++ protobuf-compiler \
+  libprotobuf-dev libboost-dev libutempter-dev libncurses5-dev \
+  zlib1g-dev libio-pty-perl libssl-dev pkg-config
+RUN git clone https://github.com/mobile-shell/mosh && cd mosh \
+ && ./autogen.sh && ./configure && make && make install
+
+WORKDIR /tmp
+<<SETUP_EMACS>>
+<<SETUP_TOOLS>>
+
+ADD bin /root/bin
+ADD fzf /root/.fzf
+ADD tangle.sh /root/bin/tangle.sh
+ADD .bash_custom /root/.bash_custom
+RUN echo "source ~/.bash_custom" >> ~/.bashrc
+#+END_SRC
+
 ** SETUP
 
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
 rm -R build
 mkdir -p build
 tangle.sh Docker.org
 cp -R ../Common/bin build/bin
+cp -R ../Common/fzf build/fzf
 cp ../Common/tmux/.tmux.conf build/.tmux.conf
 chmod +x build/image_build.sh
 chmod +x build/image_push.sh

@@ -50,11 +50,16 @@ echo "[[ -s /root/.autojump/etc/profile.d/autojump.sh ]] && source /root/.autoju
 #+BEGIN_SRC bash :results output silent :cache no :eval no
 cp bin/gitp ~/bin/gitp
 chmod +x ~/bin/gitp
+
 #+END_SRC
 
 #+BEGIN_SRC bash :results output silent :cache no :eval no
 git config --global user.name "Chris Zheng"
 git config --global user.email z@caudate.me
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+git config --global alias.root 'rev-parse --show-toplevel'
 #+END_SRC
 
 

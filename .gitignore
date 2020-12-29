@@ -30,4 +30,4 @@ projects
 *.md.html
 .org-id-locations
 /quelpa/
-/infra/*/build/*
+/infra/*/build
