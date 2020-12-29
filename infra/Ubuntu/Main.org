@@ -160,7 +160,7 @@ For containerization of the setup, We create a ~Dockerfile~ in the build directo
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /tmp
-ADD tangle.sh /root/bin/tangle
+ADD tangle    /root/bin/tangle
 RUN chmod +x  /root/bin/tangle
 ADD setup.sh  /tmp/setup.sh
 RUN cd /tmp && chmod +x ./setup.sh && ./setup.sh
@@ -220,6 +220,9 @@ rm -R build
 mkdir build
 tangle Main.org
 chmod +x build/image_build.sh
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/inception.sh
 cd build && ./image_build.sh
 #+END_SRC
 
