@@ -149,7 +149,7 @@ The previous code blocks are tangled together to produce a single setup script, 
 
 This section will outline three additional scripts used for container generation:
 
-- ~<build/build.sh>~
+- ~<build/image_build.sh>~
 - ~<build/Dockerfile>~
 - ~<build/inception.sh>~
 
@@ -172,11 +172,16 @@ RUN echo "-"
 RUN git clone https://github.com/zcaudate/etude.git /root/.emacs.d
 #+END_SRC
 
-We also create a simple `build.sh` script.
+We also create a simple `image_build.sh` script.
 
-~<build/build.sh>~
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/build.sh
+~<build/image_build.sh>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/image_build.sh
 docker build . -t zcaudate/etude:0.0.1 | tee build.out
+#+END_SRC
+
+~<build/image_push.sh>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/image_push.sh
+docker push zcaudate/etude:0.0.1
 #+END_SRC
 
 *** Building
@@ -192,7 +197,7 @@ tangle.sh Ubuntu.org
 To build a docker image, run
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-chmod +x build/build.sh
+chmod +x build/image_build.sh
 #+END_SRC
 
 The image ~zcaudate/etude:0.0.1~ will be built. It can be run by calling:
@@ -214,8 +219,8 @@ cd /root/.emacs.d/infra/Ubuntu
 rm -R build
 mkdir build
 tangle Main.org
-chmod +x build/build.sh
-cd build && ./build.sh
+chmod +x build/image_build.sh
+cd build && ./image_build.sh
 #+END_SRC
 
 We now can do emacs build inception:
