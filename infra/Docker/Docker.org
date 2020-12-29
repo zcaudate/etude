@@ -1,0 +1,77 @@
+#+TITLE:   Dev.Os
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+* Meta
+
+#+PKG_BASE:       ubuntu:20.04
+#+PKG_LANG:       emacs
+#+PKG_TAG:        tahto/dev.os
+#+PKG_VERSION:    20.04
+
+
+#+NAME: SETUP_EMACS
+#+BEGIN_SRC dockerfile :results output silent :cache no :eval no
+RUN add-apt-repository ppa:kelleyk/emacs
+RUN apt-get update
+RUN apt-get install -y emacs27-nox 
+RUN curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+#+END_SRC
+
+
+
+#+NAME: Dockerfile
+#+BEGIN_SRC dockerfile :results output silent :exports code :padline no :tangle build/Dockerfile :noweb yes
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y apt-utils software-properties-common git make curl wget gpg tmux
+RUN apt-get install -y docker.io python3 nodejs golang cargo
+
+WORKDIR /tmp
+<<SETUP_EMACS>>
+#+END_SRC
+
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no :tangle build/tangle.sh
+#!/bin/sh
+# Tangle files with Org mode
+#
+emacs -Q --batch --eval "
+    (progn
+      (require 'ob-tangle)
+      (dolist (file command-line-args-left)
+        (with-current-buffer (find-file-noselect file)
+          (org-babel-tangle))))
+  " "$@"
+#+END_SRC
+
+
+** Docker
+
+#+NAME: image_build.sh
+#+BEGIN_SRC bash :results output silent :cache no :eval no :tangle build/image_build.sh
+#!/bin/bash
+rm image_build.out
+docker build . -t tahto/dev.os:20.04 | tee image_build.out
+#+END_SRC
+
+#+NAME: image_push.sh
+#+BEGIN_SRC bash :results output silent :cache no :eval no :tangle build/image_push.sh
+#!/bin/bash
+docker push tahto/dev.os:20.04
+#+END_SRC
+
+** SETUP
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+rm -R build
+mkdir -p build
+tangle.sh Docker.org
+cp -R ../Common/bin build/bin
+cp ../Common/tmux/.tmux.conf build/.tmux.conf
+chmod +x build/image_build.sh
+chmod +x build/image_push.sh
+#+END_SRC
