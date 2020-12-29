@@ -1,0 +1,15 @@
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+** ~git~
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git config --global user.name "Chris Zheng"
+git config --global user.email z@caudate.me
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+git config --global alias.root 'rev-parse --show-toplevel'
+#+END_SRC

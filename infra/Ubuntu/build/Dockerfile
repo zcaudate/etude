@@ -1,8 +1,8 @@
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /tmp
-ADD tangle.sh /root/bin/tangle.sh
-RUN chmod +x  /root/bin/tangle.sh
+ADD tangle.sh /root/bin/tangle
+RUN chmod +x  /root/bin/tangle
 ADD setup.sh  /tmp/setup.sh
 RUN cd /tmp && chmod +x ./setup.sh && ./setup.sh
 RUN rm /tmp/setup.sh

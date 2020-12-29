@@ -118,8 +118,8 @@ go get github.com/jesseduffield/lazydocker
 
 Usually, tangling an org file is done via a shortcut key but it's a really important operation that can be extracted as a script.
 
-~<build/tangle.sh>~
-#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/tangle.sh
+~<build/tangle>~
+#+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/tangle
 #!/bin/sh
 # Tangle files with Org mode
 #
@@ -135,8 +135,8 @@ emacs -Q --batch --eval "
 And move it somewhere on the $PATH
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
-chmod +x build/tangle.sh
-mv tangle.sh ~/bin
+chmod +x build/tangle
+mv tangle ~/bin
 #+END_SRC
 
 * Docker
@@ -160,8 +160,8 @@ For containerization of the setup, We create a ~Dockerfile~ in the build directo
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR /tmp
-ADD tangle.sh /root/bin/tangle.sh
-RUN chmod +x  /root/bin/tangle.sh
+ADD tangle.sh /root/bin/tangle
+RUN chmod +x  /root/bin/tangle
 ADD setup.sh  /tmp/setup.sh
 RUN cd /tmp && chmod +x ./setup.sh && ./setup.sh
 RUN rm /tmp/setup.sh
@@ -211,11 +211,11 @@ We now detail ~inception.sh~ script. This just goes through the ~tangle~ and ~bu
 ~<build/inception.sh>~
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/inception.sh
 cd /root/.emacs.d/infra/Ubuntu
+rm -R build
 mkdir build
-tangle.sh Ubuntu.org
-cd build
-chmod +x ./build.sh
-# ./build.sh
+tangle Main.org
+chmod +x build/build.sh
+cd build && ./build.sh
 #+END_SRC
 
 We now can do emacs build inception:
