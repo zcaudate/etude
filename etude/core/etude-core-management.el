@@ -55,7 +55,7 @@
   :config (progn (setq recentf-max-saved-items 200
                        recentf-max-menu-items 15)
                  (recentf-mode t)))
-;
+
 (use-package dired-subtree :ensure t
   :bind (:map dired-mode-map
          ("i" . dired-subtree-toggle)))
@@ -80,19 +80,18 @@
       ("Code"   (extension "java" "el" "clj" "js"))
       ("Archives"(extension "zip" "rar" "gz" "bz2" "tar"))))))
 
-(comment
- (use-package ranger :ensure t
-   :init (progn (setq ranger-cleanup-on-disable t)
-                (setq ranger-cleanup-eagerly t)
-                (setq ranger-show-hidden t)
-                (setq ranger-modify-header t)
-                (setq ranger-parent-depth 0)
-                (setq ranger-footer-delay 0.2)
-                (setq ranger-preview-delay 0.040)
-                (setq ranger-show-literal nil)
-                (setq ranger-max-preview-size 1)
-                (setq ranger-dont-show-binary t))
-   :hook (range-mode . which-key-mode)))
+(use-package ranger :ensure t
+  :init (progn (setq ranger-cleanup-on-disable t)
+               (setq ranger-cleanup-eagerly t)
+               (setq ranger-show-hidden t)
+               (setq ranger-modify-header t)
+               (setq ranger-parent-depth 0)
+               (setq ranger-footer-delay 0.2)
+               (setq ranger-preview-delay 0.040)
+               (setq ranger-show-literal nil)
+               (setq ranger-max-preview-size 1)
+               (setq ranger-dont-show-binary t))
+  :hook (range-mode . which-key-mode))
 
 ;;
 ;; Project Management
@@ -145,17 +144,12 @@
 
 (use-package counsel :ensure t)
 
-(use-package counsel-etags :ensure t)
-
 (use-package counsel-projectile
   :ensure t
   :init (add-hook 'after-init-hook 'counsel-projectile-mode))
 
-(use-package counsel-tramp :ensure t)
-
 (use-package ivy-rich
   :ensure t
   :config (ivy-rich-mode t))
-
 
 (provide 'etude-core-management)

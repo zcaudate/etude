@@ -4,13 +4,6 @@
   :ensure t
   :config (progn (exec-path-from-shell-initialize)))
 
-
-;; EShell Support
-(use-package pcomplete-extension :ensure t)
-(use-package fish-mode :ensure t)
-(use-package fish-completion :ensure t)
-
-
 ;; VTerm support
 (use-package vterm :ensure t
   :init (setq vterm-always-compile-module t))
