@@ -49,8 +49,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
- '(custom-safe-themes
-   '("37768a79b479684b0756dec7c0fc7652082910c37d8863c35b702db3f16000f8" default))
  '(doom-modeline-icon nil)
  '(global-linum-mode nil)
  '(nord-comment-brightness 20)
@@ -63,7 +61,4 @@
      (gnuplot . t)
      (java . t)))
  '(org-mouse-1-follows-link 'double)
- '(org-support-shift-select 'always)
- '(org-todo-keywords '((sequence "TODO" "DONE" "RESULTS")))
- '(package-selected-packages
-   '(ranger quelpa-use-package quelpa ob-async plain-org-wiki org-roam yasnippet ivy-posframe iedit auto-highlight-symbol counsel-dash goto-chg tldr symbol-overlay dired-filter dired-collapse dired-subtree goggles helpful no-littering org-cliplink diff-hl wgrep eglot git-timemachine bufler multi-vterm w3m company-fuzzy doom-modeline ivy-rich dired-rsync graphviz-dot-mode git-gutter treemacs-projectile treemacs-magit markdown-mode treemacs undo-tree magit dockerfile-mode midje-mode cider nord-theme dashboard neotree ace-window counsel-projectile counsel projectile ivy company rainbow-delimiters paredit smartparens hydra f ht dash s use-package)))
+ '(org-support-shift-select 'always))
