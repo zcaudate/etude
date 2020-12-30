@@ -1,0 +1,54 @@
+#+TITLE:   OSX
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+** ~git~
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git config --global user.name "Chris Zheng"
+git config --global user.email z@caudate.me
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git config --global alias.root 'rev-parse --show-toplevel'
+#+END_SRC
+
+** Tools
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install bat ripgrep hyperfine dust tokei tealdeer bandwhich tree fzf up
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew instal lazydocker lazygit grv dive
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawinstall.sh | bash
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew tap dbcli/tap
+brew install pgcli
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install pspg
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install asciinema
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install --cask xquartz
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install coreutils gnu-sed
+git clone https://github.com/aristocratos/bashtop.git
+cd bashtop
+make install
+#+END_SRC
