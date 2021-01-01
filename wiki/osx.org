@@ -5,7 +5,6 @@
 #+STARTUP: showall
 
 
-
 * Utils
 
 *** Shell
@@ -23,7 +22,7 @@ brew install tokei
 *** OS
 
 #+BEGIN_SRC shell :results output silent :cache no :eval no
-brew instal hyperfine  bandwhich  dust 
+brew instal hyperfine bandwhich dust 
 #+END_SRC
 
 *** X11

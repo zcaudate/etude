@@ -1,0 +1,22 @@
+#+TITLE:   Redis
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+
+[[https://stackoverflow.com/questions/24221449/want-to-run-redis-server-in-background-nonstop][juggernaut - want to run redis-server in background nonstop]]
+
+Since Redis 2.6 it is possible to pass Redis configuration parameters
+using the command line directly. This is very useful for testing
+purposes.
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+redis-server --daemonize yes
+#+END_SRC
+
+Check if the process started or not:
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+ps aux | grep redis-server
+#+END_SRC
