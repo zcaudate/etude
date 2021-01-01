@@ -22,26 +22,35 @@
 (require 'etude-bindings)
 (require 'etude-module-org)
 
+(if (not (window-system))
+    (custom-set-faces
+     '(custom-comment ((t (:foreground "color-115"))))
+     '(font-lock-comment-delimiter-face ((t (:foreground "color-243"))))
+     '(font-lock-comment-face ((t (:foreground "color-243"))))
+     '(font-lock-doc-face ((t (:foreground "color-243"))))
+     '(org-block-begin-line ((t (:foreground "color-99"))))
+     '(org-block-end-line ((t (:foreground "color-92"))))
+     '(org-meta-line   ((t (:foreground "yellow"))))
+     '(org-link ((t (:foreground "brightblue" :underline nil)))))
+  (custom-set-faces
+   '(org-block-begin-line ((t (:foreground "Purple"))))
+   '(org-block-end-line ((t (:foreground "DarkOrchid"))))
+   '(org-meta-line   ((t (:foreground "gold1"))))
+   '(org-hide ((t (:foreground "gray50" :underline nil))))
+   '(org-link ((t (:foreground "turquoise3" :underline nil))))))
+
 (setq gc-cons-threshold (* 2 1000 1000))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-comment ((t (:foreground "color-115"))))
- '(font-lock-comment-delimiter-face ((t (:foreground "color-243"))))
- '(font-lock-comment-face ((t (:foreground "color-243"))))
- '(font-lock-doc-face ((t (:foreground "color-243"))))
- '(goggles-added ((t (:background "brightblack"))))
+ 
+ '(goggles-added   ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
- '(hydra-face-blue ((t (:foreground "blue" :weight bold))))
- '(org-block-begin-line ((t (:foreground "color-99"))))
- '(org-block-end-line ((t (:foreground "color-92"))))
- '(org-code ((t (:foreground "brightgreen"))))
- '(org-document-info-keyword ((t (:foreground "color-243" :weight bold))))
- '(org-link ((t (:foreground "brightblue" :underline nil))))
- '(org-meta-line ((t (:foreground "yellow")))))
+ )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
