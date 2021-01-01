@@ -1,0 +1,39 @@
+#+TITLE:   Postgres
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil 
+#+STARTUP: showall
+
+* Meta
+[[https://github.com/dhamaniasad/awesome-postgres][GitHub - dhamaniasad/awesome-postgres: A curated list of awesome PostgreSQL s...]]
+
+* Beekeeper
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+https://www.beekeeperstudio.io/
+#+END_SRC
+
+* Command Line
+
+** Psql
+
+*** Run Sql Query
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+psql -h 172.17.0.4 -p 5432 -d test -U root -f query.sql
+#+END_SRC
+
+** Pgcli
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew tap dbcli/tap
+brew install pgcli
+#+END_SRC
+
+** Pspg
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install pspg
+#+END_SRC
+
+

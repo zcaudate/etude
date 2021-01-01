@@ -1,0 +1,88 @@
+#+TITLE:   OSX
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+
+* Meta
+
+*** Resh - History
+
+Remembers all the history with really nice interface
+
+**** Install
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install coreutils
+curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawinstall.sh | bash
+#+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+resh
+#+END_SRC
+
+*** Navi - Help
+
+This is so good. Much better than ~tldr~ or ~man~
+
+**** Install
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install navi
+
+# install terminal widget Ctrl-G to activate
+echo "eval \"$(navi widget bash)\"" >> ~/.bash_custom
+#+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+navi
+#+END_SRC
+
+
+* Help
+
+*** 
+
+
+** Tools
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install bat ripgrep hyperfine dust tokei tealdeer bandwhich tree fzf up
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew instal lazydocker lazygit grv dive
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawinstall.sh | bash
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew tap dbcli/tap
+brew install pgcli
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install pspg
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install asciinema
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install --cask xquartz
+#+END_SRC
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install coreutils gnu-sed
+git clone https://github.com/aristocratos/bashtop.git
+cd bashtop
+make install
+#+END_SRC

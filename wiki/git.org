@@ -4,7 +4,67 @@
 #+OPTIONS: toc:nil 
 #+STARTUP: showall
 
+* Git
+
+** Installation
+
+*** OSX
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install git
+#+END_SRC
+
+*** Ubuntu
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+apt-get install -y git 
+#+END_SRC
+
+** Configuration
+
+*** Username and Email
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git config --global user.name "Chris Zheng"
+git config --global user.email z@caudate.me
+#+END_SRC
+
+*** Aliases
+
+#+DESC git root
+#+BEGIN_SRC bash :results output verbatim :cache no :eval yes
+git config --global alias.root 'rev-parse --show-toplevel'
+git root
+#+END_SRC
+
+#+RESULTS:
+: /Users/chris/.emacs.d
+
+
+* Lazygit
+
+** Installation
+
+*** Via brew
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+brew install lazygit
+#+END_SRC
+
+*** Add alias
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+# In all these examples bfg is an alias for java -jar bfg.jar.
+echo "alias g=\"lazygit\"" >> ~/.bash_custom
+source ~/.bash_custom
+#+END_SRC
+
+
+
+
 * Bfg
+
+** Introduction
 
 The [[https://rtyley.github.io/bfg-repo-cleaner][BFG]] is a simpler, faster alternative to git-filter-branch for
 cleansing bad data out of your Git repository history:
@@ -23,36 +83,51 @@ above, because:
   to customise the BFG. Which has got to be better than Bash scripting
   at least some of the time.
 
-** Install
+** Installation
 
-#+DESC: From https://rtyley.github.io/bfg-repo-cleaner/
-#+BEGIN_SRC bash :cache no :eval no
+*** From https://rtyley.github.io/bfg-repo-cleaner/
+
+#+BEGIN_SRC shell :cache no :eval no
 wget -O ~/bin/bfg-1.13.1.jar https://repo1.maven.org/maven2/com/madgag/bfg/1.13.1/bfg-1.13.1.jar
+
+# In all these examples bfg is an alias for java -jar bfg.jar.
 echo "alias bfg=\"java -var $HOME/bin/bfg-1.13.1.jar\"" >> ~/.bash_custom
 source ~/.bash_custom
 #+END_SRC
 
-** Examples
+** Previously Run Commands
 
-In all these examples bfg is an alias for java -jar bfg.jar.
+*** Removes countries.json from repository
 
-#+DESC: Delete all files named 'id_rsa' or 'id_dsa'
+#+BEGIN_SRC shell :cache no :eval no
+bfg --delete-files countries.json
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+git push -f
+#+END_SRC
+
+** More Examples
+
+*** Delete all files named 'id_rsa' or 'id_dsa'
+
 #+BEGIN_SRC bash :cache no :eval no
 bfg --delete-files id_{dsa,rsa} my-repo.git
 #+END_SRC
 
-#+DESC: Remove all blobs bigger than 50 megabytes
+*** Remove all blobs bigger than 50 megabytes
+
 #+BEGIN_SRC bash :cache no :eval no
 bfg --strip-blobs-bigger-than 50M my-repo.git
 #+END_SRC
 
 
-#+DESC: Replace all passwords listed in a file
+*** Replace all passwords listed in a file
+
 #+BEGIN_SRC bash :cache no :eval no
 bfg --replace-text passwords.txt  my-repo.git
 #+END_SRC
 
-#+DESC: Remove all folders or files named '.git' - a reserved filename in Git.
+*** Remove all folders or files named '.git' - a reserved filename in Git.
+
 #+BEGIN_SRC bash :cache no :eval no
 bfg --delete-folders .git --delete-files .git  --no-blob-protection  my-repo.git
 #+END_SRC

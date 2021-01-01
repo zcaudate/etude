@@ -1,0 +1,5 @@
+
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install lazydocker dive
+#+END_SRC
