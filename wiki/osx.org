@@ -5,6 +5,33 @@
 #+STARTUP: showall
 
 
+
+* Utils
+
+*** Shell
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install bat ripgrep fd fzf tree up
+#+END_SRC
+
+*** Code
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install tokei
+#+END_SRC
+
+*** OS
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew instal hyperfine  bandwhich  dust 
+#+END_SRC
+
+*** X11
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install --cask xquartz
+#+END_SRC
+
 * Meta
 
 *** Resh - History
@@ -24,9 +51,13 @@ curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawins
 resh
 #+END_SRC
 
+**** Links
+
+- [[https://github.com/curusarn/resh][GitHub - curusarn/resh: Rich Enhanced Shell History]]
+
 *** Navi - Help
 
-This is so good. Much better than ~tldr~ or ~man~
+This is so good. Much better than ~tldr~ or ~man~ or ~tealdeer~
 
 **** Install
 
@@ -43,42 +74,14 @@ echo "eval \"$(navi widget bash)\"" >> ~/.bash_custom
 navi
 #+END_SRC
 
+**** Links
 
-* Help
+- [[https://github.com/denisidoro/navi][GitHub - denisidoro/navi: An interactive cheatsheet tool for the
+command-line]]
 
-*** 
+*** Bashtop - Monitoring
 
-
-** Tools
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew install bat ripgrep hyperfine dust tokei tealdeer bandwhich tree fzf up
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew instal lazydocker lazygit grv dive
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawinstall.sh | bash
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew tap dbcli/tap
-brew install pgcli
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew install pspg
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew install asciinema
-#+END_SRC
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew install --cask xquartz
-#+END_SRC
+**** Install
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
 brew install coreutils gnu-sed
@@ -86,3 +89,18 @@ git clone https://github.com/aristocratos/bashtop.git
 cd bashtop
 make install
 #+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+bashtop
+#+END_SRC
+
+*** AsciiCinema - Screencast
+
+**** Install
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install asciinema
+#+END_SRC
+
