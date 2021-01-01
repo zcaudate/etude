@@ -189,6 +189,11 @@
   (e/jump-to-buffer "*scratch*"
                     (lambda () (switch-to-buffer "*scratch*"))))
 
+(defun e/window-delete ()
+  (interactive)
+  (delete-other-windows)
+  (e/close-buffer))
+
 (defun e/toggle-treemacs ()
   (interactive)
   (if hydra-base-map (hydra-keyboard-quit))
