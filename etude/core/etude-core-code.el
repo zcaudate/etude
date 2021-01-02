@@ -1,5 +1,6 @@
 ;; EGLOT for LSP
-(use-package eglot :defer t)
+(use-package eglot :ensure t :defer t)
+
 
 ;; Automatic completion
 (define-key read-expression-map (kbd "TAB") 'completion-at-point)
@@ -35,5 +36,8 @@
             '(:with company-yasnippet))))
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
+(use-package company-restclient :ensure t
+  :config (add-to-list 'company-backends 'company-restclient))
 
 (provide 'etude-core-code)

@@ -44,6 +44,8 @@
 (use-package impatient-mode :ensure t
   :config (setq impatient-mode-delay 3))
 
+(use-package restclient :ensure t)
+
 ;;
 ;; File Management
 ;;
