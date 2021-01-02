@@ -1,0 +1,60 @@
+#+TITLE:   Postgres
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil 
+#+STARTUP: showall
+
+* Meta
+[[https://github.com/dhamaniasad/awesome-postgres][GitHub - dhamaniasad/awesome-postgres: A curated list of awesome PostgreSQL s...]]
+
+* Beekeeper
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+https://www.beekeeperstudio.io/
+#+END_SRC
+
+[[https://github.com/sasha-alias/sqltabs][GitHub - sasha-alias/sqltabs: Rich SQL client for Postgresql, MySQL, MS SQL, ...]]
+
+
+* Command Line
+
+** Psql
+
+*** Run Sql Query
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+psql -h 172.17.0.4 -p 5432 -d test -U root -f query.sql
+#+END_SRC
+
+** Pgcli
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew tap dbcli/tap
+brew install pgcli
+#+END_SRC
+
+** Pspg
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install pspg
+#+END_SRC
+
+
+
+* PL/PGSQL
+
+[[https://postgres.cz/wiki/PL/pgSQL_(en)][PL/pgSQL (en) – PostgreSQL]]
+[[https://wiki.postgresql.org/wiki/Category:Library_Snippets][Category:Library Snippets - PostgreSQL wiki]]
+
+
+
+* Benchmarks
+
+
+ [[https://dba.stackexchange.com/questions/81094/postgresql-procedural-languages-overhead-plpython-plsql-pllua][plpgsql - PostgreSQL procedural languages overhead]]
+
+[[https://okbob.blogspot.com/2014/05/a-speed-of-pl-languages-for-atypical.html][A speed of PL languages for atypical usage]]
+
+[[https://dba.stackexchange.com/questions/271326/when-or-why-even-use-plpython3u][postgresql - When (or why even) use PLPython(3)u]]
+
+[[https://github.com/pllua/pllua-ng][GitHub - pllua/pllua-ng: Re-implementation of pllua, embedded Lua for postgresql]]

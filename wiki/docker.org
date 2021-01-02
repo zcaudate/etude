@@ -1,0 +1,20 @@
+#+TITLE:   Docker
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+
+* CLI
+
+** Lazydocker
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install lazydocker
+#+END_SRC
+
+** Dive
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install dive
+#+END_SRC

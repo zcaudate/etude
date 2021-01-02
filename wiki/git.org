@@ -1,0 +1,138 @@
+#+TITLE:   Git
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil 
+#+STARTUP: showall
+
+* Git
+
+** Installation
+
+*** OSX
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install git
+#+END_SRC
+
+*** Ubuntu
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+apt-get install -y git 
+#+END_SRC
+
+** Configuration
+
+*** Username and Email
+
+#+BEGIN_SRC bash :results output silent :cache no :eval no
+git config --global user.name "Chris Zheng"
+git config --global user.email z@caudate.me
+#+END_SRC
+
+*** Aliases
+
+#+DESC git root
+#+BEGIN_SRC bash :results output verbatim :cache no :eval yes
+git config --global alias.root 'rev-parse --show-toplevel'
+git root
+#+END_SRC
+
+#+RESULTS:
+: /Users/chris/.emacs.d
+
+
+* Lazygit
+
+** Installation
+
+*** Via brew
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+brew install lazygit
+#+END_SRC
+
+*** Add alias
+
+#+BEGIN_SRC shell :results output silent :cache no :eval yes
+# In all these examples bfg is an alias for java -jar bfg.jar.
+echo "alias g=\"lazygit\"" >> ~/.bash_custom
+source ~/.bash_custom
+#+END_SRC
+
+
+
+
+* Bfg
+
+** Introduction
+
+The [[https://rtyley.github.io/bfg-repo-cleaner][BFG]] is a simpler, faster alternative to git-filter-branch for
+cleansing bad data out of your Git repository history:
+
+- Removing Crazy Big Files 
+- Removing Passwords, Credentials & other Private data
+ 
+The ~git-filter-branch~ command is enormously powerful and can do
+things that the BFG can't - but the BFG is much better for the tasks
+above, because:
+
+- ~Faster~ : 10 - 720x faster
+- ~Simpler~ : The BFG isn't particularily clever, but is focused on
+  making the above tasks easy
+- ~Beautiful~ : If you need to, you can use the beautiful Scala language
+  to customise the BFG. Which has got to be better than Bash scripting
+  at least some of the time.
+
+** Installation
+
+*** From https://rtyley.github.io/bfg-repo-cleaner/
+
+#+BEGIN_SRC shell :cache no :eval no
+wget -O ~/bin/bfg-1.13.1.jar https://repo1.maven.org/maven2/com/madgag/bfg/1.13.1/bfg-1.13.1.jar
+
+# In all these examples bfg is an alias for java -jar bfg.jar.
+echo "alias bfg=\"java -var $HOME/bin/bfg-1.13.1.jar\"" >> ~/.bash_custom
+source ~/.bash_custom
+#+END_SRC
+
+** Previously Run Commands
+
+*** Removes countries.json from repository
+
+#+BEGIN_SRC shell :cache no :eval no
+bfg --delete-files countries.json
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+git push -f
+#+END_SRC
+
+** More Examples
+
+*** Delete all files named 'id_rsa' or 'id_dsa'
+
+#+BEGIN_SRC bash :cache no :eval no
+bfg --delete-files id_{dsa,rsa} my-repo.git
+#+END_SRC
+
+*** Remove all blobs bigger than 50 megabytes
+
+#+BEGIN_SRC bash :cache no :eval no
+bfg --strip-blobs-bigger-than 50M my-repo.git
+#+END_SRC
+
+
+*** Replace all passwords listed in a file
+
+#+BEGIN_SRC bash :cache no :eval no
+bfg --replace-text passwords.txt  my-repo.git
+#+END_SRC
+
+*** Remove all folders or files named '.git' - a reserved filename in Git.
+
+#+BEGIN_SRC bash :cache no :eval no
+bfg --delete-folders .git --delete-files .git  --no-blob-protection  my-repo.git
+#+END_SRC
+
+** Links
+
+- [[https://github.com/rtyley/bfg-repo-cleaner][GitHub - rtyley/bfg-repo-cleaner]]
+- [[https://www.theguardian.com/info/developer-blog/2013/apr/29/rewrite-git-history-with-the-bfg][Fast & simple Git history rewrites with The BFG]]

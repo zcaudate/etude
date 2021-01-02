@@ -3,7 +3,8 @@
 
 (use-package org-cliplink :ensure t)
 
-(use-package plain-org-wiki :ensure t)
+(use-package plain-org-wiki :ensure t
+  :init (setq plain-org-wiki-directory "~/.emacs.d/wiki"))
 
 (use-package ob-async :ensure t)
 

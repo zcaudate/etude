@@ -1,0 +1,105 @@
+#+TITLE:   OSX
+#+AUTHOR:  Chris Zheng
+#+EMAIL:   z@caudate.me
+#+OPTIONS: toc:nil
+#+STARTUP: showall
+
+
+* Utils
+
+*** Shell
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install bat ripgrep fd fzf tree up
+#+END_SRC
+
+*** Code
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install tokei
+#+END_SRC
+
+*** OS
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew instal hyperfine bandwhich dust 
+#+END_SRC
+
+*** X11
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install --cask xquartz
+#+END_SRC
+
+* Meta
+
+*** Resh - History
+
+Remembers all the history with really nice interface
+
+**** Install
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install coreutils
+curl -fsSL https://raw.githubusercontent.com/curusarn/resh/master/scripts/rawinstall.sh | bash
+#+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+resh
+#+END_SRC
+
+**** Links
+
+- [[https://github.com/curusarn/resh][GitHub - curusarn/resh: Rich Enhanced Shell History]]
+
+*** Navi - Help
+
+This is so good. Much better than ~tldr~ or ~man~ or ~tealdeer~
+
+**** Install
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install navi
+
+# install terminal widget Ctrl-G to activate
+echo "eval \"$(navi widget bash)\"" >> ~/.bash_custom
+#+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+navi
+#+END_SRC
+
+**** Links
+
+- [[https://github.com/denisidoro/navi][GitHub - denisidoro/navi: An interactive cheatsheet tool for the
+command-line]]
+
+*** Bashtop - Monitoring
+
+**** Install
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install coreutils gnu-sed
+git clone https://github.com/aristocratos/bashtop.git
+cd bashtop
+make install
+#+END_SRC
+
+**** Usage
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+bashtop
+#+END_SRC
+
+*** AsciiCinema - Screencast
+
+**** Install
+
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+brew install asciinema
+#+END_SRC
+

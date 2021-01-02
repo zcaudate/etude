@@ -2,6 +2,7 @@
 # name: SETUP
 # key: SETUP
 # --
+#+TITLE: $0
 #+AUTHOR:  Chris Zheng
 #+EMAIL:   z@caudate.me
 #+OPTIONS: toc:nil
