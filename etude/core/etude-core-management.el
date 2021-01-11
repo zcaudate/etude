@@ -26,8 +26,6 @@
   :diminish 'undo-tree-mode
   :config (global-undo-tree-mode t))
 
-(use-package iedit :ensure t)
-
 (use-package goto-chg :ensure t)
 
 (use-package yasnippet :ensure t
