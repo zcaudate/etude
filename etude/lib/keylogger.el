@@ -97,10 +97,13 @@ Only include a mode if you're sure you won't type in any secrets!")
                           mode
                           (car pos)
                           (cdr pos)
-                          (if (symbolp keys))
+                          (if (symbolp keys)
                               keys
                             (key-description keys))))))
-      (append-to-file nil nil keylogger-path)
+      (let ((silent save-silently))
+        (setq save-silently t)
+        (append-to-file nil nil keylogger-path)
+        (setq save-silently silent))
       (setq keylogger-events '()))))
 
 (defun keylogger-autosave ()
