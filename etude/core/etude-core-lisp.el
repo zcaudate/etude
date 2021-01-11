@@ -97,9 +97,10 @@
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
                  (e/mode [::clojure clojure-mode "etude-core-lisp"]
-                   ::eval-cursor   'cider-eval-last-sexp
-                   ::eval-file     'e/cider-eval-buffer
-                   ::mode-connect  'cider-connect)
+                   ::eval-cursor       'cider-eval-last-sexp
+                   ::eval-file         'e/cider-eval-buffer
+                   ::mode-connect      'cider-connect
+                   ::mode-toggle-test  'projectile-toggle-between-implementation-and-test)
                  (e/mode [::cider-repl cider-repl-mode "etude-core-lisp"]
                    ::eval-file     'cider-repl-clear-buffer))
   :hook ((clojure-mode . smartparens-strict-mode)

@@ -7,11 +7,25 @@
 
 * Utils
 
+*** Bash Custom
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+wget -O $HOME/.bash_custom https://gist.githubusercontent.com/zcaudate/dff8c15f58e7925fb9c09c8eeb1765ea/raw/04c038e2ebdbf0e6fd8663295b9dc9efed15168f/.bash
+#+END_SRC
+
 *** Shell
 
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
 brew install bat ripgrep fd fzf tree up
 #+END_SRC
+
+*** FZF
+
+- https://bluz71.github.io/2018/11/26/fuzzy-finding-in-bash-with-fzf.html
+ 
+#+BEGIN_SRC bash :results output silent :cache no :eval yes
+git clone https://github.com/zcaudate/fzf-tab-completion.git $HOME/bin/fzf-tab-completion
+#+END_SRC
+
 
 *** Code
 
@@ -19,16 +33,14 @@ brew install bat ripgrep fd fzf tree up
 brew install tokei
 #+END_SRC
 
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install fastmod
+#+END_SRC
+
 *** OS
 
 #+BEGIN_SRC shell :results output silent :cache no :eval no
-brew instal hyperfine bandwhich dust 
-#+END_SRC
-
-*** X11
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-brew install --cask xquartz
+brew install hyperfine bandwhich dust 
 #+END_SRC
 
 * Meta
@@ -102,4 +114,3 @@ bashtop
 #+BEGIN_SRC bash :results output silent :cache no :eval yes
 brew install asciinema
 #+END_SRC
-

@@ -1,4 +1,3 @@
-
 (require 'etude-lang)
 (require 'etude-core-code)
 (require 'etude-core-git)
@@ -81,7 +80,7 @@
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer)
 
 (e/bind []
-  ::list-buffers      ("C-x b" "C-x C-b")     'e/bufler-toggle
+  ::list-buffers      ("C-x b" "C-x C-b")     'ibuffer
   ::revert-buffer     ("C-x r" "C-x C-r")     'e/revert-buffer
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
 
@@ -262,26 +261,26 @@
     ("Q" save-buffers-kill-terminal "Exit Emacs" :exit t))
    ""
    (("r d" dash "Dash Docs" :exit t)
-    ("r t" tldr "TLDR" :exit t)
-    ("r l" wm3          "Browser" :exit t))
+    ("r t" tldr "TLDR" :exit t))
    "File"
-   (("o o"  counsel-projectile-find-file-dwim   "Open" :exit t)
+   (("o o"  counsel-projectile-find-file   "Open" :exit t)
     ("o r"  counsel-recentf      "Open Recent" :exit t)
     ("o p"  counsel-projectile   "Open Project" :exit t)
     ("s a"  save-some-buffers    "Save As" :exit t)
     ("s s"  save-some-buffers    "Save All"))
    ""
-   (("f"  counsel-rg             "Find" :exit t)
-    ("c c"  e/close-buffer       "Close" :exit t)
-    ("c A"  e/close-all-buffers  "Close All"))
+   (("b"    ibuffer              "Buffers" :exit t)
+    ("k k"  kill-current-buffer  "Kill" :exit t)
+    ("k c"  e/close-buffer       "Close" :exit t)
+    ("k a"  e/close-all-buffers  "Close All"))
    "Package"
-   (("P" package-install "Install" :exit t)
+   (("p i" package-install "Install" :exit t)
     ("p h" describe-package  "Describe" :exit t)
     ("p r" package-refresh-contents "Refresh")
     ("p l" package-list-packages  "List" :exit t)
     ("p d" package-delete "Delete" :exit t))
    "Customise"
-   (("C" customize "all" :exit t)
+   (("c c" customize       "all" :exit t)
     ("c f" customize-face  "face" :exit t)
     ("c t" customize-themes "theme" :exit t))
    "Help"
@@ -305,26 +304,14 @@
 (pretty-hydra-define e/menu-fn::edit-menu
   (:title "<F2> Edit" :quit-key "z" :exit nil :foreign-keys run)
   ("Find/Replace"
-   (("f"    counsel-rg             "Find" :exit t)
-    ("r"    replace-string         "Replace" :exit t)
-    ("R"    replace-regexp         "Replace Regex" :exit t)
-    ("e"    iedit-mode             "Multi Edit" :exit t))
+   (("f"    color-rg-search-project  "Find" :exit t)
+    ("r"    replace-string           "Replace" :exit t))
    ""
    ()
-
    "Navigation"
    (("l" goto-line "Goto Line")
     ("c" goto-last-change "Goto Changed")
     ("t" swiper-thing-at-point "Similar"))
-   "Git"
-   (("s"  magit-status  "Status" :exit t)
-    ("g l"  magit-log-all "Log" :exit t)
-    ("g d"  magit-diff    "Diff" :exit t)
-    ("g t"  git-timemachine "Timemachine" :exit t))
-   ""
-   (("g c"  magit-commit  "Commit" :exit t)
-    ("g f"  magit-pull    "Pull" :exit t) 
-    ("g p"  magit-push    "Push" :exit t))
    "Hunks"
    (("H"  git-gutter:toggle  "On/Off" :toggle git-gutter-mode)
     ("h s" git-gutter:clear  "Select")

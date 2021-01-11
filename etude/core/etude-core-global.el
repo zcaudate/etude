@@ -25,6 +25,6 @@
   ::mode-connect       ("M-c" "ESC c")      ()
   ::mode-build         ()      ()
   ::mode-jump-to       ("C-x ." "C-x C-.")  ()
-  ::mode-toggle-test   ()                   ())
+  ::mode-toggle-test   ("ESC 5" "M-5")      ())
 
 (provide 'etude-core-global)

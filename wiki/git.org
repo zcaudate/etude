@@ -40,12 +40,32 @@ git root
 #+RESULTS:
 : /Users/chris/.emacs.d
 
+* Rebase Tool
+
+
+** Installation
+
+*** OSX
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+brew install interactive-rebase-tool
+#+END_SRC
+
+*** Config
+
+#+BEGIN_SRC shell :results output silent :cache no :eval no
+git config --global sequence.editor interactive-rebase-tool
+#+END_SRC
+
+
+** Links
+- [[https://github.com/MitMaro/git-interactive-rebase-tool/releases][MitMaro/git-interactive-rebase-tool]]
 
 * Lazygit
 
 ** Installation
 
-*** Via brew
+*** OSX
 
 #+BEGIN_SRC shell :results output silent :cache no :eval yes
 brew install lazygit
@@ -58,8 +78,6 @@ brew install lazygit
 echo "alias g=\"lazygit\"" >> ~/.bash_custom
 source ~/.bash_custom
 #+END_SRC
-
-
 
 
 * Bfg

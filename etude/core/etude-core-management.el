@@ -16,8 +16,6 @@
 
 (use-package ace-window :ensure t)
 
-(use-package bufler :ensure t)
-
 (use-package goggles
   :ensure t
   :init   (setq-default goggles-pulse t)
@@ -36,6 +34,8 @@
   :init (yas-global-mode 1)
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+
+(require 'color-rg)
 
 ;;
 ;; Web + Web Server
@@ -100,7 +100,14 @@
 (use-package projectile
   :ensure t
   :diminish 'projectile-mode
-  :config (setq projectile-completion-system 'ivy))
+  :init (setq projectile-completion-system 'ivy))
+
+(use-package ibuffer-projectile :ensure t
+  :config (add-hook 'ibuffer-hook
+                    (lambda ()
+                      (ibuffer-projectile-set-filter-groups)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic)))))
 
 (defun e/start-screen ()
   (interactive)
@@ -113,14 +120,12 @@
   :ensure t
   :init (progn (setq dashboard-startup-banner nil)
                (setq dashboard-items '((recents  . 15)
-                                       (projects . 5)))
-               (add-hook 'emacs-startup-hook 'e/start-screen)))
+                                       (projects . 5)))))
 
 (use-package treemacs :ensure t
   :init (setq treemacs-no-png-images t))
 
 (use-package treemacs-projectile :ensure t)
-;;(use-package treemacs-magit :ensure t)
           
 ;;
 ;; Search
