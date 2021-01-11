@@ -22,6 +22,10 @@
 (require 'etude-bindings)
 (require 'etude-module-org)
 
+(require 'keylogger)
+(progn
+  (keylogger-start))
+
 (if (not (window-system))
     (custom-set-faces
      '(custom-comment ((t (:foreground "color-115"))))
@@ -53,11 +57,11 @@
  '(goggles-added ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
- '(org-block-begin-line ((t (:foreground "color-99"))))
- '(org-block-end-line ((t (:foreground "color-92"))))
+ '(org-block-begin-line ((t (:foreground "Purple"))))
+ '(org-block-end-line ((t (:foreground "DarkOrchid"))))
  '(org-hide ((t (:foreground "gray50" :underline nil))))
- '(org-link ((t (:foreground "brightblue" :underline nil))))
- '(org-meta-line ((t (:foreground "yellow")))))
+ '(org-link ((t (:foreground "turquoise3" :underline nil))))
+ '(org-meta-line ((t (:foreground "gold1")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

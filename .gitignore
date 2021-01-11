@@ -3,6 +3,7 @@
 .#*
 .cask
 .cache
+keys
 
 /changes
 /elpa
