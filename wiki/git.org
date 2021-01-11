@@ -11,13 +11,13 @@
 *** OSX
 
 #+BEGIN_SRC shell :results output silent :cache no :eval no
-brew install git
+brew install git git-extras
 #+END_SRC
 
 *** Ubuntu
 
 #+BEGIN_SRC shell :results output silent :cache no :eval no
-apt-get install -y git 
+apt-get install -y git git-extras
 #+END_SRC
 
 ** Configuration
@@ -33,8 +33,14 @@ git config --global user.email z@caudate.me
 
 #+DESC git root
 #+BEGIN_SRC bash :results output verbatim :cache no :eval yes
+## git root dir
 git config --global alias.root 'rev-parse --show-toplevel'
-git root
+
+## meta alias
+git config --global alias.alias "! git config --get-regexp ^alias\. | sed -e s/^alias\.// -e s/\ /\ =\ /"
+
+## use with fzf
+git config --global alias.ll 'log --graph --format="%C(yellow)%h%C(red)%d%C(reset) - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 #+END_SRC
 
 #+RESULTS:
