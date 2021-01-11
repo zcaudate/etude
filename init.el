@@ -75,8 +75,9 @@
      (shell . t)
      (dot . t)
      (gnuplot . t)
-     (java . t)))
+     (java . t)
+     (restclient . t)))
  '(org-mouse-1-follows-link 'double)
  '(org-support-shift-select 'always)
  '(package-selected-packages
-   '(ibuffer-projectile color-rg eta nginx-mode format-all ob-async plain-org-wiki org-cliplink auto-highlight-symbol doom-modeline nord-theme ivy-rich counsel-projectile counsel swiper wgrep ivy smex treemacs-projectile treemacs dashboard projectile ranger dired-filter dired-collapse dired-subtree no-littering impatient-mode yasnippet goto-chg iedit undo-tree goggles bufler ace-window which-key tldr helpful multi-vterm vterm exec-path-from-shell midje-mode cider rainbow-delimiters paredit smartparens git-gutter graphviz-dot-mode markdown-mode dockerfile-mode yaml-mode company pretty-hydra hydra f ht dash s use-package)))
+   '(ibuffer-projectile eta nginx-mode format-all ob-async plain-org-wiki org-cliplink auto-highlight-symbol doom-modeline nord-theme ivy-rich counsel-projectile counsel swiper wgrep ivy smex treemacs-projectile treemacs dashboard projectile ranger dired-filter dired-collapse dired-subtree no-littering impatient-mode yasnippet goto-chg iedit undo-tree goggles bufler ace-window which-key tldr helpful multi-vterm vterm exec-path-from-shell midje-mode cider rainbow-delimiters paredit smartparens git-gutter graphviz-dot-mode markdown-mode dockerfile-mode yaml-mode company pretty-hydra hydra f ht dash s use-package)))

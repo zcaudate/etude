@@ -121,7 +121,7 @@
 (e/bind []
   ::open              ("C-x C-f" "C-x f")          'find-file
   ::open-recent       ("C-r")                      'counsel-recentf
-  ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'projectile-find-file-dwim
+  ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'counsel-projectile-find-file
   ::save              ("ESC s" "C-s" "M-s")        'save-buffer
   ::save-as           ()                           'write-file
   ::save-all          ("C-x C-s" "C-x s")          'save-some-buffers
@@ -132,7 +132,7 @@
 ;; (Window Movement)
 ;;
 
-(e/bind []
+(e/bind [*]
   ::window-delete
   ("C-x C-d" "C-x d")
   'e/close-buffer

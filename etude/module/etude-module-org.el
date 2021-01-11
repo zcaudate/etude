@@ -8,6 +8,8 @@
 
 (use-package ob-async :ensure t)
 
+(use-package ob-restclient :ensure t)
+
 (defun e/org-fill-paragraph ()
   (interactive)
   (if (not (org-in-src-block-p))
