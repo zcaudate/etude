@@ -56,19 +56,19 @@
          (hydra-keyboard-quit)
        (e/menu-fn::elisp-menu/body)))
 
-(e/mode [::lisp   lisp-interaction-mode "etude-core-global"]
+(eta-modal [::lisp   lisp-interaction-mode "etude-core-global"]
   ::eval-cursor   'eval-last-sexp
   ::eval-file     'e/eval-buffer
   ::eval-cursor-alt 'pp-macroexpand-last-sexp
   ::mode-menu     'e/elisp-mode-menu)
 
-(e/mode [::emacs-lisp    emacs-lisp-mode "etude-core-lisp"]
+(eta-modal [::emacs-lisp    emacs-lisp-mode "etude-core-lisp"]
   ::eval-cursor     'eval-last-sexp
   ::eval-file       'e/eval-buffer
   ::eval-cursor-alt 'pp-macroexpand-last-sexp
   ::mode-menu       'e/elisp-mode-menu)
 
-;; (e/mode [::eshell-mode   eshell-mode    "etude-core-lisp"]
+;; (eta-modal[::eshell-mode   eshell-mode    "etude-core-lisp"]
 ;;   ::eval-cursor 'eval-last-sexp)
 
 ;;
@@ -96,12 +96,12 @@
   :ensure t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
-                 (e/mode [::clojure clojure-mode "etude-core-lisp"]
+                 (eta-modal[::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
                    ::mode-connect      'cider-connect
                    ::mode-toggle-test  'projectile-toggle-between-implementation-and-test)
-                 (e/mode [::cider-repl cider-repl-mode "etude-core-lisp"]
+                 (eta-modal[::cider-repl cider-repl-mode "etude-core-lisp"]
                    ::eval-file     'cider-repl-clear-buffer))
   :hook ((clojure-mode . smartparens-strict-mode)
          (clojure-mode . rainbow-delimiters-mode)

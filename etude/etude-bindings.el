@@ -1,4 +1,5 @@
-(require 'etude-lang)
+(require 'eta)
+(require 'eta-hydra)
 (require 'etude-core-code)
 (require 'etude-core-git)
 (require 'etude-core-global)
@@ -7,12 +8,14 @@
 (require 'etude-core-shell)
 (require 'etude-core-util)
 
+(use-package pretty-hydra :ensure t) ;; pretty menus
+
 ;;
 ;; (Command)
 ;;
 (defun e/no-action () (interactive))
 
-(e/bind [*]
+(eta-bind [*]
   ::no-action       ()                          'e/no-action
   ::which-key       ("C-x C-h" "C-x h")         'which-key-show-major-mode
   ::main-menu       ("C-p" "M-p" "M-x" "ESC p" "ESC x")   'counsel-M-x
@@ -35,11 +38,11 @@
 
 
 
-(e/bind []
+(eta-bind []
   ::select-all      ("C-x a" "C-x C-a")           'mark-page
   ::cut             ("C-a")                       'kill-region)
 
-(e/bind [*]
+(eta-bind [*]
   ::copy            ("C-o")                       'copy-region-as-kill
   ::cut-context     ("C-k")                       'paredit-kill
   ::copy-context    ("C-x k" "C-x C-k")           'e/paredit-copy-context
@@ -76,10 +79,10 @@
                 (delete-other-windows)))
      (bufler 0))))
 
-(e/bind [*]
+(eta-bind [*]
   ::jump-buffer       ("ESC b" "M-b" "C-b")   'counsel-switch-buffer)
 
-(e/bind []
+(eta-bind []
   ::list-buffers      ("C-x b" "C-x C-b")     'ibuffer
   ::revert-buffer     ("C-x r" "C-x C-r")     'e/revert-buffer
   ::last-used-buffer  ("ESC \\" "M-\\" "C-\\" "C-x \\")   'e/last-used-buffer
@@ -92,7 +95,7 @@
   ("M-=" "ESC =" "C-x =" "C-x C-=" "C-S-<right>" "C-x C-<right>" "C-x <right>")
   'next-buffer)
 
-(e/bind []
+(eta-bind []
   ::goto-line            ("C-x C-g" "C-x g")   'goto-line
   ::goto-start           ()   'beginning-of-buffer
   ::goto-end             ()   'end-of-buffer
@@ -118,7 +121,7 @@
   (save-some-buffers)
   (mapc 'kill-buffer (buffer-list)))
 
-(e/bind []
+(eta-bind []
   ::open              ("C-x C-f" "C-x f")          'find-file
   ::open-recent       ("C-r")                      'counsel-recentf
   ::open-project      ("ESC t" "M-t" "C-t" "s-t")  'counsel-projectile-find-file
@@ -132,7 +135,7 @@
 ;; (Window Movement)
 ;;
 
-(e/bind [*]
+(eta-bind [*]
   ::window-delete
   ("C-x C-d" "C-x d")
   'e/close-buffer
@@ -209,7 +212,7 @@
       (e/window-delete)
     (ranger)))
 
-(e/bind []
+(eta-bind []
   ::toggle-dashboard       ("ESC 1" "M-1")   'e/jump-to-start-screen
   ::toggle-terminal        ("ESC 2" "M-2")   'e/jump-to-terminal
   ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
@@ -294,7 +297,7 @@
     ()
     ("i"       e/insert-input))
   
-  (e/bind [] ::f1-menu   ("<f1>")
+  (eta-bind [] ::f1-menu   ("<f1>")
           (lambda ()
             (interactive)
             (if (eq hydra-curr-map e/menu-fn::start-menu/keymap)
@@ -330,7 +333,7 @@
 
 (progn
   (defhydra+ e/menu-fn::edit-menu () ("i"  e/insert-input nil))
-  (e/bind [] ::f2-menu   ("<f2>")
+  (eta-bind [] ::f2-menu   ("<f2>")
           (lambda ()
             (interactive)
             (if (eq hydra-curr-map e/menu-fn::edit-menu/keymap)
@@ -373,7 +376,7 @@
     ("<down>"  enlarge-window)
     ("<left>"  shrink-window-horizontally)
     ("<right>" enlarge-window-horizontally))
-  (e/bind [] ::f5-menu   ("<f5>")
+  (eta-bind [] ::f5-menu   ("<f5>")
           (lambda ()
             (interactive)
             (if (eq hydra-curr-map e/menu-fn::meta-menu/keymap)
@@ -384,7 +387,7 @@
 ;; File and Directory Support
 ;;
 
-(e/bind []
+(eta-bind []
   ::f3-menu   ("<f3>")   'e/jump-to-ranger
   ::f4-menu   ("<f4>")   'e/toggle-treemacs)
 
@@ -411,7 +414,7 @@
 
 (add-hook 'ranger-mode-hook
           (lambda ()
-            (e/mode [::ranger   ranger-mode "etude-core-bindings"]
+            (eta-modal[::ranger   ranger-mode "etude-core-bindings"]
               ::mode-menu  'e/ranger-mode-menu)))
 
 (provide 'etude-bindings)

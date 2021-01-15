@@ -13,7 +13,7 @@
   :init   (require 'cargo)
   :hook   cargo-minor-mode
   :config (progn (setq rust-format-on-save t)
-                 (e/mode [:rust rust-mode  "etude-module-native"]
+                 (eta-modal[:rust rust-mode  "etude-module-native"]
                    ::init       'cargo-process-init
                    ::eval-file  'cargo-process-run)))
 

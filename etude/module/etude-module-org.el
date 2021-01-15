@@ -48,7 +48,7 @@
     (mark-page)
     (fill-region (region-beginning) (region-end) nil)))
 
-(e/mode [::org   org-mode "etude-module-org"]
+(eta-modal[::org   org-mode "etude-module-org"]
   ::eval-cursor   'org-ctrl-c-ctrl-c
   ::eval-cursor-alt 'e/org-babel-tangle-block
   ::mode-connect  nil

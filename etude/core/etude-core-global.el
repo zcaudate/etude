@@ -1,4 +1,4 @@
-(require 'etude-lang)
+(require 'eta)
 
 ;;
 ;; (GLOBAL) Mode Specific
@@ -17,7 +17,7 @@
 ;;   - html/css
 ;;   - javascript
 
-(e/mode-init []
+(eta-modal-init []
   ::mode-menu          ("<f8>")  ()
   ::eval-cursor        ("C-e")   ("P")
   ::eval-cursor-alt    ("C-x p" "C-x C-p")   ("P")

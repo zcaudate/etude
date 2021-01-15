@@ -28,10 +28,6 @@
 
 (require 'use-package)
 
-;; (use-package quelpa :ensure t)
-
-;;(use-package quelpa-use-package :ensure t)
-
 ;; DEFAULTS
 
 
@@ -130,5 +126,7 @@
                (funcall method indent-point state)))))))
 
 (setq-default lisp-indent-function 'e/lisp-indent-function)
+
+(defmacro comment (&rest body))
 
 (provide 'etude-boot)

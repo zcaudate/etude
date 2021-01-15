@@ -12,20 +12,26 @@
               (or (buffer-file-name) 
                   (file-chase-links load-file-name))))
        (add-to-list 'load-path (concat emacs-d "etude"))
-       (add-to-list 'load-path (concat emacs-d "dev" "eta")))
+       (add-to-list 'load-path (concat emacs-d "dev/" "eta"))
+       (add-to-list 'load-path (concat emacs-d "dev/" "eta-hydra"))
+       (add-to-list 'load-path (concat emacs-d "dev/" "eta-logger")))
 
 (setq use-package-always-ensure nil)
 
 ;; Core
 (require 'etude-boot)
-(require 'etude-lang)
+
+(require 'eta)
+(require 'eta-hydra)
+(require 'eta-logger)
+
 (require 'etude-core)
 (require 'etude-bindings)
 (require 'etude-module-org)
 
-(require 'keylogger)
+
 (progn
-  (keylogger-start))
+  (eta-logger-start))
 
 (if (not (window-system))
     (custom-set-faces
