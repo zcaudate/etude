@@ -11,7 +11,8 @@
              (file-name-directory
               (or (buffer-file-name) 
                   (file-chase-links load-file-name))))
-       (add-to-list 'load-path (concat emacs-d "etude")))
+       (add-to-list 'load-path (concat emacs-d "etude"))
+       (add-to-list 'load-path (concat emacs-d "dev" "eta")))
 
 (setq use-package-always-ensure nil)
 

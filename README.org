@@ -15,59 +15,10 @@ Etude
 - LHS ~>~ Document 
 - RHS ~>~ Vterm ~>~ Docker ~>~ Emacs ~>~ Document
 
-[[https://raw.githubusercontent.com/zcaudate/etude/master/img/front.png]]
+[[https://user-images.githubusercontent.com/1455572/104732790-ae7c3600-5778-11eb-8003-035321daac85.png]]
 
 ** Prerequisites
 
 Libraries:
 - [[https://github.com/BurntSushi/ripgrep][ripgrep]] - search and replace (counsel)
 - [[https://www.gnu.org/software/ispell/][ispell]] - spell checker (native)
-
-** Packages
-
-A rougle list of packages installed:
-
-- ace-widow
-- annotate
-- bufler
-- company
-- dashboard
-- doom-modeline
-- eta
-- googles
-- helpful
-- hydra
-- iedit
-- impatient
-- ivy
-- magit
-- no-littering
-- nord-theme
-- projectile
-- ranger
-- tldr
-- treemacs
-- vterm
-- wgrep
-
-** Dockerized Setup
-
-This is outlined in more detail in [[https://github.com/zcaudate/etude/blob/master/automation/Ubuntu.org][Ubuntu.org]].
-
-To build:
-
-1. Generate the build scripts:
-
-#+NAME: Bootstrap
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-cd ETUDE/automation
-tangle.sh Ubuntu.org   # detailed in Ubuntu.org
-#+END_SRC
-
-2. Run the build:
-
-#+BEGIN_SRC bash :results output silent :cache no :eval yes
-cd Ubuntu
-rm build.out
-chmod +x ./build.sh
-#+END_SRC

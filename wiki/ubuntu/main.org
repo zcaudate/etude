@@ -215,10 +215,10 @@ We now detail ~inception.sh~ script. This just goes through the ~tangle~ and ~bu
 
 ~<build/inception.sh>~
 #+BEGIN_SRC bash :results output silent :cache no :eval yes :tangle build/inception.sh
-cd /root/.emacs.d/infra/Ubuntu
+cd /root/.emacs.d/wiki/ubuntu
 rm -R build
 mkdir build
-tangle Main.org
+tangle main.org
 chmod +x build/image_build.sh
 #+END_SRC
 
