@@ -1,0 +1,6 @@
+[submodule "dev/eta-logger"]
+	path = dev/eta-logger
+	url = git@github.com:zcaudate/eta-logger.git
+[submodule "dev/eta"]
+	path = dev/eta
+	url = git@github.com:zcaudate/eta.git
