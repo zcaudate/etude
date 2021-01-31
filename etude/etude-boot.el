@@ -3,15 +3,6 @@
 (add-to-list 'load-path (concat emacs-d "etude/mode"))
 (add-to-list 'load-path (concat emacs-d "etude/lib"))
 
-(require 'package)
-(progn (add-to-list 'package-archives
-		    '("melpa" . "http://melpa.org/packages/"))
-
-       (when (< emacs-major-version 24)
-	 (add-to-list 'package-archives
-		      '("gnu" . "http://elpa.gnu.org/packages/"))) 
-       (package-initialize))
-
 (add-hook 'emacs-startup-hook
          (lambda ()
            (message "Emacs ready in %s with %d garbage collections."

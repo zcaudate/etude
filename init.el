@@ -7,6 +7,16 @@
 
 (setq gc-cons-threshold (* 50 1000 1000))
 
+
+(require 'package)
+(progn (add-to-list 'package-archives
+		    ;; '("melpa" . "http://melpa.org/packages/")
+			'("melpa" . "http://elpa.emacs-china.org/melpa/"))
+	    (add-to-list 'package-archives
+		    ;; '("gnu" . "http://elpa.gnu.org/packages/")
+			'("gnu"   . "http://elpa.emacs-china.org/gnu/")) 
+       (package-initialize))
+
 (progn (setq emacs-d
              (file-name-directory
               (or (buffer-file-name) 
@@ -21,12 +31,16 @@
 ;; Core
 (require 'etude-boot)
 
+(use-package ht :ensure t)
+(use-package s :ensure t)
+
+(require 'etude-core)
 (require 'eta)
 (require 'eta-hydra)
 (require 'eta-logger)
 
-(require 'etude-core)
 (require 'etude-bindings)
+
 (require 'etude-module-org)
 
 
@@ -64,11 +78,11 @@
  '(goggles-added ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
- '(org-block-begin-line ((t (:foreground "Purple"))))
- '(org-block-end-line ((t (:foreground "DarkOrchid"))))
+ '(org-block-begin-line ((t (:foreground "color-99"))))
+ '(org-block-end-line ((t (:foreground "color-92"))))
  '(org-hide ((t (:foreground "gray50" :underline nil))))
- '(org-link ((t (:foreground "turquoise3" :underline nil))))
- '(org-meta-line ((t (:foreground "gold1")))))
+ '(org-link ((t (:foreground "brightblue" :underline nil))))
+ '(org-meta-line ((t (:foreground "yellow")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
