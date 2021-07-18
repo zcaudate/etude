@@ -28,7 +28,7 @@
 (require 'etude-core)
 (require 'etude-bindings)
 (require 'etude-module-org)
-
+(require 'etude-foundation)
 
 (progn
   (eta-logger-start))
@@ -58,17 +58,18 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-comment ((t (:foreground "color-115"))))
+ '(eros-result-overlay-face ((t (:background "black" :box (:line-width -1 :color "black")))))
  '(font-lock-comment-delimiter-face ((t (:foreground "color-243"))))
  '(font-lock-comment-face ((t (:foreground "color-243"))))
  '(font-lock-doc-face ((t (:foreground "color-243"))))
  '(goggles-added ((t (:background "brightblack"))))
  '(goggles-changed ((t (:background "brightblack"))))
  '(goggles-removed ((t (:extend t :background "brightblack"))))
- '(org-block-begin-line ((t (:foreground "Purple"))))
- '(org-block-end-line ((t (:foreground "DarkOrchid"))))
+ '(org-block-begin-line ((t (:foreground "color-99"))))
+ '(org-block-end-line ((t (:foreground "color-92"))))
  '(org-hide ((t (:foreground "gray50" :underline nil))))
- '(org-link ((t (:foreground "turquoise3" :underline nil))))
- '(org-meta-line ((t (:foreground "gold1")))))
+ '(org-link ((t (:foreground "brightblue" :underline nil))))
+ '(org-meta-line ((t (:foreground "yellow")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -77,6 +78,7 @@
  ;; If there is more than one, they won't work right.
  '(blink-cursor-mode nil)
  '(doom-modeline-icon nil)
+ '(eros-mode t)
  '(global-linum-mode nil)
  '(nord-comment-brightness 20)
  '(org-babel-load-languages
@@ -85,9 +87,7 @@
      (python . t)
      (shell . t)
      (dot . t)
-     (gnuplot . t)
-     (java . t)
-     (restclient . t)))
+     (java . t)))
  '(org-mouse-1-follows-link 'double)
  '(org-support-shift-select 'always)
  '(package-selected-packages

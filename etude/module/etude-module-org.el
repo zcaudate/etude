@@ -1,14 +1,10 @@
 (require 'etude-core)
-(require 'etude-module-org-preview)
+
 
 (use-package org-cliplink :ensure t)
 
 (use-package plain-org-wiki :ensure t
   :init (setq plain-org-wiki-directory "~/.emacs.d/wiki"))
-
-(use-package ob-async :ensure t)
-
-(use-package ob-restclient :ensure t)
 
 (defun e/org-fill-paragraph ()
   (interactive)
@@ -21,9 +17,6 @@
   (let ((current-prefix-arg '(4)))
     (call-interactively 'org-babel-tangle)))
 
-(defun org-babel-execute:dockerfile (body params)
-  body)
-
 (add-hook 'org-mode-hook '(lambda ()
                             (visual-line-mode)
                             (org-indent-mode)
@@ -34,7 +27,6 @@
                             (define-key org-mode-map (kbd "C-c C-g") 'org-cliplink)
                             (add-to-list 'org-src-lang-modes '("md.graph" . fundamental))
                             (add-to-list 'org-src-lang-modes '("bash" . shell))))
-
 
 (defhydra e/org-mode-menu ()
   ("8" e/preview-html  "preview html")
@@ -55,70 +47,81 @@
   ::eval-file     'org-babel-tangle
   ::mode-menu     'e/org-mode-menu/body)
 
-;; Org JS Workaround
-(setq org-babel-js-function-wrapper
-      "process.stdout.write(require('util').inspect(function(){\n%s\n}(), { maxArrayLength: null, maxStringLength: null, breakLength: Infinity, compact: true }))")
 
 
-;; Impatient mode filters
-(defun e/show-org-markdeep (buffer)
-  (save-window-excursion
-    (with-current-buffer buffer
-      (org-markdeep-export-as-markdeep))
-    (princ (with-current-buffer (get-buffer "*Org MD:Etude Export*")
-             (format "%s\n%s"
-                     (buffer-string)
-                     e/md-footer))
-           (current-buffer))))
 
-(defun e/show-org-markdown (buffer)
-  (save-window-excursion
-    (with-current-buffer buffer
-      (org-markdeep-export-as-markdeep))
-    (princ (with-current-buffer (get-buffer "*Org MD Export*")
-             (format e/strapdown-zeta-body
-                     (buffer-string)))
-           (current-buffer))))
-
-(defun e/show-org-html (buffer)
-  (save-window-excursion
-    (with-current-buffer buffer
-      (org-html-export-as-html))
-    (princ (with-current-buffer (get-buffer "*Org HTML Export*")
-             (buffer-string))
-           (current-buffer))))
-
-(defun e/preview-markdeep ()
-  (interactive)
-  (if (not (httpd-running-p))
-      (httpd-start))
-  (impatient-mode t)
-  (imp-set-user-filter 'e/show-org-markdeep)
-  (browse-url (s-concat "http://localhost:8080/imp/live/"
-                        (buffer-name (current-buffer)))))
-
-(defun e/preview-markdown ()
-  (interactive)
-  (if (not (httpd-running-p))
-      (httpd-start))
-  (impatient-mode t)
-  (imp-set-user-filter 'e/show-org-markdown)
-  (browse-url (s-concat "http://localhost:8080/imp/live/"
-                        (buffer-name (current-buffer)))))
-
-(defun e/preview-html ()
-  (interactive)
-  (if (not (httpd-running-p))
-      (httpd-start))
-  (impatient-mode t)
-  (imp-set-user-filter 'e/show-org-html)
-  (browse-url (s-concat "http://localhost:8080/imp/live/"
-                        (buffer-name (current-buffer)))))
+(comment
+ (comment
+  (require 'etude-module-org-preview)
+  (use-package ob-async :ensure t)
+  
+ (use-package ob-restclient :ensure t))
+ 
+ ;; Org JS Workaround
+ (setq org-babel-js-function-wrapper
+       "process.stdout.write(require('util').inspect(function(){\n%s\n}(), { maxArrayLength: null, maxStringLength: null, breakLength: Infinity, compact: true }))")
 
 
-(defun e/preview-exit ()
-  (interactive)
-  (if (imp-buffer-enabled-p (current-buffer))
-      (impatient-mode)))
+ ;; Impatient mode filters
+ (defun e/show-org-markdeep (buffer)
+   (save-window-excursion
+     (with-current-buffer buffer
+       (org-markdeep-export-as-markdeep))
+     (princ (with-current-buffer (get-buffer "*Org MD:Etude Export*")
+              (format "%s\n%s"
+                      (buffer-string)
+                      e/md-footer))
+            (current-buffer))))
+
+ (defun e/show-org-markdown (buffer)
+   (save-window-excursion
+     (with-current-buffer buffer
+       (org-markdeep-export-as-markdeep))
+     (princ (with-current-buffer (get-buffer "*Org MD Export*")
+              (format e/strapdown-zeta-body
+                      (buffer-string)))
+            (current-buffer))))
+
+ (defun e/show-org-html (buffer)
+   (save-window-excursion
+     (with-current-buffer buffer
+       (org-html-export-as-html))
+     (princ (with-current-buffer (get-buffer "*Org HTML Export*")
+              (buffer-string))
+            (current-buffer))))
+
+ (defun e/preview-markdeep ()
+   (interactive)
+   (if (not (httpd-running-p))
+       (httpd-start))
+   (impatient-mode t)
+   (imp-set-user-filter 'e/show-org-markdeep)
+   (browse-url (s-concat "http://localhost:8080/imp/live/"
+                         (buffer-name (current-buffer)))))
+
+ (defun e/preview-markdown ()
+   (interactive)
+   (if (not (httpd-running-p))
+       (httpd-start))
+   (impatient-mode t)
+   (imp-set-user-filter 'e/show-org-markdown)
+   (browse-url (s-concat "http://localhost:8080/imp/live/"
+                         (buffer-name (current-buffer)))))
+
+ (defun e/preview-html ()
+   (interactive)
+   (if (not (httpd-running-p))
+       (httpd-start))
+   (impatient-mode t)
+   (imp-set-user-filter 'e/show-org-html)
+   (browse-url (s-concat "http://localhost:8080/imp/live/"
+                         (buffer-name (current-buffer)))))
+
+
+ (defun e/preview-exit ()
+   (interactive)
+   (if (imp-buffer-enabled-p (current-buffer))
+       (impatient-mode))))
 
 (provide 'etude-module-org)
+ 

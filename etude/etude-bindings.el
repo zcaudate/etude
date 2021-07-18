@@ -1,14 +1,12 @@
 (require 'eta)
 (require 'eta-hydra)
 (require 'etude-core-code)
-(require 'etude-core-git)
 (require 'etude-core-global)
 (require 'etude-core-lisp)
 (require 'etude-core-management)
 (require 'etude-core-shell)
-(require 'etude-core-util)
 
-(use-package pretty-hydra :ensure t) ;; pretty menus
+(use-package pretty-hydra :defer t) ;; pretty menus
 
 ;;
 ;; (Command)
@@ -341,7 +339,7 @@
               (e/menu-fn::edit-menu/body)))))
 
 (pretty-hydra-define e/menu-fn::meta-menu
-  (:title "<F5> Meta" :quit-key "z" :exit nil :foreign-keys run)
+  (:title "<F3> Meta" :quit-key "z" :exit nil :foreign-keys run)
   ("Window"
    (("H"   split-window-right   "Split H" :exit nil)
     ("V"   split-window-below   "Split V" :exit nil)
@@ -376,7 +374,7 @@
     ("<down>"  enlarge-window)
     ("<left>"  shrink-window-horizontally)
     ("<right>" enlarge-window-horizontally))
-  (eta-bind [] ::f5-menu   ("<f5>")
+  (eta-bind [] ::f3-menu   ("<f3>")
           (lambda ()
             (interactive)
             (if (eq hydra-curr-map e/menu-fn::meta-menu/keymap)
@@ -388,7 +386,7 @@
 ;;
 
 (eta-bind []
-  ::f3-menu   ("<f3>")   'e/jump-to-ranger
+  ;;::f3-menu   ("<f3>")   'e/jump-to-ranger
   ::f4-menu   ("<f4>")   'e/toggle-treemacs)
 
 

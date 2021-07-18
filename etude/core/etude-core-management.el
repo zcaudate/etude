@@ -1,10 +1,5 @@
 (require 'etude-core-shell)
 
-;; Documentation
-(use-package helpful :ensure t)
-
-(use-package tldr :ensure t)
-
 ;;
 ;; Movement/Cut/Paste/Undo
 ;;
@@ -12,9 +7,6 @@
 (use-package which-key :ensure t
   :init (progn (setq which-key-sort-order 
                      'which-key-local-then-key-order)))
-
-
-(use-package ace-window :ensure t)
 
 (use-package goggles
   :ensure t
@@ -26,24 +18,6 @@
   :diminish 'undo-tree-mode
   :config (global-undo-tree-mode t))
 
-(use-package goto-chg :ensure t)
-
-(use-package yasnippet :ensure t
-  :init (yas-global-mode 1)
-  :config
-  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
-
-(require 'color-rg)
-
-;;
-;; Web + Web Server
-;;
-
-(use-package impatient-mode :ensure t
-  :config (setq impatient-mode-delay 3))
-
-(use-package restclient :ensure t)
-
 ;;
 ;; File Management
 ;;
@@ -51,7 +25,7 @@
 (use-package no-littering :ensure t)
 
 (use-package recentf
-  :defer t
+  :ensure t
   :config (progn (setq recentf-max-saved-items 200
                        recentf-max-menu-items 15)
                  (recentf-mode t)))
@@ -80,19 +54,6 @@
       ("Code"   (extension "java" "el" "clj" "js"))
       ("Archives"(extension "zip" "rar" "gz" "bz2" "tar"))))))
 
-(use-package ranger :ensure t
-  :init (progn (setq ranger-cleanup-on-disable t)
-               (setq ranger-cleanup-eagerly t)
-               (setq ranger-show-hidden t)
-               (setq ranger-modify-header t)
-               (setq ranger-parent-depth 0)
-               (setq ranger-footer-delay 0.2)
-               (setq ranger-preview-delay 0.040)
-               (setq ranger-show-literal nil)
-               (setq ranger-max-preview-size 1)
-               (setq ranger-dont-show-binary t))
-  :hook (range-mode . which-key-mode))
-
 ;;
 ;; Project Management
 ;;
@@ -117,24 +78,29 @@
   (define-key dashboard-mode-map [down-mouse-1] 'nil))
 
 (use-package dashboard
-  :ensure t
+  :defer t
   :init (progn (setq dashboard-startup-banner nil)
                (setq dashboard-items '((recents  . 15)
                                        (projects . 5)))))
 
-(use-package treemacs :ensure t
+(use-package treemacs :defer t
   :init (setq treemacs-no-png-images t))
 
-(use-package treemacs-projectile :ensure t)
+(use-package treemacs-projectile :defer t)
           
 ;;
 ;; Search
 ;;
 
-(use-package smex :ensure t)
+(use-package git-gutter
+   :defer t
+   :diminish 'git-gutter-mode
+   :config   (global-git-gutter-mode t))
+   
+(use-package smex :defer t)
 
 (use-package ivy
-  :ensure t
+  :defer t
   :diminish 'ivy-mode
   :config (progn (ivy-mode t)
                  (setq ivy-initial-inputs-alist nil)
@@ -143,18 +109,20 @@
                  (setq enable-recursive-minibuffers t)
                  (setq ivy-count-format "(%d/%d)")))
 
-(use-package wgrep :ensure t)
+(use-package wgrep :defer t)
 
-(use-package swiper :ensure t)
+(require 'color-rg)
 
-(use-package counsel :ensure t)
+(use-package swiper :defer t)
+
+(use-package counsel :defer t)
 
 (use-package counsel-projectile
-  :ensure t
+  :defer t
   :init (add-hook 'after-init-hook 'counsel-projectile-mode))
 
 (use-package ivy-rich
-  :ensure t
+  :defer t
   :config (ivy-rich-mode t))
 
 (provide 'etude-core-management)

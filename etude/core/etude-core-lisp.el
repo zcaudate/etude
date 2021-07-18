@@ -1,4 +1,5 @@
 (require 'etude-core-global)
+(require 'etude-foundation)
 
 ;; Lisp Modes
 (use-package smartparens
@@ -16,6 +17,9 @@
   :ensure t
   :diminish 'rainbow-delimiters-mode)
 
+(use-package eros
+  :ensure t)
+
 (progn (add-hook 'lisp-interaction-mode-hook 'smartparens-strict-mode)
        (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
        (add-hook 'lisp-interaction-mode-hook 'paredit-mode)
@@ -32,7 +36,7 @@
   (eval-buffer (current-buffer) t))
 
 (pretty-hydra-define e/menu-fn::elisp-menu
-  (:title "<F8> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
+  (:title "<F10> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
   ("Actions"
    (("1" ielm "Repl")
     ("2" ert  "Test")
@@ -49,23 +53,26 @@
     ("D" toggle-debug-on-error "Debug on error" :toggle (default-value 'debug-on-error))
     ("X" toggle-debug-on-quit "Debug on quit" :toggle (default-value 'debug-on-quit)))))
 
-
 (defun e/elisp-mode-menu ()
-     (interactive)
-     (if (eq hydra-curr-map e/menu-fn::elisp-menu/keymap)
-         (hydra-keyboard-quit)
-       (e/menu-fn::elisp-menu/body)))
+  (interactive)
+  (if (eq hydra-curr-map e/menu-fn::elisp-menu/keymap)
+      (hydra-keyboard-quit)
+    (e/menu-fn::elisp-menu/body)))
 
 (eta-modal [::lisp   lisp-interaction-mode "etude-core-global"]
-  ::eval-cursor   'eval-last-sexp
-  ::eval-file     'e/eval-buffer
-  ::eval-cursor-alt 'pp-macroexpand-last-sexp
-  ::mode-menu     'e/elisp-mode-menu)
+  ::eval-cursor      'eros-eval-last-sexp
+  ::eval-cursor-alt  'pp-macroexpand-last-sexp
+  ::eval-file        'e/eval-buffer
+  ::refresh-code     'e/eval-buffer
+  ::refresh-rt       'e/no-action
+  ::mode-menu        'e/elisp-mode-menu)
 
 (eta-modal [::emacs-lisp    emacs-lisp-mode "etude-core-lisp"]
-  ::eval-cursor     'eval-last-sexp
-  ::eval-file       'e/eval-buffer
+  ::eval-cursor     'eros-eval-last-sexp
   ::eval-cursor-alt 'pp-macroexpand-last-sexp
+  ::eval-file       'e/eval-buffer
+  ::refresh-code    'e/eval-buffer
+  ::refresh-rt      'e/no-action
   ::mode-menu       'e/elisp-mode-menu)
 
 ;; (eta-modal[::eshell-mode   eshell-mode    "etude-core-lisp"]
@@ -75,9 +82,55 @@
 ;; Clojure
 ;;
 
+;; TEMPLATE
+(comment
+ (pretty-hydra-define e/menu-fn::clojure-menu 
+   (:quit-key "z"  :exit nil :foreign-keys run)
+   (""
+    (("` 1"  foundation/ptr-print  "ptr-print")
+     ("` 2"  foundation/ptr-clip   "ptr-clip"))
+    ""
+    (("` 3"  cider-eval-last-sexp  "eval"))
+    ""
+    (("` 5"  foundation/ptr-teardown "ptr-teardown")
+     ("` 6"  foundation/ptr-setup     "ptr-setup"))
+    ""
+    (("3"  foundation/rt-reprep   "Prep Rt"))
+    ""
+    (("5" foundation/rt-setup     "rt-setup")
+     ("6"  foundation/rt-teardown "rt-teardown"))
+    
+    ""
+    (("0"  foundation/import-tests  "Import Tests")
+     ("9"  foundation/create-tests  "Create Tests")))))
+
+
+;; ACTUAL
+(defhydra e/menu-fn::clojure-menu (:color pink
+                                   :hint nil)
+  "
+`1: ptr-print   `3: eval   `5: ptr-teardown   3: Prep Rt   5: rt-setup      0: Import Tests 
+`2: ptr-clip               `6: ptr-setup                   6: rt-teardown   9: Create Tests    "
+  ("` 1"  foundation/ptr-print)
+  ("` 2"  foundation/ptr-clip)
+  ("` 3"  cider-eval-last-sexp)
+  ("` 5"  foundation/ptr-teardown)
+  ("` 6"  foundation/ptr-setup)
+  ("3"  foundation/rt-reprep)
+  ("5" foundation/rt-setup)
+  ("6"  foundation/rt-teardown)
+  ("0"  foundation/import-tests)
+  ("9"  foundation/create-tests)
+  ("z" quit-window " " :exit t :hint nil))
+
+(defun e/clojure-mode-menu ()
+  (interactive)
+  (if (eq hydra-curr-map e/menu-fn::clojure-menu/keymap)
+      (hydra-keyboard-quit)
+    (e/menu-fn::clojure-menu/body)))
 
 (use-package cider
-  :ensure t
+  :defer t
   :init (progn (setq nrepl-log-messages t)
                (setq nrepl-buffer-name-separator "/")
                (setq nrepl-buffer-name-show-port t)
@@ -93,56 +146,31 @@
   (cider-eval-buffer))
 
 (use-package clojure-mode
-  :ensure t
+  :defer t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
-                 (eta-modal[::clojure clojure-mode "etude-core-lisp"]
+                 (eta-modal [::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
+                   ::f5                'foundation/ns-reeval
+                   ::f6                'foundation/rt-refresh
+                   ::f7                'foundation/rt-setup
+                   ::f8                'foundation/rt-resetup
+                   ::esc-6             'foundation/ptr-print
                    ::mode-connect      'cider-connect
-                   ::mode-toggle-test  'projectile-toggle-between-implementation-and-test)
-                 (eta-modal[::cider-repl cider-repl-mode "etude-core-lisp"]
-                   ::eval-file     'cider-repl-clear-buffer))
+                   ::mode-toggle-test  'projectile-toggle-between-implementation-and-test
+                   ::mode-menu         'e/clojure-mode-menu)
+                 (eta-modal [::cider-repl cider-repl-mode "etude-core-lisp"]
+                   ::eval-file   'cider-repl-clear-buffer))
   :hook ((clojure-mode . smartparens-strict-mode)
          (clojure-mode . rainbow-delimiters-mode)
          (clojure-mode . paredit-mode)
          (clojure-mode . eldoc-mode)))
 
 (use-package midje-mode
-  :ensure t
+  :defer t
   :config (define-clojure-indent
             (comment 'defun)))
-
-;;
-;; Overlays from cider
-;;
-
-(autoload 'cider--make-result-overlay "cider-overlays")
-
-(defun e/eval-overlay (value point)
-  (cider--make-result-overlay (format "%S" value)
-    :where point
-    :duration 'command)
-  ;; Preserve the return value.
-  value)
-
-(advice-add 'eval-region :around
-            (lambda (f beg end &rest r)
-              (e/eval-overlay
-               (apply f beg end r)
-               end)))
-
-(advice-add 'eval-last-sexp :filter-return
-            (lambda (r)
-              (e/eval-overlay r (point))))
-
-(advice-add 'eval-defun :filter-return
-            (lambda (r)
-              (e/eval-overlay
-               r
-               (save-excursion
-                 (end-of-defun)
-                 (point)))))
 
 (provide 'etude-core-lisp)
 

@@ -18,13 +18,23 @@
 ;;   - javascript
 
 (eta-modal-init []
-  ::mode-menu          ("<f8>")  ()
+  ::mode-menu          ("<f10>")  ()
   ::eval-cursor        ("C-e")   ("P")
   ::eval-cursor-alt    ("C-x p" "C-x C-p")   ("P")
   ::eval-file          ("C-x x" "C-x C-x")  ()
+  ::f5                 ("<f5>")  ()
+  ::f6                 ("<f6>")  ()
+  ::f7                 ("<f7>")  ()
+  ::f8                 ("<f8>")  ()
+  ::f9                 ("<f9>")  ()
   ::mode-connect       ("M-c" "ESC c")      ()
   ::mode-build         ()      ()
   ::mode-jump-to       ("C-x ." "C-x C-.")  ()
-  ::mode-toggle-test   ("ESC 5" "M-5")      ())
+  ::mode-toggle-test   ("ESC 5" "M-5")      ()
+  ::esc-6              ("ESC 6" "M-6")      ()
+  ::esc-7              ("ESC 7" "M-7")      ()
+  ::esc-8              ("ESC 8" "M-8")      ()
+  ::esc-9              ("ESC 9" "M-9")      ()
+  ::esc-0              ("ESC 0" "M-0")      ())
 
 (provide 'etude-core-global)
