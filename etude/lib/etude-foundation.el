@@ -44,29 +44,48 @@
   (interactive)
   (foundation/cider-eval "(std.lang/rt:refresh)"))
 
+(defun foundation/ns-reeval ()
+  (interactive)
+  (save-buffer)
+  (foundation/cider-eval
+   "(do (std.lang/ns:reset) nil)")
+  (cider-eval-buffer))
+
 ;;
 ;;
 ;;
-(defun foundation/create-tests ()
+(defun foundation/scaffold-tests ()
   (interactive)
   (foundation/cider-eval
-   "(code.manage/create-tests)"))
+   "(code.manage/create-tests [(code.project/source-ns (std.lib/ns-sym))])"))
 
 (defun foundation/import-tests ()
   (interactive)
   (foundation/cider-eval
-   "(code.manage/import)"))
+   "(code.manage/import [(code.project/source-ns (std.lib/ns-sym))])"))
 
 (defun foundation/incomplete-tests ()
   (interactive)
   (foundation/cider-eval
-   "(code.manage/incomplete)"))
+   "(code.manage/incomplete [(code.project/source-ns (std.lib/ns-sym))])"))
 
-(defun foundation/ns-reeval ()
+(defun foundation/orphaned-tests ()
   (interactive)
   (foundation/cider-eval
-   "(do (std.lang/ns:reset) nil)")
-  (cider-eval-buffer))
+   "(code.manage/orphaned [(code.project/source-ns (std.lib/ns-sym))])"))
+
+(defun foundation/pedantic-tests ()
+  (interactive)
+  (foundation/cider-eval
+   "(code.manage/pedantic [(code.project/source-ns (std.lib/ns-sym))])"))
+
+(defun foundation/run-errored-tests ()
+  (interactive)
+  (foundation/cider-eval "(code.test/run-errored)"))
+
+(defun foundation/run-tests ()
+  (interactive)
+  (foundation/cider-eval "(code.test/run)"))
   
 (defun foundation/ptr-teardown ()
   (interactive)

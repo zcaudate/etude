@@ -18,7 +18,6 @@
 ;;   - javascript
 
 (eta-modal-init []
-  ::mode-menu          ("<f10>")  ()
   ::eval-cursor        ("C-e")   ("P")
   ::eval-cursor-alt    ("C-c e" "C-x p" "C-x C-p")   ("P")
   ::eval-file          ("C-x x" "C-x C-x")  ()
@@ -27,6 +26,9 @@
   ::f7                 ("<f7>")  ()
   ::f8                 ("<f8>")  ()
   ::f9                 ("<f9>")  ()
+  ::f10                ("<f10>")  ()
+  ::f11                ("<f11>")  ()
+  ::mode-menu          ("<f12>")  ()
   ::mode-connect       ("M-c" "ESC c")      ()
   ::mode-build         ()      ()
   ::mode-jump-to       ("C-x ." "C-x C-.")  ()
