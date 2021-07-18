@@ -36,7 +36,7 @@
   (eval-buffer (current-buffer) t))
 
 (pretty-hydra-define e/menu-fn::elisp-menu
-  (:title "<F10> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
+  (:title "<F12> Elisp" :quit-key "z"  :exit nil :foreign-keys run)
   ("Actions"
    (("1" ielm "Repl")
     ("2" ert  "Test")
@@ -82,52 +82,41 @@
 ;; Clojure
 ;;
 
-;; TEMPLATE
-(comment
- (pretty-hydra-define e/menu-fn::clojure-menu 
-   (:quit-key "z"  :exit nil :foreign-keys run)
-   (""
-    (("` 1"  foundation/ptr-print  "ptr-print")
-     ("` 2"  foundation/ptr-clip   "ptr-clip"))
-    ""
-    (("` 3"  cider-eval-last-sexp  "eval"))
-    ""
-    (("` 5"  foundation/ptr-teardown "ptr-teardown")
-     ("` 6"  foundation/ptr-setup     "ptr-setup"))
-    ""
-    (("3"  foundation/rt-reprep   "Prep Rt"))
-    ""
-    (("5" foundation/rt-setup     "rt-setup")
-     ("6"  foundation/rt-teardown "rt-teardown"))
-    
-    ""
-    (("0"  foundation/import-tests  "Import Tests")
-     ("9"  foundation/create-tests  "Create Tests")))))
 
+(defhydra e/menu-fn::clojure-rt-menu (:color pink)
+  ("1"  foundation/rt-setup  "Setup")
+  ("2"  foundation/rt-teardown "Teardown")
+  ("3"  foundation/rt-resetup  "Resetup")
+  ("4"  foundation/rt-reprep  "Reprep")
+  
+  ("9"  foundation/rt-load "Setup Current")
+  ("0"  foundation/rt-unload "Teardown Current")
+  ("`"  quit-window "Exit" :exit t))
+
+(defun e/clojure-rt-menu ()
+  (interactive)
+  (if (eq hydra-curr-map e/menu-fn::clojure-rt-menu/keymap)
+      (hydra-keyboard-quit)
+    (e/menu-fn::clojure-rt-menu/body)))
 
 ;; ACTUAL
-(defhydra e/menu-fn::clojure-menu (:color pink
-                                   :hint nil)
-  "
-`1: ptr-print   `3: eval   `5: ptr-teardown   3: Prep Rt   5: rt-setup      0: Import Tests 
-`2: ptr-clip               `6: ptr-setup                   6: rt-teardown   9: Create Tests    "
-  ("` 1"  foundation/ptr-print)
-  ("` 2"  foundation/ptr-clip)
-  ("` 3"  cider-eval-last-sexp)
-  ("` 5"  foundation/ptr-teardown)
-  ("` 6"  foundation/ptr-setup)
-  ("3"  foundation/rt-reprep)
-  ("5" foundation/rt-setup)
-  ("6"  foundation/rt-teardown)
-  ("0"  foundation/import-tests)
-  ("9"  foundation/create-tests)
-  ("z" quit-window " " :exit t :hint nil))
+(defhydra e/menu-fn::clojure-unit-menu (:color pink)
+  
+  ("1"  foundation/import-tests   "Import")
+  ("2"  foundation/scaffold-tests "Scaffold")
+  ("3"  foundation/incomplete-tests "Incomplete")
+  ("4"  foundation/orphaned-tests "Orphaned")
+  ("5"  foundation/pedantic-tests "Pedantic")
+  
+  ("9"  foundation/run-errored-tests "Run Errored")
+  ("0"  foundation/run-tests "Run")
+  ("`" quit-window "Exit" :exit t :hint nil))
 
-(defun e/clojure-mode-menu ()
+(defun e/clojure-unit-menu ()
   (interactive)
-  (if (eq hydra-curr-map e/menu-fn::clojure-menu/keymap)
+  (if (eq hydra-curr-map e/menu-fn::clojure-unit-menu/keymap)
       (hydra-keyboard-quit)
-    (e/menu-fn::clojure-menu/body)))
+    (e/menu-fn::clojure-unit-menu/body)))
 
 (use-package cider
   :defer t
@@ -154,9 +143,9 @@
                    ::eval-file         'e/cider-eval-buffer
                    ::f5                'foundation/ns-reeval
                    ::f6                'foundation/rt-refresh
-                   ::f7                'foundation/rt-setup
-                   ::f8                'foundation/rt-resetup
-                   ::esc-6             'foundation/ptr-print
+                   ::f8                'e/clojure-rt-menu
+                   ::f10               'e/clojure-unit-menu
+                   ;; ::esc-6             'foundation/ptr-print
                    ::mode-connect      'cider-connect
                    ::mode-toggle-test  'projectile-toggle-between-implementation-and-test
                    ::mode-menu         'e/clojure-mode-menu)
