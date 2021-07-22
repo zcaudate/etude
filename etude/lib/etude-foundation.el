@@ -51,8 +51,11 @@
    "(do (std.lang/ns:reset) nil)")
   (cider-eval-buffer))
 
-;;
-;;
+(defun foundation/ns-rebuild ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(std.lib/make:build-roots)"))
 ;;
 (defun foundation/scaffold-tests ()
   (interactive)
@@ -90,31 +93,31 @@
 (defun foundation/ptr-teardown ()
   (interactive)
   (foundation/cider-eval-at-point
-   (concat "(std.lang/ptr:teardown " (cider-last-sexp)
-           ")")))
+   (concat "(std.lang/with:print (std.lang/ptr-teardown " (cider-last-sexp) "))")))
 
 (defun foundation/ptr-setup ()
   (interactive)
   (foundation/cider-eval-at-point
-   (concat "(std.lang/ptr:setup " (cider-last-sexp)
-           ")")))
+   (concat "(std.lang/with:print (std.lang/ptr-setup " (cider-last-sexp) "))")))
 
 (defun foundation/ptr-emit ()
   (interactive)
   (foundation/cider-eval-at-point
-   (concat "(std.lang/ptr-emit " (cider-last-sexp)
-           ")")))
+   (concat "(std.lang/ptr-emit " (cider-last-sexp) ")")))
 
 (defun foundation/ptr-print ()
   (interactive)
   (foundation/cider-eval-at-point
-   (concat "(std.lang/ptr-print " (cider-last-sexp)
-           ")")))
+   (concat "(std.lang/ptr-print " (cider-last-sexp) ")")))
 
 (defun foundation/ptr-clip ()
   (interactive)
   (foundation/cider-eval-at-point
-   (concat "(std.lang/ptr-clip " (cider-last-sexp)
-           ")")))
+   (concat "(std.lang/ptr-clip " (cider-last-sexp) ")")))
+
+(defun foundation/ptr-print ()
+  (interactive)
+  (foundation/cider-eval-at-point
+   (concat "(std.lang/ptr-print " (cider-last-sexp) ")")))
 
 (provide 'etude-foundation)
