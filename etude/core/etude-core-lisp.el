@@ -142,15 +142,18 @@
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
                    ::f5                'foundation/ns-reeval
-                   ::f6                nil
+                   ::f6                'foundation/rt-restart
                    ::f7                'foundation/ns-rebuild
                    ::f8                'e/clojure-rt-menu
                    ::f10               'e/clojure-unit-menu
-                   ::cc-1               'foundation/ptr-print
-                   ::cc-2               'foundation/ptr-clip
-                   ::cc-9               'foundation/ptr-setup
-                   ::cc-0               'foundation/ptr-teardown
-                   ;; ::esc-6             'foundation/ptr-print
+                   ::cc-1              'foundation/ptr-print-or-clip
+                   
+                   ::cc-3              'foundation/ptr-setup
+                   ::cc-4              'foundation/ptr-teardown
+                   ::cc-7              'foundation/rt-emit-module
+                   ::cc-8              'foundation/test-setup-global
+                   ::cc-9              'foundation/test-teardown-global
+                   
                    ::mode-connect      'cider-connect
                    ::mode-toggle-test  'projectile-toggle-between-implementation-and-test
                    ::mode-menu         'e/clojure-mode-menu)
