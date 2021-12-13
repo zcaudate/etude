@@ -141,22 +141,23 @@
                  (eta-modal [::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
-                   ::f5                'foundation/ns-reeval
-                   ::f6                'foundation/rt-restart
-                   ::f7                'foundation/ns-rebuild
-                   ::f8                'e/clojure-rt-menu
-                   ::f10               'e/clojure-unit-menu
-                   ::cc-1              'foundation/ptr-print-or-clip
+                   ::f5                'foundation/ns-clear
+                   ::esc-f5            'foundation/rt-module-purge
+                   ::f6                'foundation/build-triggered
+                   ::esc-f6            'foundation/rt-print-module
                    
+                   ::f8                'foundation/test-setup-global
+                   ::esc-f8            'foundation/test-teardown-global
+
+                   ::f10               'e/cider-eval-buffer
+                   
+                   ::cc-1              'foundation/ptr-print-or-clip
                    ::cc-3              'foundation/ptr-setup
                    ::cc-4              'foundation/ptr-teardown
-                   ::cc-7              'foundation/rt-emit-module
-                   ::cc-8              'foundation/test-setup-global
-                   ::cc-9              'foundation/test-teardown-global
                    
                    ::mode-connect      'cider-connect
                    ::mode-toggle-test  'projectile-toggle-between-implementation-and-test
-                   ::mode-menu         'e/clojure-mode-menu)
+                   ::mode-menu         'e/clojure-unit-menu)
                  (eta-modal [::cider-repl cider-repl-mode "etude-core-lisp"]
                    ::eval-file   'cider-repl-clear-buffer))
   :hook ((clojure-mode . smartparens-strict-mode)

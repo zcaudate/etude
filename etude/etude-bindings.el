@@ -126,7 +126,7 @@
   ::save              ("ESC s" "C-s" "M-s")        'save-buffer
   ::save-as           ()                           'write-file
   ::save-all          ("C-x C-s" "C-x s")          'save-some-buffers
-  ::close             ("ESC `" "M-`" "C-`")        'e/close-buffer
+  ::close             ()                           'e/close-buffer
   ::close-all         ()                           'e/close-all-buffers)
 
 ;;
@@ -211,11 +211,9 @@
     (ranger)))
 
 (eta-bind []
-  ::toggle-dashboard       ("ESC 1" "M-1")   'e/jump-to-start-screen
-  ::toggle-terminal        ("ESC 2" "M-2")   'e/jump-to-terminal
+  ::toggle-terminal        ("ESC 1" "M-1")   'e/jump-to-terminal
   ::toggle-scratch         ("ESC 3" "M-3")   'e/jump-to-scratch
   ::toggle-bindings        ("ESC 4" "M-4")   'e/jump-to-bindings)
-
 
 ;;
 ;; (F1) Command
