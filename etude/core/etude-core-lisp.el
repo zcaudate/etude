@@ -150,7 +150,8 @@
                    ::esc-f8            'foundation/test-teardown-global
 
                    ::f10               'e/cider-eval-buffer
-                   
+
+                   ::cc-0              'foundation/print-or-clip-last-expr
                    ::cc-1              'foundation/ptr-print-or-clip
                    ::cc-3              'foundation/ptr-setup
                    ::cc-4              'foundation/ptr-teardown

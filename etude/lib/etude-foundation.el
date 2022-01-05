@@ -121,6 +121,14 @@
     (foundation/cider-eval-at-point
      (concat "(std.lang/ptr-clip " (cider-last-sexp) ")"))))
 
+(defun foundation/ptr-redis-print-or-clip (&optional prefix)
+  (interactive "P")
+  (if prefix
+      (foundation/cider-eval-at-point
+       (concat "(std.lib/pl (rt.redis/generate-script " (cider-last-sexp) "))"))
+    (foundation/cider-eval-at-point
+     (concat "(std.lib/clip:nil (rt.redis/generate-script " (cider-last-sexp) "))"))))
+
 (defun foundation/insert-uuid ()
   (interactive)
   (cider-interactive-eval "(str (std.lib/uuid))"
@@ -190,10 +198,13 @@
                           nil
                           (cider--nrepl-pr-request-map)))
 
-(defun foundation/clip-last-expr ()
+(defun foundation/print-or-clip-last-expr (&optional prefix)
   (interactive)
-  (foundation/cider-eval-at-point
-   (concat "(std.lib/clip:nil " (cider-last-sexp) ")")))
+  (if prefix
+      (foundation/cider-eval-at-point
+       (concat "(std.lib/prf " (cider-last-sexp) ")"))
+    (foundation/cider-eval-at-point
+     (concat "(std.lib/clip:nil " (cider-last-sexp) ")"))))
 
 (defun foundation/paste-long-string ()
   (interactive)
