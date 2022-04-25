@@ -170,8 +170,9 @@
 
 (use-package midje-mode
   :defer t
-  :config (define-clojure-indent
-            (comment 'defun)))
+  :config (progn (define-clojure-indent
+                   (comment 'defun))
+		 (define-clojure-indent                                                    (fn:> :defn)))
 
 (provide 'etude-core-lisp)
 
