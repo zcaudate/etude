@@ -141,10 +141,12 @@
                  (eta-modal [::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
+                   ::esc-f2            'foundation/rt-print-module
+                   ::esc-f3            'foundation/hotkey-0
+                   ::esc-f4            'foundation/hotkey-1 
                    ::f5                'foundation/ns-clear
                    ::esc-f5            'foundation/rt-module-purge
                    ::f6                'foundation/build-triggered
-                   ::esc-f6            'foundation/rt-print-module
                    
                    ::f8                'foundation/test-setup-global
                    ::esc-f8            'foundation/test-teardown-global
@@ -168,8 +170,9 @@
 
 (use-package midje-mode
   :defer t
-  :config (define-clojure-indent
-            (comment 'defun)))
+  :config (progn (define-clojure-indent
+                   (comment 'defun))
+		 (define-clojure-indent                                                    (fn:> :defn)))
 
 (provide 'etude-core-lisp)
 
