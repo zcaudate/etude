@@ -41,6 +41,8 @@
 
 (defun foundation/rt-print-module (&optional prefix)
   (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
   (foundation/cider-eval "(std.lang/print-module)"))
 
 (defun foundation/rt-restart ()
@@ -219,5 +221,54 @@
                           (foundation/make-format-handler)
                           nil
                           (cider--nrepl-pr-request-map)))
+
+(defun foundation/hotkey-0 ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./hotkey-0)"))
+
+(defun foundation/hotkey-1 ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./hotkey-1)"))
+
+(defun foundation/hotkey-2 ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./hotkey-2)"))
+
+(defun foundation/hotkey-3 ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./hotkey-3)"))
+
+(defun foundation/hotkey-4 ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./hotkey-4)"))
+
+
+(defun statstrade/refresh-statsweb-index ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./refresh-statsweb-index)"))
+
+(defun statstrade/refresh-pune-00-all-web-cell ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./refresh-pune-00-all-web-cell)"))
+
+(defun statstrade/refresh-statsall ()
+  (interactive)
+  (save-buffer)
+  (cider-eval-buffer)
+  (foundation/cider-eval "(./refresh-statsall)"))
 
 (provide 'etude-foundation)
