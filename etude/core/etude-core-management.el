@@ -109,7 +109,7 @@
                  (setq enable-recursive-minibuffers t)
                  (setq ivy-count-format "(%d/%d)")))
 
-(use-package wgrep :defer t)
+(require 'wgrep)
 
 (require 'color-rg)
 

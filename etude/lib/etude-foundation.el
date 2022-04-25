@@ -1,5 +1,8 @@
 (require 'cider)
 
+(define-clojure-indent
+  (fn:> :defn))
+
 (defun foundation/debug-last-sexp ()
   (interactive)
   (message (or (cider-last-sexp)
@@ -72,6 +75,10 @@
 ;;
 ;;
 ;;
+
+(defun foundation/test-scaffold-global ()
+  (interactive)
+  (foundation/cider-eval "[(code.test/run:load) (code.test/fact:global :prelim) (code.test/fact:global :setup)]"))
 
 (defun foundation/test-setup-global ()
   (interactive)
