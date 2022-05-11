@@ -200,6 +200,20 @@
                           nil
                           (cider--nrepl-pr-request-map)))
 
+(defun foundation/lang-add-js-module ()
+  (interactive)
+  (cider-interactive-eval "'(def.js MODULE (!:module))"
+                          (cider-eval-print-handler)
+                          nil
+                          (cider--nrepl-pr-request-map)))
+
+(defun foundation/lang-add-xt-module ()
+  (interactive)
+  (cider-interactive-eval "'(def.js MODULE (!:module))"
+                          (cider-eval-print-handler)
+                          nil
+                          (cider--nrepl-pr-request-map)))
+
 (defun foundation/print-or-clip-last-expr (&optional prefix)
   (interactive)
   (if prefix
