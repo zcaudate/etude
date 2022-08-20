@@ -16,7 +16,7 @@
   :ensure t
   :init (load-theme 'nord t))
 
-(use-package doom-modeline :defer t
+(use-package doom-modeline :ensure t
   :init (doom-modeline-mode))
 
 ;; Use smart mode line
@@ -36,7 +36,7 @@
 
 
 (use-package auto-highlight-symbol
-  :defer t
+  :ensure t
   :diminish 'auto-highlight-symbol-mode
   :config   (progn (setq ahs-idle-interval 0.0)))
 

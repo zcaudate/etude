@@ -19,6 +19,6 @@
                      (self-insert-command 1)))
                  (define-key company-active-map (kbd "<return>") nil)))
 
-(use-package company-fuzzy :defer t)
+(use-package company-fuzzy :ensure t)
 
 (provide 'etude-core-code)

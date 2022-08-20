@@ -1,11 +1,11 @@
 ;; Add shell defaults
 
 (use-package exec-path-from-shell
-  :defer t
+  :ensure t
   :config (progn (exec-path-from-shell-initialize)))
 
 ;; VTerm support
-(use-package vterm :defer t
+(use-package vterm :ensure t
   :init (setq vterm-always-compile-module t))
 
 ;;

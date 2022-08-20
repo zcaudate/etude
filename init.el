@@ -20,6 +20,8 @@
 
 ;; Core
 (require 'etude-boot)
+(use-package ht :ensure t)
+(use-package pretty-hydra :ensure t)
 
 (require 'eta)
 (require 'eta-hydra)
@@ -27,7 +29,6 @@
 
 (require 'etude-core)
 (require 'etude-bindings)
-;; (require 'etude-module-org)
 (require 'etude-foundation)
 
 (progn

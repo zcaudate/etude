@@ -15,7 +15,7 @@
 ;;
 
 (use-package cmake-mode
-  :defer t
+  :ensure t
   :mode "\\CMakeLists.txt\\'" )
 
 ;;
@@ -23,7 +23,7 @@
 ;;
 
 (use-package opencl-mode
-  :defer t
+  :ensure t
   :mode   "\\.cl\\'")
 
 ;;
@@ -31,7 +31,7 @@
 ;;
 
 (use-package lsp-clangd
-  :defer t
+  :ensure t
   :init  (when (equal system-type 'darwin)
            (setq lsp-clangd-executable "/usr/local/opt/llvm/bin/clangd"))
   :hook  ((c-mode . lsp-clangd-c-enable)
