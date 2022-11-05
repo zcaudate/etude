@@ -1,5 +1,4 @@
 (require 'etude-core-global)
-(require 'etude-foundation)
 
 ;; Lisp Modes
 (use-package smartparens
@@ -119,7 +118,7 @@
     (e/menu-fn::clojure-unit-menu/body)))
 
 (use-package cider
-  :defer t
+  :ensure t
   :init (progn (setq nrepl-log-messages t)
                (setq nrepl-buffer-name-separator "/")
                (setq nrepl-buffer-name-show-port t)
@@ -135,7 +134,7 @@
   (cider-eval-buffer))
 
 (use-package clojure-mode
-  :defer t
+  :ensure t
   :config (progn (require 'cider-mode)
                  (require 'midje-mode)
                  (eta-modal [::clojure clojure-mode "etude-core-lisp"]
@@ -169,7 +168,7 @@
          (clojure-mode . eldoc-mode)))
 
 (use-package midje-mode
-  :defer t
+  :ensure t
   :config (progn (define-clojure-indent
                    (comment 'defun))
 		 (define-clojure-indent

@@ -5,10 +5,10 @@
 ;;
 
 (use-package cargo
-  :defer t)
+  :ensure t)
 
 (use-package rust-mode
-  :defer t
+  :ensure t
   :mode   "\\.rs\\'"
   :init   (require 'cargo)
   :hook   cargo-minor-mode

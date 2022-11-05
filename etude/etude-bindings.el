@@ -6,7 +6,7 @@
 (require 'etude-core-management)
 (require 'etude-core-shell)
 
-(use-package pretty-hydra :defer t) ;; pretty menus
+(use-package pretty-hydra :ensure t) ;; pretty menus
 
 ;;
 ;; (Command)

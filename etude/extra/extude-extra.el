@@ -52,7 +52,7 @@
 (use-package graphviz-dot-mode :ensure t)
 
 ;; EGLOT for LSP
-(use-package eglot :ensure t :defer t)
+(use-package eglot :ensure t :ensure t)
 
 
 

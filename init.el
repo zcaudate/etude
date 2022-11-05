@@ -35,7 +35,6 @@
 
 (require 'etude-core)
 (require 'etude-bindings)
-;; (require 'etude-module-org)
 (require 'etude-foundation)
 
 (progn

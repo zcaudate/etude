@@ -78,29 +78,29 @@
   (define-key dashboard-mode-map [down-mouse-1] 'nil))
 
 (use-package dashboard
-  :defer t
+  :ensure t
   :init (progn (setq dashboard-startup-banner nil)
                (setq dashboard-items '((recents  . 15)
                                        (projects . 5)))))
 
-(use-package treemacs :defer t
+(use-package treemacs :ensure t
   :init (setq treemacs-no-png-images t))
 
-(use-package treemacs-projectile :defer t)
+(use-package treemacs-projectile :ensure t)
           
 ;;
 ;; Search
 ;;
 
 (use-package git-gutter
-   :defer t
+   :ensure t
    :diminish 'git-gutter-mode
    :config   (global-git-gutter-mode t))
    
-(use-package smex :defer t)
+(use-package smex :ensure t)
 
 (use-package ivy
-  :defer t
+  :ensure t
   :diminish 'ivy-mode
   :config (progn (ivy-mode t)
                  (setq ivy-initial-inputs-alist nil)
@@ -113,16 +113,16 @@
 
 (require 'color-rg)
 
-(use-package swiper :defer t)
+(use-package swiper :ensure t)
 
-(use-package counsel :defer t)
+(use-package counsel :ensure t)
 
 (use-package counsel-projectile
-  :defer t
+  :ensure t
   :init (add-hook 'after-init-hook 'counsel-projectile-mode))
 
 (use-package ivy-rich
-  :defer t
+  :ensure t
   :config (ivy-rich-mode t))
 
 (provide 'etude-core-management)
