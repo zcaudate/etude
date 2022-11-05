@@ -79,9 +79,18 @@
   (interactive)
   (foundation/cider-eval "[(code.test/run:load) (code.test/fact:global :setup)]"))
 
+(defun foundation/test-prep-global ()
+  (interactive)
+  (foundation/cider-eval "[(code.test/run:load) (code.test/fact:global :prelim) (code.test/fact:global :setup)]"))
+
 (defun foundation/test-teardown-global ()
   (interactive)
   (foundation/cider-eval "(code.test/fact:global :teardown)"))
+
+
+(defun foundation/rt-deploy ()
+  (interactive)
+  (foundation/cider-eval "[(rt.solidity/rt:deploy)]"))
 
 ;;
 ;;
@@ -95,6 +104,11 @@
   (interactive)
   (foundation/cider-eval "(code.test/run)"))
 
+(defun foundation/ptr-deploy ()
+  (interactive)
+  (foundation/cider-eval-at-point
+   (concat "(rt.solidity/rt:deploy-ptr " (cider-last-sexp) ")")))
+
 (defun foundation/ptr-teardown ()
   (interactive)
   (foundation/cider-eval-at-point
@@ -104,6 +118,16 @@
   (interactive)
   (foundation/cider-eval-at-point
    (concat "(std.lang/with:print-all (std.lang/ptr-setup " (cider-last-sexp) "))")))
+
+(defun foundation/ptr-teardown-deps ()
+  (interactive)
+  (foundation/cider-eval-at-point
+   (concat "(std.lang/with:print-all (std.lang/ptr-teardown-deps " (cider-last-sexp) "))")))
+
+(defun foundation/ptr-setup-deps ()
+  (interactive)
+  (foundation/cider-eval-at-point
+   (concat "(std.lang/with:print-all (std.lang/ptr-setup-deps " (cider-last-sexp) "))")))
 
 (defun foundation/ptr-emit ()
   (interactive)
@@ -209,7 +233,7 @@
 
 (defun foundation/lang-add-xt-module ()
   (interactive)
-  (cider-interactive-eval "'(def.js MODULE (!:module))"
+  (cider-interactive-eval "'(def.xt MODULE (!:module))"
                           (cider-eval-print-handler)
                           nil
                           (cider--nrepl-pr-request-map)))
