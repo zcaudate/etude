@@ -5,6 +5,7 @@ elpa.bak
 .cask
 .cache
 keys
+.DS_Store
 
 /changes
 /elpa
