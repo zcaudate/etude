@@ -136,7 +136,6 @@
 (use-package clojure-mode
   :ensure t
   :config (progn (require 'cider-mode)
-                 (require 'midje-mode)
                  (eta-modal [::clojure clojure-mode "etude-core-lisp"]
                    ::eval-cursor       'cider-eval-last-sexp
                    ::eval-file         'e/cider-eval-buffer
@@ -167,12 +166,13 @@
          (clojure-mode . paredit-mode)
          (clojure-mode . eldoc-mode)))
 
-(use-package midje-mode
-  :ensure t
-  :config (progn (define-clojure-indent
-                   (comment 'defun))
-		 (define-clojure-indent
-                   (fn:> :defn))))
+
+;; (use-package midje-mode
+;;   :ensure t
+;;   :config (progn (define-clojure-indent
+;;                    (comment 'defun))
+;; 		 (define-clojure-indent
+;;                    (fn:> :defn))))
 
 (provide 'etude-core-lisp)
 
